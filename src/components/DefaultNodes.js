@@ -19,5 +19,15 @@ let nodes = [
         content:"You are resposible for struggling so struggle mightily.I",
         inspiration:"Eric Weinstein"
     },
+    {
+        title:"",
+        content:"I feel bad for making you say theese things. It must mean you're in such a tough spot that you have no choice but to say them",
+        inspiration:"Hanekawa (Kizu-p136)"
+    },
+    {
+        title:"",
+        content:"...Every aberration has its reasons, they say. Araragi, you need to give some more though to why you encountered a vampire. Well that'd be... by chance, no? Im sure it was by chance. what ou need to think about is why that chance came about...",
+        inspiration:"Oshino (Kizu-p149)"
+    },
 
 ]
