@@ -1,11 +1,19 @@
 import React , {useRef} from 'react'
 import forceGraph3d from '3d-force-graph';
+import styled from 'styled-components'
 
 export default function ForceGraph3D() {
     let ref = useRef();
     return (
-        <div className="force-graph-3d">
+        <DivForceGraph3D>
             <sgv ref={ref}></sgv>
-        </div>
+        </DivForceGraph3D>
     )
 }
+
+let DivForceGraph3D = styled.div `
+    border: 2px solid #888;
+    margin: 0px auto;
+    width: 700px;
+    height: 700px;
+`
