@@ -1,5 +1,4 @@
 import './App.css';
-import './ForceGraph3D.css'
 import { ForceGraph3D } from 'react-force-graph';
 import CreateArea from './CreateArea';
 import NodeCard from './NodeCard';
