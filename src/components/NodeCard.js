@@ -19,10 +19,12 @@ export default function NodeCard(props) {
 
 let DivNodeCard = styled.div `
   background: #00219708;
+  color: #EEE;
   border-radius: 5px;
   box-shadow: 0px 0px 4px #ccc;
   padding: 10px;
   width: 150px;
+  height: 150px;
   margin: 10px;
   backdrop-filter: blur(5px);
   
