@@ -27,6 +27,7 @@ function App() {
         graphData={gData()}
         width={1000}
       />
+      
       <CreateArea/>
     </div>
   );

@@ -22,16 +22,27 @@ let nodes = [
     {
         title:"",
         content:"I feel bad for making you say theese things. It must mean you're in such a tough spot that you have no choice but to say them",
-        inspiration:"Hanekawa (Kizu-p136)"
+        inspiration:"Hanekawa [Kizu-p136]"
     },
     {
         title:"",
-        content:"...Every aberration has its reasons, they say. Araragi, you need to give some more though to why you encountered a vampire. Well that'd be... by chance, no? Im sure it was by chance. what ou need to think about is why that chance came about...",
-        inspiration:"Oshino (Kizu-p149)"
+        content:"...Every aberration has its reasons, they say. Araragi, you need to give some more though to why you encountered a vampire. Well that'd be... by chance, no? Im sure it was by chance. what you need to think about is why that chance came about...",
+        inspiration:"Oshino [Kizu-p149]"
+    }, {
+        title:"We are gods, but for the wisdom.",
+        content:"",
+        inspiration:"Eric Weinstein"
     }, {
         title:"",
-        content:"We are gods, but for the wisdom",
-        inspiration:"Eric Weinstein"
-    },
-
+        content:"This might not be a good idea, but it could be the idea that leads to the idea.",
+        inspiration:"Victoria Labalme"
+    }, {
+        title:"",
+        content:"I wasn't special, but becoming special for someone like you would be thriling. Well... I think im exagerating a bit, but I guess I could admit that I just have fun talking with you ...",
+        inspiration:"Senjougahara [Bake(Part I)-p228]"
+    }, {
+        title:"",
+        content:"...—but the thing thats a little odd about you is that you try to deal with every single one. Once you've experienced an aberration, you're more likely to attract them in the future— that much is true, but most people who encounter one will then go out of their way to avoid them",
+        inspiration:"Oshino [Bake(Part II)-p228]"
+    }
 ]
