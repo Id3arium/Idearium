@@ -1,5 +1,6 @@
 import React from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import styled from 'styled-components'
 
 export default function NodeCard(props) {
@@ -7,13 +8,14 @@ export default function NodeCard(props) {
     props.onDelete(props.id);
   };
   return (
-    <DivNodeCard>
-      <div className="header">
-        <h1>{props.title} </h1>
-        <button onClick={deleteNodeCard}>
-          <DeleteIcon />
-        </button>
-      </div>
+    <DivNodeCard className="DivNodeCard">
+      <h1>{props.title} </h1>
+      <button className="nav-btn prev" onClick={deleteNodeCard}>
+        <KeyboardArrowLeftIcon />
+      </button>
+      <button className="nav-btn next" onClick={deleteNodeCard}>
+        <KeyboardArrowRightIcon />
+      </button>
       
       <p> {props.content} </p>
     </DivNodeCard>
@@ -22,7 +24,6 @@ export default function NodeCard(props) {
 
 let DivNodeCard = styled.div `
   background: #00219708;
-  color: #EEE;
   border-radius: 5px;
   box-shadow: 0px 0px 4px #ccc;
   padding: 10px;
@@ -32,16 +33,23 @@ let DivNodeCard = styled.div `
   backdrop-filter: blur(5px);
   position:relative;
   
-  color: ${(props) => (props.primary ? 'hotpink' : 'turquoise')};
+  color: ${(props) => (props.primary ? '#111' : '#EEE')};
 
-  .header{
-  }
-
-  button {
+  .nav-btn {
+    width: 35px;
+    height: 35px;
+    padding: 4px;
     position: absolute;
-    right: 10px;
-    top: 10px;
+    top: 8px;
   }
+
+  .prev {
+    left: 8px;
+  }
+  .next {
+    right: 8px;
+  }
+
   h1 {
     font-size: 1.2em;
     margin: 6px 0;
