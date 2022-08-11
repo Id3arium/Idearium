@@ -8,10 +8,13 @@ export default function NodeCard(props) {
   };
   return (
     <DivNodeCard>
-      <button onClick={deleteNodeCard}>
-        <DeleteIcon />
-      </button>
-      <h1>{props.title} </h1>
+      <div className="header">
+        <h1>{props.title} </h1>
+        <button onClick={deleteNodeCard}>
+          <DeleteIcon />
+        </button>
+      </div>
+      
       <p> {props.content} </p>
     </DivNodeCard>
   );
@@ -23,13 +26,22 @@ let DivNodeCard = styled.div `
   border-radius: 5px;
   box-shadow: 0px 0px 4px #ccc;
   padding: 10px;
-  width: 150px;
-  height: 150px;
+  width: 500px;
+  height: 100%;
   margin: 10px;
   backdrop-filter: blur(5px);
+  position:relative;
   
-  color: ${(props) => (props.primary ? 'hotpink' : 'turquoise')}
+  color: ${(props) => (props.primary ? 'hotpink' : 'turquoise')};
 
+  .header{
+  }
+
+  button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
   h1 {
     font-size: 1.2em;
     margin: 6px 0;
