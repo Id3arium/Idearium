@@ -27,7 +27,7 @@ function App() {
         graphData={gData()}
         width={1000}
       />
-      
+      <NodeCard title='Title' content='content'/>
       <CreateArea/>
     </div>
   );
