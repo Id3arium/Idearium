@@ -1,4 +1,3 @@
-import './App.css';
 import { ForceGraph3D } from 'react-force-graph';
 import CreateArea from './CreateArea.js';
 import NodeCard from './NodeCard.js';
@@ -8,10 +7,10 @@ import styled from 'styled-components';
 function App() {
   let gData = () => {
     // Random tree
-    const N = 10;
+    const clusterSize = 100;
     return {
-      nodes: [...Array(N).keys()].map((i) => ({ id: i })),
-      links: [...Array(N).keys()]
+      nodes: [...Array(clusterSize).keys()].map((i) => ({ id: i })),
+      links: [...Array(clusterSize).keys()]
         .filter((id) => id)
         .map((id) => ({
           source: id,
