@@ -2,7 +2,7 @@ import './App.css';
 import { ForceGraph3D } from 'react-force-graph';
 import CreateArea from './CreateArea.js';
 import NodeCard from './NodeCard.js';
-import style
+import styled from 'styled-components';
 //import ForceGraph3d from './components/ForceGraph3D';
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
   }
   console.log(gData())
   return (
-    <div className="App">
+    <DivApp id="App">
       <ForceGraph3D 
         className="force-graph-3d"
         graphData={gData()}
@@ -29,8 +29,25 @@ function App() {
       />
       <NodeCard title='Title' content='content'/>
       <CreateArea/>
-    </div>
+    </DivApp>
   );
 }
 
 export default App;
+
+let DivApp = styled.div`
+  .App {
+    text-align: center;
+  }
+
+  .App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+`
