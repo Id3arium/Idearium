@@ -51,8 +51,9 @@ let DivNodeCard = styled.div `
   }
 
   h1 {
+    text-align: center;
     font-size: 1.2em;
-    margin: 6px 0;
+    margin: 6px 40px;
   }
 
   p {
