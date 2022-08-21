@@ -1,7 +1,8 @@
 import './App.css';
 import { ForceGraph3D } from 'react-force-graph';
-import CreateArea from './CreateArea';
-import NodeCard from './NodeCard';
+import CreateArea from './CreateArea.js';
+import NodeCard from './NodeCard.js';
+import style
 //import ForceGraph3d from './components/ForceGraph3D';
 
 function App() {
