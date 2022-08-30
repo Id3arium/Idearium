@@ -1,32 +1,46 @@
+import React, {useEffect} from 'react';
 import { ForceGraph3D } from 'react-force-graph';
 import CreateArea from './CreateArea.js';
 import NodeCard from './NodeCard.js';
 import styled from 'styled-components';
 import nodes from "./nodes.json"
-import React, {useEffect} from 'react';
 //import ForceGraph3d from './components/ForceGraph3D';
 
 function App() {
 
-  //makes sure nodes have the same appearance frequncy after adding/removing a node
-  function updateNodeProbabilities(nodeNumDelta){
+  //makes sure all node frequencies add up to 1 while keeping the same appearance rate
+  function updateNodeFrequencies(nodeNumDelta){
     let oldNumNodes = nodes.length
     let newNumNodes = oldNumNodes + nodeNumDelta
-    let oldDefaultProb = 1 / oldNumNodes
-    let newDefaultProb = 1 / newNumNodes
+    let oldDefaultFreq = 1 / oldNumNodes
+    let newDefaultFreq = 1 / newNumNodes
 
     nodes.forEach( node => {
       if(node.hasOwnProperty("probability")){
-        let probRatio = node.probability / oldDefaultProb
-        node.probability = probRatio * newDefaultProb
+        let probRatio = node.frequency / oldDefaultFreq
+        node.frequency = probRatio * newDefaultFreq
       }
     })
     console.log("nodes",nodes)
   }
 
+  function getWeightedRandomNodeId(){
+    let interval = 1/nodes.length
+    let randNum = Math.random() // range of [0,1)
+    let counter = 0
+    nodes.forEach( node => {
+      //check if rand number is between counter and counter + nodes frequency
+      if ( randNum >= counter && randNum < counter + node.frequency) {
+        return node.id
+      } else {
+        counter += node.frequency
+      }
+    })
 
+  }
 
-  function getNextNode(){}
+  function changeNodeFrequency( newFreq) {}
+
   let gData = () => {
     // Random tree
     const clusterSize = 100;
