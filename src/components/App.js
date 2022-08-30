@@ -39,7 +39,16 @@ function App() {
 
   }
 
-  function changeNodeFrequency( newFreq) {}
+  function changeNodeFrquency(nodeId, isIncreased) {
+    let numNodes = nodes.length
+    let numerator = isIncreased ? 1 : -1
+    let freqModifier = numerator / (numNodes * numNodes)
+    
+    nodes[nodeId].frequency += numNodes * freqModifier
+    nodes.forEach(node => {
+      node.frequency -= freqModifier
+    })
+  }
 
   let gData = () => {
     // Random tree
