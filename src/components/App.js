@@ -36,7 +36,6 @@ function App() {
         counter += node.frequency
       }
     })
-
   }
 
   function changeNodeFrquency(nodeId, isIncreased) {
@@ -44,10 +43,16 @@ function App() {
     let numerator = isIncreased ? 1 : -1
     let freqModifier = numerator / (numNodes * numNodes)
     
-    nodes[nodeId].frequency += numNodes * freqModifier
-    nodes.forEach(node => {
-      node.frequency -= freqModifier
-    })
+    let newFrequency = nodes[nodeId].frequency + numNodes * freqModifier
+    
+    if (Math.abs(1 - newFrequency) >= 1e-12 ) {
+      nodes[nodeId].frequency = newFrequency
+
+      //redistribute frequencies of other nodes so they still add up to ~1
+      nodes.forEach(node => {
+        node.frequency -= freqModifier
+      })
+    }
   }
 
   let gData = () => {
