@@ -2,19 +2,31 @@ import { ForceGraph3D } from 'react-force-graph';
 import CreateArea from './CreateArea.js';
 import NodeCard from './NodeCard.js';
 import styled from 'styled-components';
-import nodes from "./Nodes.json"
+import nodes from "./nodes.json"
+import React, {useEffect} from 'react';
 //import ForceGraph3d from './components/ForceGraph3D';
 
 function App() {
-  // makes sure all nodes have a probability
-  function validateNodeProbabilities(){
-    let numnodes = 
-      nodes.forEach( node => {
 
+  //makes sure nodes have the same appearance frequncy after adding/removing a node
+  function updateNodeProbabilities(nodeNumDelta){
+    let oldNumNodes = nodes.length
+    let newNumNodes = oldNumNodes + nodeNumDelta
+    let oldDefaultProb = 1 / oldNumNodes
+    let newDefaultProb = 1 / newNumNodes
+
+    nodes.forEach( node => {
+      if(node.hasOwnProperty("probability")){
+        let probRatio = node.probability / oldDefaultProb
+        node.probability = probRatio * newDefaultProb
+      }
     })
-
+    console.log("nodes",nodes)
   }
-  function getNextNode()
+
+
+
+  function getNextNode(){}
   let gData = () => {
     // Random tree
     const clusterSize = 100;
@@ -28,6 +40,10 @@ function App() {
         }))
     };
   }
+  useEffect(()=>{
+
+  },[])
+
   console.log(gData())
   return (
     <DivApp id="App">
