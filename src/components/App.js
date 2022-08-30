@@ -2,9 +2,19 @@ import { ForceGraph3D } from 'react-force-graph';
 import CreateArea from './CreateArea.js';
 import NodeCard from './NodeCard.js';
 import styled from 'styled-components';
+import nodes from "./Nodes.json"
 //import ForceGraph3d from './components/ForceGraph3D';
 
 function App() {
+  // makes sure all nodes have a probability
+  function validateNodeProbabilities(){
+    let numnodes = 
+      nodes.forEach( node => {
+
+    })
+
+  }
+  function getNextNode()
   let gData = () => {
     // Random tree
     const clusterSize = 100;
