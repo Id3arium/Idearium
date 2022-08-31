@@ -5,19 +5,19 @@ import styled from 'styled-components'
 
 export default function NodeCard(props) {
   const deleteNodeCard = () => {
-    props.onDelete(props.id);
+    props.onDelete(props.nodeData.id);
   };
   return (
     <DivNodeCard className="DivNodeCard">
-      <h1>{props.title} </h1>
-      <button className="nav-btn prev" onClick={deleteNodeCard}>
+      <h1>{props.nodeData.title} </h1>
+      <button className="nav-btn prev" onClick={()=>{props.onPrev()}}>
         <KeyboardArrowLeftIcon />
       </button>
-      <button className="nav-btn next" onClick={deleteNodeCard}>
+      <button className="nav-btn next" onClick={()=>{props.onNext()}}>
         <KeyboardArrowRightIcon />
       </button>
       
-      <p> {props.content} </p>
+      <p> {props.nodeData.content} </p>
     </DivNodeCard>
   );
 }
