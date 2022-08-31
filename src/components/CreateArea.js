@@ -59,13 +59,12 @@ function CreateArea(props) {
 }
 
 let StyledCreateArea = styled.div`
-  float: right;
   width: 100%;
   margin: 30px 20px;
 
   form.create-note {
     position: relative;
-    background: #ccc;
+    background: #CCC;
     padding: 15px;
     border-radius: 7px;
     box-shadow: 0 1px 5px rgb(138, 137, 137);
@@ -75,6 +74,7 @@ let StyledCreateArea = styled.div`
   form.create-note textarea {
     width: 100%;
     border: none;
+    background: #CCC;
     padding: 4px;
     outline: none;
     font-size: 1.2em;
@@ -86,9 +86,9 @@ let StyledCreateArea = styled.div`
     position: absolute;
     right: 12px;
     bottom: -18px;
-    background: #1313f588;
+    background: #1313f5c0;
     backdrop-filter: blur(5px);
-    color: #fff;
+    color: #CCC;
     border: 1px solid black;
     border-radius: 50%;
     width: 36px;
