@@ -68,39 +68,40 @@ function App() {
         }))
     };
   }
+  
   useEffect(()=>{
 
   },[])
 
   console.log(gData())
   return (
-    <DivApp id="App">
-      <ForceGraph3D 
-        className="force-graph-3d"
-        graphData={gData()}
-        width={1000}
-      />
-      <NodeCard title='Title' content='content'/>
+    <StyledApp id="App">
+      <div className='force-graph'>
+        <ForceGraph3D 
+          graphData={gData()}
+          width={1000}
+        />
+      </div>
+      
       <CreateArea/>
-    </DivApp>
+      
+    </StyledApp>
   );
 }
 
 export default App;
 
-let DivApp = styled.div`
-  .App {
-    text-align: center;
-  }
-
-  .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
+let StyledApp = styled.div`
+  display: flex;
+  text-align: center;
+//
+//.App-header {
+//  min-height: 100vh;
+//  display: flex;
+//  flex-direction: column;
+//  align-items: center;
+//  justify-content: center;
+//  font-size: calc(10px + 2vmin);
+//  color: white;
+//}
 `

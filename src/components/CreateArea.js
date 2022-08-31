@@ -29,7 +29,7 @@ function CreateArea(props) {
     setIsExpanded(true);
   }
   return (
-    <StyledCreateArea id='create-area'>
+    <StyledCreateArea>
       <form className="create-note">
         {isExpanded && (
           <input
@@ -59,19 +59,20 @@ function CreateArea(props) {
 }
 
 let StyledCreateArea = styled.div`
-  float: left;
-  
+  float: right;
+  width: 100%;
+  margin: 30px 20px;
+
   form.create-note {
-    width: 300px;
-    margin: 30px 0 20px 0;
-    background: #fcfcfc;
+    position: relative;
+    background: #ccc;
     padding: 15px;
     border-radius: 7px;
     box-shadow: 0 1px 5px rgb(138, 137, 137);
   }
+
   form.create-note input,
   form.create-note textarea {
-    background-color: #fcfcfc;
     width: 100%;
     border: none;
     padding: 4px;
@@ -80,6 +81,7 @@ let StyledCreateArea = styled.div`
     font-family: inherit;
     resize: none;
   }
+
   form.create-note button {
     position: absolute;
     right: 12px;
