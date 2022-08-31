@@ -5,9 +5,6 @@ import NodeCard from "./NodeCard.js";
 export default function NodeCardsArea({ nodes }) {
 	let nodesTimeline = [getWeightedRandomNodeID()]
   	let [currTimelineIdx, setcurrTimelineIdx] = useState(nodesTimeline[0]);
-	//useEffect(() => {
-	//	// if user 
-	//},[currNodeID])	
 
 	function onNextNodeCard(){
 		let isAtEndOfTimeline = currTimelineIdx === nodesTimeline.length - 1
