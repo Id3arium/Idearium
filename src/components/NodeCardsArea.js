@@ -70,6 +70,8 @@ export default function NodeCardsArea(props) {
 				onPrev={onPrevNodeCard} 
 				onIncreaseNodeFreq={increaseNodeFreq} 
 				onDecreaseNodeFreq={decreaseNodeFreq} 
+				timelineSize={nodesTimeline.length}
+				currTimelineIdx={currTimelineIdx}
 			/>
 		</StyledNodeCardsArea>
 	);
