@@ -29,7 +29,7 @@ function CreateArea(props) {
     setIsExpanded(true);
   }
   return (
-    <StyledCreateArea>
+    <StyledCreateArea id="create-area">
       <form className="create-note">
         {isExpanded && (
           <input

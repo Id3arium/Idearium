@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { ForceGraph3D } from "react-force-graph";
+//import ForceGraph3d from './components/ForceGraph3D';
 import CreateArea from "./CreateArea.js";
 import styled from "styled-components";
-import nodes from "./nodes.json";
 import NodeCardsArea from "./NodeCardsArea.js";
-//import ForceGraph3d from './components/ForceGraph3D';
+import nodes from "./nodes.json";
 
 function App() {
   let gData = () => {
