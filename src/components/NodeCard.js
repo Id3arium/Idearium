@@ -8,7 +8,7 @@ export default function NodeCard(props) {
     props.onDelete(props.nodeData.id);
   };
   return (
-    <DivNodeCard className="DivNodeCard">
+    <StyledNodeCard id="node-card">
       <h1>{props.nodeData.title} </h1>
       <button className="nav-btn prev" onClick={()=>{props.onPrev()}}>
         <KeyboardArrowLeftIcon />
@@ -18,17 +18,17 @@ export default function NodeCard(props) {
       </button>
       
       <p> {props.nodeData.content} </p>
-    </DivNodeCard>
+    </StyledNodeCard>
   );
 }
 
-let DivNodeCard = styled.div `
+let StyledNodeCard = styled.div `
   background: #00219708;
   border-radius: 5px;
   box-shadow: 0px 0px 4px #ccc;
   padding: 10px;
   width: 500px;
-  height: 100%;
+  height: 200px;
   margin: 10px;
   backdrop-filter: blur(5px);
   position:relative;

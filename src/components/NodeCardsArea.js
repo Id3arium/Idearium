@@ -46,18 +46,16 @@ export default function NodeCardsArea(props) {
 	function getWeightedRandomNodeID() {
 		let randNum = Math.random(); // range of [0,1)
 		let counter = 0;
-		let randNodeIdx = -1
-		props.nodes.forEach((node,i) => {
-			let isInCounterRange = (randNum) => {
-				return randNum >= counter && randNum < counter + node.frequency
-			}
-			if (isInCounterRange(randNum)) {
-				randNodeIdx = i;
+		for (let i = 0; i < props.nodes.length; i++) {
+			let currNodeFreq = props.nodes[i].frequency
+			let isInCounterRange = randNum >= counter && randNum < (counter + currNodeFreq)
+			if (isInCounterRange) {
+				return props.nodes[i].id
 			} else {
-				counter += node.frequency;
+				counter += currNodeFreq
 			}
-		});
-		return props.nodes[randNodeIdx].id
+		}
+		return props.nodes[-1].id
 	}
 
 	function changeNodeFrquency(nodeId, isIncreased) {
