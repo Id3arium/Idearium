@@ -3,8 +3,8 @@ import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
 
 export default function NodeCardsArea(props) {
-	let nodesTimeline = [getWeightedRandomNodeID()]
-  	let [currTimelineIdx, setcurrTimelineIdx] = useState(0);
+  	let [nodesTimeline, setNodesTimeline] = useState([getWeightedRandomNodeID()]);
+  	let [currTimelineIdx, setCurrTimelineIdx] = useState(0);
 	  
 	function getNodeData(timelineIdx){
 		let nodeID = nodesTimeline[timelineIdx]
@@ -15,17 +15,18 @@ export default function NodeCardsArea(props) {
 		let isAtEndOfTimeline = currTimelineIdx === nodesTimeline.length - 1
 		if(isAtEndOfTimeline) {
 			let newNodeID = getWeightedRandomNodeID()
-			nodesTimeline.push(newNodeID)
-			setcurrTimelineIdx(nodesTimeline.at(-1))
-		} else {
-			setcurrTimelineIdx(currTimelineIdx+1)
-		}
+			while(newNodeID === nodesTimeline.at(-1)){
+				newNodeID = getWeightedRandomNodeID()
+			}
+			setNodesTimeline([...nodesTimeline,newNodeID])
+		} 
+		setCurrTimelineIdx(currTimelineIdx+1)
 	}
 
 	function onPrevNodeCard(){
-		let isAtBegginingOfTimeline = currTimelineIdx = 0
-		if(!isAtBegginingOfTimeline) {
-			setcurrTimelineIdx(currTimelineIdx-1)
+		let isAtBeginningOfTimeline = currTimelineIdx === 0
+		if(!isAtBeginningOfTimeline) {
+			setCurrTimelineIdx(currTimelineIdx-1)
 		}
 	}
 
@@ -55,7 +56,6 @@ export default function NodeCardsArea(props) {
 				counter += currNodeFreq
 			}
 		}
-		return props.nodes[-1].id
 	}
 
 	function changeNodeFrquency(nodeId, isIncreased) {
@@ -68,22 +68,20 @@ export default function NodeCardsArea(props) {
 		if (Math.abs(1 - newFrequency) >= 1e-12) {
 			props.nodes[nodeId].frequency = newFrequency;
 
-			//redistribute frequencies of other nodes so they still add up to ~1
 			props.nodes.forEach((node) => {
 				node.frequency -= freqModifier;
 			});
 		}
 	}
-  return (
-    <StyledNodeCardsArea id="node-cards-area">
-        <NodeCard 
-			nodeData={getNodeData(currTimelineIdx)} 
-			onNext={onNextNodeCard} 
-			onPrev={onPrevNodeCard} 
-			//onDelete={}
-		/>
-    </StyledNodeCardsArea>
-  );
+	return (
+		<StyledNodeCardsArea id="node-cards-area">
+			<NodeCard 
+				nodeData={getNodeData(currTimelineIdx)} 
+				onNext={onNextNodeCard} 
+				onPrev={onPrevNodeCard} 
+			/>
+		</StyledNodeCardsArea>
+	);
 }
 
 let StyledNodeCardsArea = styled.div`
