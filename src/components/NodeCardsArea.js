@@ -30,20 +30,6 @@ export default function NodeCardsArea(props) {
 		}
 	}
 
-	function updateNodeFrequencies(nodeNumDelta) {
-		let oldNumNodes = props.nodes.length;
-		let newNumNodes = oldNumNodes + nodeNumDelta;
-		let oldDefaultFreq = 1 / oldNumNodes;
-		let newDefaultFreq = 1 / newNumNodes;
-
-		props.nodes.forEach((node) => {
-			if (node.hasOwnProperty("probability")) {
-				let probRatio = node.frequency / oldDefaultFreq;
-				node.frequency = probRatio * newDefaultFreq;
-			}
-		});
-	}
-
 	function getWeightedRandomNodeID() {
 		let randNum = Math.random(); // range of [0,1)
 		let counter = 0;
@@ -73,12 +59,17 @@ export default function NodeCardsArea(props) {
 			});
 		}
 	}
+
+	let increaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, true)
+	let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
 	return (
 		<StyledNodeCardsArea id="node-cards-area">
 			<NodeCard 
 				nodeData={getNodeData(currTimelineIdx)} 
 				onNext={onNextNodeCard} 
 				onPrev={onPrevNodeCard} 
+				onIncreaseNodeFreq={increaseNodeFreq} 
+				onDecreaseNodeFreq={decreaseNodeFreq} 
 			/>
 		</StyledNodeCardsArea>
 	);

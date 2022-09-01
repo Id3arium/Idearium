@@ -1,28 +1,42 @@
-import React from "react";
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import styled from 'styled-components'
+import React, { useState } from "react";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import styled from "styled-components";
 
 export default function NodeCard(props) {
-  const deleteNodeCard = () => {
-    props.onDelete(props.nodeData.id);
-  };
-  return (
-    <StyledNodeCard id="node-card">
-      <h1>{props.nodeData.title} </h1>
-      <button className="nav-btn prev" onClick={()=>{props.onPrev()}}>
-        <KeyboardArrowLeftIcon />
-      </button>
-      <button className="nav-btn next" onClick={()=>{props.onNext()}}>
-        <KeyboardArrowRightIcon />
-      </button>
-      
-      <p> {props.nodeData.content} </p>
-    </StyledNodeCard>
-  );
+    const [backsideToggled, setBacksideToggled] = useState(false)
+    const deleteNodeCard = () => {
+        props.onDelete(props.nodeData.id);
+    };
+    return (
+        <StyledNodeCard id="node-card" >
+            <button
+                className="nav-btn prev"
+                onClick={() => {props.onPrev()}}
+            >
+                <KeyboardArrowLeftIcon />
+            </button>
+            <button
+                className="nav-btn next"
+                onClick={() => {props.onNext()}}
+            >
+                <KeyboardArrowRightIcon />
+            </button>
+            {!backsideToggled && <div className="front-side" onClick={()=>setBacksideToggled(!backsideToggled)}>
+                <h1>{props.nodeData.title} </h1>
+                
+                <p> {props.nodeData.content} </p>
+            </div>}
+            {backsideToggled && <div className="back-side" onClick={()=>setBacksideToggled(!backsideToggled)}>
+                <p className="frequency">
+                    {(props.nodeData.frequency * 100).toFixed(1)}% Likely to appear
+                </p>
+            </div>}
+        </StyledNodeCard>
+    );
 }
 
-let StyledNodeCard = styled.div `
+let StyledNodeCard = styled.div`
   background: #00219708;
   border-radius: 5px;
   box-shadow: 0px 0px 4px #ccc;
@@ -31,9 +45,9 @@ let StyledNodeCard = styled.div `
   height: 200px;
   margin: 10px;
   backdrop-filter: blur(5px);
-  position:relative;
-  
-  color: ${(props) => (props.primary ? '#111' : '#EEE')};
+  position: relative;
+
+  color: ${(props) => (props.primary ? "#111" : "#EEE")};
 
   .nav-btn {
     width: 35px;
@@ -46,6 +60,7 @@ let StyledNodeCard = styled.div `
   .prev {
     left: 8px;
   }
+  
   .next {
     right: 8px;
   }
@@ -62,4 +77,12 @@ let StyledNodeCard = styled.div `
     white-space: pre-wrap;
     word-wrap: break-word;
   }
-`
+
+  .frequency {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 15px;
+    font-size: .8em;
+  }
+`;
