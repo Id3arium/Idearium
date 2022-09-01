@@ -1,11 +1,16 @@
-import React, {useState, useEffect}from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
 
-export default function NodeCardsArea({ nodes }) {
+export default function NodeCardsArea(props) {
 	let nodesTimeline = [getWeightedRandomNodeID()]
-  	let [currTimelineIdx, setcurrTimelineIdx] = useState(nodesTimeline[0]);
-
+  	let [currTimelineIdx, setcurrTimelineIdx] = useState(0);
+	  
+	function getNodeData(timelineIdx){
+		let nodeID = nodesTimeline[timelineIdx]
+		let nodeData = props.nodes[nodeID]
+		return nodeData
+	}
 	function onNextNodeCard(){
 		let isAtEndOfTimeline = currTimelineIdx === nodesTimeline.length - 1
 		if(isAtEndOfTimeline) {
@@ -25,12 +30,12 @@ export default function NodeCardsArea({ nodes }) {
 	}
 
 	function updateNodeFrequencies(nodeNumDelta) {
-		let oldNumNodes = nodes.length;
+		let oldNumNodes = props.nodes.length;
 		let newNumNodes = oldNumNodes + nodeNumDelta;
 		let oldDefaultFreq = 1 / oldNumNodes;
 		let newDefaultFreq = 1 / newNumNodes;
 
-		nodes.forEach((node) => {
+		props.nodes.forEach((node) => {
 			if (node.hasOwnProperty("probability")) {
 				let probRatio = node.frequency / oldDefaultFreq;
 				node.frequency = probRatio * newDefaultFreq;
@@ -39,39 +44,42 @@ export default function NodeCardsArea({ nodes }) {
 	}
 
 	function getWeightedRandomNodeID() {
-		let interval = 1 / nodes.length;
 		let randNum = Math.random(); // range of [0,1)
 		let counter = 0;
-		nodes.forEach((node) => {
-			//check if rand number is between counter and counter + nodes frequency
-			if (randNum >= counter && randNum < counter + node.frequency) {
-				return node.id;
+		let randNodeIdx = -1
+		props.nodes.forEach((node,i) => {
+			let isInCounterRange = (randNum) => {
+				return randNum >= counter && randNum < counter + node.frequency
+			}
+			if (isInCounterRange(randNum)) {
+				randNodeIdx = i;
 			} else {
 				counter += node.frequency;
 			}
 		});
+		return props.nodes[randNodeIdx].id
 	}
 
 	function changeNodeFrquency(nodeId, isIncreased) {
-		let numNodes = nodes.length;
+		let numNodes = props.nodes.length;
 		let numerator = isIncreased ? 1 : -1;
 		let freqModifier = numerator / (numNodes * numNodes);
 
-		let newFrequency = nodes[nodeId].frequency + numNodes * freqModifier;
+		let newFrequency = props.nodes[nodeId].frequency + numNodes * freqModifier;
 
 		if (Math.abs(1 - newFrequency) >= 1e-12) {
-			nodes[nodeId].frequency = newFrequency;
+			props.nodes[nodeId].frequency = newFrequency;
 
 			//redistribute frequencies of other nodes so they still add up to ~1
-			nodes.forEach((node) => {
+			props.nodes.forEach((node) => {
 				node.frequency -= freqModifier;
 			});
 		}
 	}
   return (
-    <StyledNodeCardsArea>
+    <StyledNodeCardsArea id="node-cards-area">
         <NodeCard 
-			nodeData={nodes[nodesTimeline[currTimelineIdx]]} 
+			nodeData={getNodeData(currTimelineIdx)} 
 			onNext={onNextNodeCard} 
 			onPrev={onPrevNodeCard} 
 			//onDelete={}
@@ -81,7 +89,9 @@ export default function NodeCardsArea({ nodes }) {
 }
 
 let StyledNodeCardsArea = styled.div`
+	margin: 20px;
 	overflow-y: hidden;
 	height: 600px;
+	width: 600px;
 	border: 2px solid black;
 `;
