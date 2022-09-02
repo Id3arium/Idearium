@@ -5,7 +5,7 @@ import Zoom from "@mui/material/Zoom";
 import _ from "lodash";
 import styled from "@emotion/styled";
 
-function CreateArea(props) {
+function IdeaCompositionArea(props) {
   const [note, setNote] = useState({ title: "", content: "", inspiration: "" });
   const [isExpanded, setIsExpanded] = useState(false);
   function handleChange(e) {
@@ -107,4 +107,4 @@ let StyledCreateArea = styled.div`
 
 `
 
-export default CreateArea;
+export default IdeaCompositionArea;
