@@ -42,19 +42,18 @@ function CreateArea(props) {
 
         <textarea
           name="content"
-          placeholder={isExpanded ? "Content" : "Compose An Idea..." }
+          placeholder={isExpanded ? "Content" : "Compose Idea..." }
           rows={isExpanded ? "4" : "1"}
           value={note.content}
           onChange={handleChange}
           onFocus={expandArea}
         />
-        {isExpanded && <textarea
+        {isExpanded && <input
           name="inspiration"
           placeholder={"Inspiration" }
-          rows={isExpanded ? "1" : "1"}
+          rows={1}
           value={note.inspiration}
           onChange={handleChange}
-          onFocus={expandArea}
         />}
         <Zoom in={isExpanded}>
           <Fab onClick={submitNote}>
