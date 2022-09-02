@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ForceGraph3D } from "react-force-graph";
 //import ForceGraph3d from './components/ForceGraph3D';
-import CreateArea from "./CreateArea.js";
+import IdeaCompositionArea from "./IdeaCompositionArea.js";
 import styled from "styled-components";
 import NodeCardsArea from "./NodeCardsArea.js";
 import defaultNodes from "./nodes.json";
-import zustand from "zustand";
+import create from "zustand";
 
 function App() {
 	let [nodes,setNodes] = useState(defaultNodes)
@@ -28,21 +28,34 @@ function App() {
 			id: nodes.length,
 			title: newNode.title,
 			content: newNode.content,
-			inspiration: newNode.inspiration
+			inspiration: newNode.inspiration,
+			frequency:0
 		}
 		setNodes([...nodes,newNodeData])
+		updateNodeFrequencies()
+		console.log("nodes",nodes)
 	}
 
-  	useEffect(() => {}, []);
+	function updateNodeFrequencies(nodeNumDelta) {
+        let oldNumNodes = nodes.length;
+        let newNumNodes = oldNumNodes + nodeNumDelta;
+        let oldDefaultFreq = 1 / oldNumNodes;
+        let newDefaultFreq = 1 / newNumNodes;
 
-	console.log(gData());
+        nodes.forEach((node) => {
+			let probRatio = node.frequency / oldDefaultFreq;
+			node.frequency = probRatio * newDefaultFreq;
+        });
+    }
+
+	//console.log(gData());
 	return (
 		<StyledApp id="App">
 			<div className="force-graph">
 				<ForceGraph3D graphData={gData()} width={850} />
 			</div>
 			<div>
-				<CreateArea onAdd={addNode} />
+				<IdeaCompositionArea onAdd={addNode} />
 				<NodeCardsArea nodes={nodes} />
 			</div>
 		</StyledApp>

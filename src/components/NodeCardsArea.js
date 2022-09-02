@@ -75,19 +75,7 @@ export default function NodeCardsArea(props) {
 		}
 	}
 
-	function updateNodeFrequencies(nodeNumDelta) {
-        let oldNumNodes = props.nodes.length;
-        let newNumNodes = oldNumNodes + nodeNumDelta;
-        let oldDefaultFreq = 1 / oldNumNodes;
-        let newDefaultFreq = 1 / newNumNodes;
-
-        props.nodes.forEach((node) => {
-            if (node.hasOwnProperty("frequency")) {
-                let probRatio = node.frequency / oldDefaultFreq;
-                node.frequency = probRatio * newDefaultFreq;
-            }
-        });
-    }
+	
 
 	let increaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, true)
 	let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
