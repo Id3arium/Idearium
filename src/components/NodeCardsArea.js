@@ -1,11 +1,26 @@
 import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
+import create from 'zustand'
+
+export const useNodeCardsAreaStore = create((set) => ({
+	nodesTimeline: [],
+	currTimelineIdx: 0,
+	setNodesTimeline: (timeLine) => set((state) => ({nodesTimeline: timeLine})),
+	setcurrTimelineIdx: (i) => set((state) => ({currTimelineIdx: i})),
+
+}))
 
 export default function NodeCardsArea(props) {
-  	let [nodesTimeline, setNodesTimeline] = useState([getWeightedRandomNodeID()]);
-  	let [currTimelineIdx, setCurrTimelineIdx] = useState(0);
-	  
+	let nodesTimeline = useNodeCardsAreaStore(state => state.nodesTimeline)
+	let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
+	let setNodesTimeline = useNodeCardsAreaStore(state => state.setNodesTimeline)
+	let setCurrTimelineIdx = useNodeCardsAreaStore(state => state.setCurrTimelineIdx)
+
+	if (nodesTimeline.length === 0){
+		nodesTimeline = [getWeightedRandomNodeID()]
+	}
+
 	function getNodeData(timelineIdx){
 		let nodeID = nodesTimeline[timelineIdx]
 		let nodeData = props.nodes[nodeID]
@@ -59,6 +74,20 @@ export default function NodeCardsArea(props) {
 			});
 		}
 	}
+
+	function updateNodeFrequencies(nodeNumDelta) {
+        let oldNumNodes = props.nodes.length;
+        let newNumNodes = oldNumNodes + nodeNumDelta;
+        let oldDefaultFreq = 1 / oldNumNodes;
+        let newDefaultFreq = 1 / newNumNodes;
+
+        props.nodes.forEach((node) => {
+            if (node.hasOwnProperty("frequency")) {
+                let probRatio = node.frequency / oldDefaultFreq;
+                node.frequency = probRatio * newDefaultFreq;
+            }
+        });
+    }
 
 	let increaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, true)
 	let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
