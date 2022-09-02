@@ -6,7 +6,7 @@ import _ from "lodash";
 import styled from "@emotion/styled";
 
 function CreateArea(props) {
-  const [note, setNote] = useState({ title: "", content: "" });
+  const [note, setNote] = useState({ title: "", content: "", inspiration: "" });
   const [isExpanded, setIsExpanded] = useState(false);
   function handleChange(e) {
     const { name, value } = e.target;
@@ -19,7 +19,7 @@ function CreateArea(props) {
   }
   function submitNote(e) {
     e.preventDefault();
-    let emptyNote = { title: "", content: "" };
+    let emptyNote = { title: "", content: "", inspiration: "" };
     if (!_.isEqual(note, emptyNote)) {
       props.onAdd(note);
       setNote(emptyNote);
@@ -31,23 +31,31 @@ function CreateArea(props) {
   return (
     <StyledCreateArea id="create-area">
       <form className="create-note">
-        {isExpanded && (
+        {isExpanded && 
           <input
             name="title"
             placeholder="Title"
             value={note.title}
             onChange={handleChange}
           />
-        )}
+        }
 
         <textarea
           name="content"
-          placeholder="Take a note..."
+          placeholder={isExpanded ? "Content" : "Compose An Idea..." }
           rows={isExpanded ? "4" : "1"}
           value={note.content}
           onChange={handleChange}
           onFocus={expandArea}
         />
+        {isExpanded && <textarea
+          name="inspiration"
+          placeholder={"Inspiration" }
+          rows={isExpanded ? "1" : "1"}
+          value={note.inspiration}
+          onChange={handleChange}
+          onFocus={expandArea}
+        />}
         <Zoom in={isExpanded}>
           <Fab onClick={submitNote}>
             <AddIcon />
