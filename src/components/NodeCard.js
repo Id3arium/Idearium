@@ -11,18 +11,22 @@ export default function NodeCard(props) {
     const [backsideToggled, setBacksideToggled] = useState(false)
     let nodesTimeline = useNodeCardsAreaStore((state) => state.nodesTimeline)
     let currTimelineIdx = useNodeCardsAreaStore((state) => state.currTimelineIdx)
+
     console.log("nodesTimeline",nodesTimeline)
+	function handleClick(e){ 
+		if (e.target.id === "node-card"){
+			setBacksideToggled(!backsideToggled)
+	}}
     const deleteNodeCard = () => {
         props.onDelete(props.nodeData.id);
     };
     let frontSide = 
-    <div className="front-side" onClick={()=>setBacksideToggled(!backsideToggled)}>
+    <div className="front-side">
         <h1>{props.nodeData.title} </h1>
-        
         <p> {props.nodeData.content} </p>
     </div>
     let backSide = 
-    <div className="back-side" onClick={()=>setBacksideToggled(!backsideToggled)}>
+    <div className="back-side" >
         <h1>[{currTimelineIdx+1} / {nodesTimeline.length}]</h1>
         <p>Inspiration: {props.nodeData.inspiration}</p>
         <p className="frequency">
@@ -31,7 +35,7 @@ export default function NodeCard(props) {
     </div>
     
     return (
-        <StyledNodeCard id="node-card" >
+        <StyledNodeCard id="node-card" onClick={handleClick}>
             <div>
                 <button className="nav-btn top left" onClick={() => {props.onPrev()}}>
                     <KeyboardArrowLeftIcon />
@@ -64,6 +68,9 @@ let StyledNodeCard = styled.div`
   margin: 10px;
   backdrop-filter: blur(5px);
   position: relative;
+  :hover{
+    background-color: rebeccapurple;
+  }
 
   color: ${(props) => (props.primary ? "#111" : "#EEE")};
 
@@ -72,6 +79,7 @@ let StyledNodeCard = styled.div`
     height: 35px;
     padding: 4px;
     position: absolute;
+    z-index: 1;
   }
 
   .left {
