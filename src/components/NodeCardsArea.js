@@ -6,19 +6,18 @@ import create from 'zustand'
 export const useNodeCardsAreaStore = create((set) => ({
 	nodesTimeline: [],
 	currTimelineIdx: 0,
+	setCurrTimelineIdx: (idx) => set((state) => ({currTimelineIdx: idx})),
 	setNodesTimeline: (timeLine) => set((state) => ({nodesTimeline: timeLine})),
-	setcurrTimelineIdx: (i) => set((state) => ({currTimelineIdx: i})),
-
 }))
 
 export default function NodeCardsArea(props) {
 	let nodesTimeline = useNodeCardsAreaStore(state => state.nodesTimeline)
-	let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
 	let setNodesTimeline = useNodeCardsAreaStore(state => state.setNodesTimeline)
+    let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
 	let setCurrTimelineIdx = useNodeCardsAreaStore(state => state.setCurrTimelineIdx)
 
 	if (nodesTimeline.length === 0){
-		nodesTimeline = [getWeightedRandomNodeID()]
+		setNodesTimeline([getWeightedRandomNodeID()])
 	}
 
 	function getNodeData(timelineIdx){
@@ -34,6 +33,7 @@ export default function NodeCardsArea(props) {
 				newNodeID = getWeightedRandomNodeID()
 			}
 			setNodesTimeline([...nodesTimeline,newNodeID])
+			console.log("nodesTimeline",nodesTimeline)
 		} 
 		setCurrTimelineIdx(currTimelineIdx+1)
 	}
@@ -50,8 +50,9 @@ export default function NodeCardsArea(props) {
 		let counter = 0;
 		for (let i = 0; i < props.nodes.length; i++) {
 			let currNodeFreq = props.nodes[i].frequency
-			let isInCounterRange = randNum >= counter && randNum < (counter + currNodeFreq)
-			if (isInCounterRange) {
+			//likelyhood of randNum being inside the range is === to the nodes appearance frequency
+			let isRandNumInNodeRange = randNum >= counter && randNum < (counter + currNodeFreq)
+			if (isRandNumInNodeRange) {
 				return props.nodes[i].id
 			} else {
 				counter += currNodeFreq
@@ -75,8 +76,6 @@ export default function NodeCardsArea(props) {
 		}
 	}
 
-	
-
 	let increaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, true)
 	let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
 	return (
@@ -87,8 +86,6 @@ export default function NodeCardsArea(props) {
 				onPrev={onPrevNodeCard} 
 				onIncreaseNodeFreq={increaseNodeFreq} 
 				onDecreaseNodeFreq={decreaseNodeFreq} 
-				timelineSize={nodesTimeline.length}
-				currTimelineIdx={currTimelineIdx}
 			/>
 		</StyledNodeCardsArea>
 	);

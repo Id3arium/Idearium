@@ -42,7 +42,7 @@ function IdeaCompositionArea(props) {
 
         <textarea
           name="content"
-          placeholder={isExpanded ? "Content" : "Compose Idea..." }
+          placeholder={isExpanded ? "Content" : "Compose an Idea..." }
           rows={isExpanded ? "4" : "1"}
           value={note.content}
           onChange={handleChange}

@@ -4,9 +4,14 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import styled from "styled-components";
+import { useNodeCardsAreaStore } from "./NodeCardsArea";
+
 
 export default function NodeCard(props) {
     const [backsideToggled, setBacksideToggled] = useState(false)
+    let nodesTimeline = useNodeCardsAreaStore((state) => state.nodesTimeline)
+    let currTimelineIdx = useNodeCardsAreaStore((state) => state.currTimelineIdx)
+    console.log("nodesTimeline",nodesTimeline)
     const deleteNodeCard = () => {
         props.onDelete(props.nodeData.id);
     };
@@ -18,7 +23,7 @@ export default function NodeCard(props) {
     </div>
     let backSide = 
     <div className="back-side" onClick={()=>setBacksideToggled(!backsideToggled)}>
-        <h1>[{props.currTimelineIdx+1} / {props.timelineSize}]</h1>
+        <h1>[{currTimelineIdx+1} / {nodesTimeline.length}]</h1>
         <p>Inspiration: {props.nodeData.inspiration}</p>
         <p className="frequency">
             {(props.nodeData.frequency * 100).toFixed(1)}% Likely to appear
