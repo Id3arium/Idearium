@@ -3,20 +3,23 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { useNodeCardsAreaStore } from "./NodeCardsArea";
 
-
 export default function NodeCard(props) {
     const [backsideToggled, setBacksideToggled] = useState(false)
-    let nodesTimeline = useNodeCardsAreaStore((state) => state.nodesTimeline)
-    let currTimelineIdx = useNodeCardsAreaStore((state) => state.currTimelineIdx)
+    let nodesTimeline = useNodeCardsAreaStore.getState().nodesTimeline
+    let currTimelineIdx = useNodeCardsAreaStore.getState().currTimelineIdx
+    let currNodeID = useNodeCardsAreaStore.getState().currNodeID
 
-    console.log("nodesTimeline",nodesTimeline)
+	console.log("nodecard props", props)
 	function handleClick(e){ 
+		console.log("e.target",e.target)
 		if (e.target.id === "node-card"){
 			setBacksideToggled(!backsideToggled)
-	}}
+		}
+	}
     const deleteNodeCard = () => {
         props.onDelete(props.nodeData.id);
     };
@@ -37,20 +40,20 @@ export default function NodeCard(props) {
     return (
         <StyledNodeCard id="node-card" onClick={handleClick}>
             <div>
-                <button className="nav-btn top left" onClick={() => {props.onPrev()}}>
+                <IconButton className="nav-btn top left" onClick={() => {props.onPrev()}}>
                     <KeyboardArrowLeftIcon />
-                </button>
-                <button className="nav-btn top right" onClick={() => {props.onNext()}}>
-                    <KeyboardArrowRightIcon />
-                </button>
+                </IconButton>
+                <IconButton className="nav-btn top right" onClick={() => {props.onNext()}}>
+                    <KeyboardArrowRightIcon disabled={true}/>
+                </IconButton>
             </div>
             {backsideToggled && <div>
-                <button className="nav-btn bottom left" onClick={() => {props.onDecreaseNodeFreq()}}>
+                <IconButton className="nav-btn bottom left" onClick={() => {props.onDecreaseNodeFreq(currNodeID)}}>
                     <ArrowDropDownIcon />
-                </button>
-                <button className="nav-btn bottom right" onClick={() => {props.onIncreaseNodeFreq()}}>
+                </IconButton>
+                <IconButton className="nav-btn bottom right" onClick={() => {props.onIncreaseNodeFreq(currNodeID)}}>
                     <ArrowDropUpIcon />
-                </button>
+                </IconButton>
             </div>}
             {!backsideToggled && frontSide}
             {backsideToggled && backSide}
@@ -69,15 +72,13 @@ let StyledNodeCard = styled.div`
   backdrop-filter: blur(5px);
   position: relative;
   :hover{
-    background-color: rebeccapurple;
+    background-color: #ffffff08;
   }
 
   color: ${(props) => (props.primary ? "#111" : "#EEE")};
 
   .nav-btn {
-    width: 35px;
-    height: 35px;
-    padding: 4px;
+	color: white;
     position: absolute;
     z-index: 1;
   }
@@ -96,6 +97,10 @@ let StyledNodeCard = styled.div`
 
   .bottom {
     bottom: 8px;
+  }
+
+  .front-side, .back-side{
+	pointer-events: none;
   }
 
   h1 {
