@@ -9,9 +9,9 @@ import { useNodeCardsAreaStore } from "./NodeCardsArea";
 
 export default function NodeCard(props) {
     const [backsideToggled, setBacksideToggled] = useState(false)
-    let nodeIDsTimeline = useNodeCardsAreaStore.getState().nodeIDsTimeline
-    let currTimelineIdx = useNodeCardsAreaStore.getState().currTimelineIdx
-    let currNodeID = useNodeCardsAreaStore.getState().currNodeID
+    let nodeIDsTimeline = useNodeCardsAreaStore(state => state.nodeIDsTimeline)
+    let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
+    let currNodeID = useNodeCardsAreaStore(state => state.currNodeID)
 
 	console.log("nodecard props", props)
 	function handleClick(e){ 

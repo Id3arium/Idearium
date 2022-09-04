@@ -6,9 +6,13 @@ import create from 'zustand'
 export const useNodeCardsAreaStore = create((set) => ({
 	nodeIDsTimeline: [],
 	currTimelineIdx: 0,
-	setCurrTimelineIdx: (idx) => set((state) => ({currTimelineIdx: idx})),
+	currNodeID:0,
+	setCurrTimelineIdx: (idx) => set((state) => ({
+		currTimelineIdx: idx,
+		currNodeID: state.nodeIDsTimeline[idx]
+	})),
 	addNodeIDToTimeline: (newNodeID) => set((state) => ({
-		nodeIDsTimeline: [...state.nodeIDsTimeline,newNodeID]
+		nodeIDsTimeline: [...state.nodeIDsTimeline,newNodeID],
 	})),
 }))
 
@@ -20,6 +24,7 @@ export default function NodeCardsArea(props) {
 
 	if (nodeIDsTimeline.length === 0){
 		addNodeIDToTimeline(getWeightedRandomNodeID())
+		setCurrTimelineIdx(0)
 	}
 
 	function getNodeData(timelineIdx){
@@ -35,9 +40,11 @@ export default function NodeCardsArea(props) {
 				newNodeID = getWeightedRandomNodeID()
 			}
 			addNodeIDToTimeline(newNodeID)
+			setCurrTimelineIdx(currTimelineIdx+1)
 			console.log("nodesTimeline",nodeIDsTimeline)
-		} 
-		setCurrTimelineIdx(currTimelineIdx+1)
+		} else {
+			setCurrTimelineIdx(currTimelineIdx+1)
+		}
 	}
 
 	function onPrevNodeCard(){
