@@ -25,12 +25,12 @@ export default function NodeCard(props) {
     };
     let frontSide = 
     <div className="front-side">
-        <h1>{props.nodeData.title} </h1>
+        <h1 >{props.nodeData.title} </h1>
         <p> {props.nodeData.content} </p>
     </div>
     let backSide = 
     <div className="back-side" >
-        <h1>[{currTimelineIdx+1} / {nodeIDsTimeline.length}]</h1>
+        <h1 > Node #{currNodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
         <p>Inspiration: {props.nodeData.inspiration}</p>
         <p className="frequency">
             {(props.nodeData.frequency * 100).toFixed(1)}% Likely to appear
@@ -40,10 +40,14 @@ export default function NodeCard(props) {
     return (
         <StyledNodeCard id="node-card" onClick={handleClick}>
             <div>
-                <IconButton className="nav-btn top left" onClick={() => {props.onPrev()}}>
+                <IconButton className="nav-btn top left" 
+                  onClick={() => {props.onPrev()}}
+                >
                     <KeyboardArrowLeftIcon />
                 </IconButton>
-                <IconButton className="nav-btn top right" onClick={() => {props.onNext()}}>
+                <IconButton className="nav-btn top right" 
+                  onClick={() => {props.onNext()}}
+                >
                     <KeyboardArrowRightIcon disabled={true}/>
                 </IconButton>
             </div>
@@ -65,9 +69,9 @@ let StyledNodeCard = styled.div`
   background: #00219708;
   border-radius: 5px;
   box-shadow: 0px 0px 4px #ccc;
-  padding: 10px;
-  width: 500px;
-  height: 200px;
+  padding: 25px;
+  width: 525px;
+  height: auto;
   margin: 10px;
   backdrop-filter: blur(5px);
   position: relative;
@@ -84,34 +88,37 @@ let StyledNodeCard = styled.div`
   }
 
   .left {
-    left: 8px;
+    left: 15px;
   }
 
   .right {
-    right: 8px;
+    right: 15px;
   }
 
-  .up {
-    top: 8px;
+  .top {
+    top: 20px;
   }
 
   .bottom {
-    bottom: 8px;
+    bottom: 15px;
   }
 
   .front-side, .back-side{
-	pointer-events: none;
+    min-height: 200px;
+    height: auto;
+    padding: 0px 30px;
+	  pointer-events: none;
   }
 
   h1 {
     text-align: center;
     font-size: 1.2em;
-    margin: 6px 40px;
+    margin: 0px 15px 20px;
   }
 
   p {
     font-size: 1.1em;
-    margin: 6px 0;
+    margin: 6px 0 30px;
     white-space: pre-wrap;
     word-wrap: break-word;
   }
@@ -120,7 +127,7 @@ let StyledNodeCard = styled.div`
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 15px;
+    bottom: 0px;
     font-size: .8em;
   }
 `;

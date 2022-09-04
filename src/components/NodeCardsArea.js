@@ -21,17 +21,13 @@ export default function NodeCardsArea(props) {
 	let addNodeIDToTimeline = useNodeCardsAreaStore(state => state.addNodeIDToTimeline)
     let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
 	let setCurrTimelineIdx = useNodeCardsAreaStore(state => state.setCurrTimelineIdx)
+	let currNodeID = useNodeCardsAreaStore(state => state.currNodeID)
 
 	if (nodeIDsTimeline.length === 0){
 		addNodeIDToTimeline(getWeightedRandomNodeID())
 		setCurrTimelineIdx(0)
 	}
 
-	function getNodeData(timelineIdx){
-		let nodeID = nodeIDsTimeline[timelineIdx]
-		let nodeData = props.nodes[nodeID]
-		return nodeData
-	}
 	function onNextNodeCard(){
 		let isAtEndOfTimeline = currTimelineIdx === nodeIDsTimeline.length - 1
 		if(isAtEndOfTimeline) {
@@ -85,12 +81,13 @@ export default function NodeCardsArea(props) {
 		}
 	}
 
+	let getCurrNodeData = () => props.nodes[currNodeID]
 	let increaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, true)
 	let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
 	return (
 		<StyledNodeCardsArea id="node-cards-area">
 			<NodeCard 
-				nodeData={getNodeData(currTimelineIdx)} 
+				nodeData={getCurrNodeData()} 
 				onNext={onNextNodeCard} 
 				onPrev={onPrevNodeCard} 
 				onIncreaseNodeFreq={increaseNodeFreq} 
