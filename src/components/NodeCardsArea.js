@@ -4,36 +4,38 @@ import NodeCard from "./NodeCard.js";
 import create from 'zustand'
 
 export const useNodeCardsAreaStore = create((set) => ({
-	nodesTimeline: [],
+	nodeIDsTimeline: [],
 	currTimelineIdx: 0,
 	setCurrTimelineIdx: (idx) => set((state) => ({currTimelineIdx: idx})),
-	setNodesTimeline: (timeLine) => set((state) => ({nodesTimeline: timeLine})),
+	addNodeIDToTimeline: (newNodeID) => set((state) => ({
+		nodeIDsTimeline: [...state.nodeIDsTimeline,newNodeID]
+	})),
 }))
 
 export default function NodeCardsArea(props) {
-	let nodesTimeline = useNodeCardsAreaStore(state => state.nodesTimeline)
-	let setNodesTimeline = useNodeCardsAreaStore(state => state.setNodesTimeline)
+	let nodeIDsTimeline = useNodeCardsAreaStore(state => state.nodeIDsTimeline)
+	let addNodeIDToTimeline = useNodeCardsAreaStore(state => state.addNodeIDToTimeline)
     let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
 	let setCurrTimelineIdx = useNodeCardsAreaStore(state => state.setCurrTimelineIdx)
 
-	if (nodesTimeline.length === 0){
-		setNodesTimeline([getWeightedRandomNodeID()])
+	if (nodeIDsTimeline.length === 0){
+		addNodeIDToTimeline(getWeightedRandomNodeID())
 	}
 
 	function getNodeData(timelineIdx){
-		let nodeID = nodesTimeline[timelineIdx]
+		let nodeID = nodeIDsTimeline[timelineIdx]
 		let nodeData = props.nodes[nodeID]
 		return nodeData
 	}
 	function onNextNodeCard(){
-		let isAtEndOfTimeline = currTimelineIdx === nodesTimeline.length - 1
+		let isAtEndOfTimeline = currTimelineIdx === nodeIDsTimeline.length - 1
 		if(isAtEndOfTimeline) {
 			let newNodeID = getWeightedRandomNodeID()
-			while(newNodeID === nodesTimeline.at(-1)){
+			while(newNodeID === nodeIDsTimeline.at(-1)){
 				newNodeID = getWeightedRandomNodeID()
 			}
-			setNodesTimeline([...nodesTimeline,newNodeID])
-			console.log("nodesTimeline",nodesTimeline)
+			addNodeIDToTimeline(newNodeID)
+			console.log("nodesTimeline",nodeIDsTimeline)
 		} 
 		setCurrTimelineIdx(currTimelineIdx+1)
 	}
@@ -60,15 +62,15 @@ export default function NodeCardsArea(props) {
 		}
 	}
 
-	function changeNodeFrquency(nodeId, isIncreased) {
+	function changeNodeFrquency(nodeID, isIncreased) {
 		let numNodes = props.nodes.length;
 		let numerator = isIncreased ? 1 : -1;
 		let freqModifier = numerator / (numNodes * numNodes);
 
-		let newFrequency = props.nodes[nodeId].frequency + numNodes * freqModifier;
+		let newFrequency = props.nodes[nodeID].frequency + numNodes * freqModifier;
 
 		if (Math.abs(1 - newFrequency) >= 1e-12) {
-			props.nodes[nodeId].frequency = newFrequency;
+			props.nodes[nodeID].frequency = newFrequency;
 
 			props.nodes.forEach((node) => {
 				node.frequency -= freqModifier;

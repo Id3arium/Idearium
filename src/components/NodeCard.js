@@ -9,7 +9,7 @@ import { useNodeCardsAreaStore } from "./NodeCardsArea";
 
 export default function NodeCard(props) {
     const [backsideToggled, setBacksideToggled] = useState(false)
-    let nodesTimeline = useNodeCardsAreaStore.getState().nodesTimeline
+    let nodeIDsTimeline = useNodeCardsAreaStore.getState().nodeIDsTimeline
     let currTimelineIdx = useNodeCardsAreaStore.getState().currTimelineIdx
     let currNodeID = useNodeCardsAreaStore.getState().currNodeID
 
@@ -30,7 +30,7 @@ export default function NodeCard(props) {
     </div>
     let backSide = 
     <div className="back-side" >
-        <h1>[{currTimelineIdx+1} / {nodesTimeline.length}]</h1>
+        <h1>[{currTimelineIdx+1} / {nodeIDsTimeline.length}]</h1>
         <p>Inspiration: {props.nodeData.inspiration}</p>
         <p className="frequency">
             {(props.nodeData.frequency * 100).toFixed(1)}% Likely to appear
