@@ -24,27 +24,29 @@ function App() {
 	};
 
 	function addNode(newNode){
-		let newNodeData = {
-			id: nodes.length,
-			title: newNode.title,
-			content: newNode.content,
-			inspiration: newNode.inspiration,
-			frequency:0
-		}
-		setNodes([...nodes,newNodeData])
-		updateNodeFrequencies()
+		setNodes((prevNodes)=>{
+			updateNodeFrequencies()
+			let newNodeData = {
+				id: nodes.length,
+				title: newNode.title,
+				content: newNode.content,
+				inspiration: newNode.inspiration,
+				frequency: 1 / (prevNodes.length+1)
+			}
+			return [...prevNodes,newNodeData]
+		})
 		console.log("nodes",nodes)
 	}
 
-	function updateNodeFrequencies(nodeNumDelta) {
-        let oldNumNodes = nodes.length;
-        let newNumNodes = oldNumNodes + nodeNumDelta;
-        let oldDefaultFreq = 1 / oldNumNodes;
-        let newDefaultFreq = 1 / newNumNodes;
+	function updateNodeFrequencies() {
+        let oldNumNodes = nodes.length
+        let newNumNodes = oldNumNodes + 1
+        let oldDefaultFreq = 1 / oldNumNodes
+        let newDefaultFreq = 1 / newNumNodes
 
         nodes.forEach((node) => {
-			let probRatio = node.frequency / oldDefaultFreq;
-			node.frequency = probRatio * newDefaultFreq;
+			let probRatio = node.frequency / oldDefaultFreq
+			node.frequency = probRatio * newDefaultFreq
         });
     }
 
