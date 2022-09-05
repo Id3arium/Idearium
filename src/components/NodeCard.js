@@ -39,7 +39,7 @@ export default function NodeCard(props) {
     
     return (
         <StyledNodeCard id="node-card" onClick={handleClick}>
-            <div>
+            <div className="card-controls" onHover>
                 <IconButton className="nav-btn top left" 
                   onClick={() => {props.onPrev()}}
                 >
@@ -59,8 +59,11 @@ export default function NodeCard(props) {
                     <ArrowDropUpIcon />
                 </IconButton>
             </div>}
-            {!backsideToggled && frontSide}
-            {backsideToggled && backSide}
+            <div className="clack">
+              {!backsideToggled && frontSide}
+              {backsideToggled && backSide}
+            </div>
+              
         </StyledNodeCard>
     );
 }
@@ -75,11 +78,19 @@ let StyledNodeCard = styled.div`
   margin: 10px;
   backdrop-filter: blur(5px);
   position: relative;
+  color: ${(props) => (props.primary ? "#111" : "#EEE")};
   :hover{
     background-color: #ffffff08;
   }
 
-  color: ${(props) => (props.primary ? "#111" : "#EEE")};
+  .card-controls{
+    display: none;
+  }
+
+  :hover > .card-controls {
+    display: block;
+    color: red;
+  }
 
   .nav-btn {
 	color: white;
