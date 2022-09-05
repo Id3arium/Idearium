@@ -7,8 +7,20 @@ import NodeCardsArea from "./NodeCardsArea.js";
 import defaultNodes from "./nodes.json";
 import create from "zustand";
 
+const useLocalStorage = (key, initialValue) => {
+	const storedValue = JSON.parse(localStorage.getItem(key))
+	const [value, setValue] = React.useState( storedValue ?? initialValue)
+	
+	React.useEffect(() => {
+	  localStorage.setItem(key, JSON.stringify(value))
+	}, [value, key])
+  
+	return [value, setValue]
+};
+
 function App() {
-	let [nodes,setNodes] = useState(defaultNodes)
+	const [nodes, setNodes] = useLocalStorage("nodes", defaultNodes);
+
   	let gData = () => {
 		// Random tree
 		const clusterSize = 100;
@@ -50,7 +62,6 @@ function App() {
         });
     }
 
-	//console.log(gData());
 	return (
 		<StyledApp id="App">
 			<div className="force-graph">
