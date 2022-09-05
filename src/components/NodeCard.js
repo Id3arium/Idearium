@@ -50,12 +50,14 @@ export default function NodeCard(props) {
         
         <div className="card-content" >
             <StyledCardSide id="front-side" isVisible={!backSideVisible}>
-                <h1 >{props.nodeData.title} </h1>
-                <p> {props.nodeData.content} </p>
+                <div className="centered"> 
+                    {props.nodeData.title && <h1 >{props.nodeData.title} </h1>}
+                    <p>{props.nodeData.content}</p> 
+                </div>
             </StyledCardSide>
             <StyledCardSide id="back-side" isVisible={backSideVisible}>
                 <h1 > Node #{currNodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
-                <p>Inspiration: {props.nodeData.inspiration}</p>
+                <p>Inspiration: {props.nodeData.inspiration}  </p><br></br>
                 <p className="frequency">
                     {(props.nodeData.frequency * 100).toFixed(1)}% Likely to appear
                 </p>
@@ -67,9 +69,10 @@ export default function NodeCard(props) {
 }
 
 let StyledCardSide = styled.div`
-  opacity: ${props => props.isVisible ? "1": ".25"};
-  filter: ${props => props.isVisible ? "none": "blur(9px)"};
-  padding: 0px 30px;
+  opacity: ${props => props.isVisible ? "1": ".1"};
+  filter: ${props => props.isVisible ? "none": "blur(7px)"};
+  transform: ${props => props.isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
+  padding: 10px 0px;
   grid-area: 1/1;
   pointer-events: none;
 `
@@ -80,7 +83,6 @@ let StyledNodeCard = styled.div`
   box-shadow: 0px 0px 4px #ccc;
   padding: 25px;
   width: 525px;
-  height: auto;
   margin: 10px;
   backdrop-filter: blur(5px);
   position: relative;
@@ -100,6 +102,7 @@ let StyledNodeCard = styled.div`
 
   .card-content{
     display: grid;
+    align-items:center;
     pointer-events: none;
     height: auto;
   }
@@ -110,40 +113,39 @@ let StyledNodeCard = styled.div`
     z-index: 1;
   }
 
-  .left {
-    left: 15px;
-  }
-
-  .right {
-    right: 15px;
-  }
-
-  .top {
-    top: 20px;
-  }
-
-  .bottom {
-    bottom: 15px;
-  }
-
   h1 {
     text-align: center;
     font-size: 1.2em;
     margin: 0px 15px 20px;
   }
 
+  .centered {
+
+    width: 100%;
+    grid-area: 1/1;
+    justify-content: center;
+  }
+
   p {
+    margin: auto;
     font-size: 1.1em;
-    margin: 6px 0 30px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
   }
 
   .frequency {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0px;
+    bottom: -8px;
     font-size: .8em;
   }
+
+  
+  .left { left: 15px; }
+
+  .right { right: 15px; }
+
+  .top { top: 20px; }
+
+  .bottom { bottom: 15px; }
+
 `;
