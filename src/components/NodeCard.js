@@ -67,7 +67,8 @@ export default function NodeCard(props) {
 }
 
 let StyledCardSide = styled.div`
-  opacity: ${props => props.isVisible ? "1": "0"};
+  opacity: ${props => props.isVisible ? "1": ".25"};
+  filter: ${props => props.isVisible ? "none": "blur(9px)"};
   padding: 0px 30px;
   grid-area: 1/1;
   pointer-events: none;
