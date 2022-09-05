@@ -28,21 +28,25 @@ export default function NodeCard(props) {
     return (
     <StyledNodeCard id="node-card" onClick={handleClick}>
         <div className="card-controls" >
-            <IconButton className="nav-btn top left" 
+            <IconButton className="nav-btn top left outlined" 
                 onClick={() => {props.onPrev()}}
             >
-                <KeyboardArrowLeftIcon />
+                <KeyboardArrowLeftIcon  />
             </IconButton>
-            <IconButton className="nav-btn top right" 
+            <IconButton className="nav-btn top right outlined" 
                 onClick={() => {props.onNext()}}
             >
                 <KeyboardArrowRightIcon disabled={true}/>
             </IconButton>
             {backSideVisible && <div>
-                <IconButton className="nav-btn bottom left" onClick={() => {props.onDecreaseNodeFreq(currNodeID)}}>
+                <IconButton className="nav-btn bottom left outlined" 
+                    onClick={() => {props.onDecreaseNodeFreq(currNodeID)}}
+                >
                     <ArrowDropDownIcon />
                 </IconButton>
-                <IconButton className="nav-btn bottom right" onClick={() => {props.onIncreaseNodeFreq(currNodeID)}}>
+                <IconButton className="nav-btn bottom right outlined" 
+                    onClick={() => {props.onIncreaseNodeFreq(currNodeID)}}
+                >
                     <ArrowDropUpIcon />
                 </IconButton>
             </div>}
@@ -50,10 +54,8 @@ export default function NodeCard(props) {
         
         <div className="card-content" >
             <StyledCardSide id="front-side" isVisible={!backSideVisible}>
-                <div className="centered"> 
-                    {props.nodeData.title && <h1 >{props.nodeData.title} </h1>}
-                    <p>{props.nodeData.content}</p> 
-                </div>
+                {props.nodeData.title && <h1 >{props.nodeData.title} </h1>}
+                <p>{props.nodeData.content}</p> 
             </StyledCardSide>
             <StyledCardSide id="back-side" isVisible={backSideVisible}>
                 <h1 > Node #{currNodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
@@ -81,12 +83,13 @@ let StyledNodeCard = styled.div`
   background: #00219708;
   border-radius: 5px;
   box-shadow: 0px 0px 4px #ccc;
-  padding: 25px;
+  padding: 20px 30px 30px;
   width: 525px;
   margin: 10px;
   backdrop-filter: blur(5px);
   position: relative;
-  color: ${(props) => (props.primary ? "#111" : "#EEE")};
+  color: #EEE;
+
   :hover{
     background-color: #ffffff08;
   }
@@ -100,6 +103,10 @@ let StyledNodeCard = styled.div`
     color: red;
   }
 
+  .outlined:hover {
+    outline: 1px solid #ffffff40;
+  }
+  
   .card-content{
     display: grid;
     align-items:center;
@@ -117,13 +124,6 @@ let StyledNodeCard = styled.div`
     text-align: center;
     font-size: 1.2em;
     margin: 0px 15px 20px;
-  }
-
-  .centered {
-
-    width: 100%;
-    grid-area: 1/1;
-    justify-content: center;
   }
 
   p {
