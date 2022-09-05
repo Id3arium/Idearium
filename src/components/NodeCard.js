@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { useNodeCardsAreaStore } from "./NodeCardsArea";
 
 export default function NodeCard(props) {
-    const [backsideToggled, setBacksideToggled] = useState(false)
+    const [backSideVisible, setBackSideVisible] = useState(false)
     let nodeIDsTimeline = useNodeCardsAreaStore(state => state.nodeIDsTimeline)
     let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
     let currNodeID = useNodeCardsAreaStore(state => state.currNodeID)
@@ -16,42 +16,29 @@ export default function NodeCard(props) {
 	console.log("nodecard props", props)
 	function handleClick(e){ 
 		console.log("e.target",e.target)
+		//if (e.target.className === "card-content"){
 		if (e.target.id === "node-card"){
-			setBacksideToggled(!backsideToggled)
+			setBackSideVisible(!backSideVisible)
 		}
 	}
     const deleteNodeCard = () => {
         props.onDelete(props.nodeData.id);
     };
-    let frontSide = 
-    <div className="front-side">
-        <h1 >{props.nodeData.title} </h1>
-        <p> {props.nodeData.content} </p>
-    </div>
-    let backSide = 
-    <div className="back-side" >
-        <h1 > Node #{currNodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
-        <p>Inspiration: {props.nodeData.inspiration}</p>
-        <p className="frequency">
-            {(props.nodeData.frequency * 100).toFixed(1)}% Likely to appear
-        </p>
-    </div>
     
     return (
-        <StyledNodeCard id="node-card" onClick={handleClick}>
-            <div className="card-controls" onHover>
-                <IconButton className="nav-btn top left" 
-                  onClick={() => {props.onPrev()}}
-                >
-                    <KeyboardArrowLeftIcon />
-                </IconButton>
-                <IconButton className="nav-btn top right" 
-                  onClick={() => {props.onNext()}}
-                >
-                    <KeyboardArrowRightIcon disabled={true}/>
-                </IconButton>
-            </div>
-            {backsideToggled && <div>
+    <StyledNodeCard id="node-card" onClick={handleClick}>
+        <div className="card-controls" >
+            <IconButton className="nav-btn top left" 
+                onClick={() => {props.onPrev()}}
+            >
+                <KeyboardArrowLeftIcon />
+            </IconButton>
+            <IconButton className="nav-btn top right" 
+                onClick={() => {props.onNext()}}
+            >
+                <KeyboardArrowRightIcon disabled={true}/>
+            </IconButton>
+            {backSideVisible && <div>
                 <IconButton className="nav-btn bottom left" onClick={() => {props.onDecreaseNodeFreq(currNodeID)}}>
                     <ArrowDropDownIcon />
                 </IconButton>
@@ -59,14 +46,32 @@ export default function NodeCard(props) {
                     <ArrowDropUpIcon />
                 </IconButton>
             </div>}
-            <div className="clack">
-              {!backsideToggled && frontSide}
-              {backsideToggled && backSide}
-            </div>
-              
-        </StyledNodeCard>
+        </div>
+        
+        <div className="card-content" >
+            <StyledCardSide id="front-side" isVisible={!backSideVisible}>
+                <h1 >{props.nodeData.title} </h1>
+                <p> {props.nodeData.content} </p>
+            </StyledCardSide>
+            <StyledCardSide id="back-side" isVisible={backSideVisible}>
+                <h1 > Node #{currNodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
+                <p>Inspiration: {props.nodeData.inspiration}</p>
+                <p className="frequency">
+                    {(props.nodeData.frequency * 100).toFixed(1)}% Likely to appear
+                </p>
+            </StyledCardSide>
+        </div>
+        
+    </StyledNodeCard>
     );
 }
+
+let StyledCardSide = styled.div`
+  opacity: ${props => props.isVisible ? "1": "0"};
+  padding: 0px 30px;
+  grid-area: 1/1;
+  pointer-events: none;
+`
 
 let StyledNodeCard = styled.div`
   background: #00219708;
@@ -92,6 +97,12 @@ let StyledNodeCard = styled.div`
     color: red;
   }
 
+  .card-content{
+    display: grid;
+    pointer-events: none;
+    height: auto;
+  }
+
   .nav-btn {
 	color: white;
     position: absolute;
@@ -112,13 +123,6 @@ let StyledNodeCard = styled.div`
 
   .bottom {
     bottom: 15px;
-  }
-
-  .front-side, .back-side{
-    min-height: 200px;
-    height: auto;
-    padding: 0px 30px;
-	  pointer-events: none;
   }
 
   h1 {
