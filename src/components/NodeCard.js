@@ -9,6 +9,7 @@ import { useNodeCardsAreaStore } from "./NodeCardsArea";
 
 export default function NodeCard(props) {
     const [backSideVisible, setBackSideVisible] = useState(false)
+    const [isHovered, setIsHovered] = useState(false)
     let nodeIDsTimeline = useNodeCardsAreaStore(state => state.nodeIDsTimeline)
     let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
     let currNodeID = useNodeCardsAreaStore(state => state.currNodeID)
@@ -26,7 +27,11 @@ export default function NodeCard(props) {
     };
     
     return (
-    <StyledNodeCard id="node-card" onClick={handleClick}>
+    <StyledNodeCard id="node-card" 
+        onClick={handleClick}  
+        onMouseEnter={()=>{setIsHovered(true)}} 
+        onMouseLeave={()=>{setIsHovered(false)}}
+    >
         <div className="card-controls" >
             <IconButton className="nav-btn top left outlined" 
                 onClick={() => {props.onPrev()}}
@@ -53,11 +58,11 @@ export default function NodeCard(props) {
         </div>
         
         <div className="card-content" >
-            <StyledCardSide id="front-side" isVisible={!backSideVisible}>
+            <StyledCardSide id="front-side" isVisible={!backSideVisible} isHovered={isHovered}>
                 {props.nodeData.title && <h1 >{props.nodeData.title} </h1>}
                 <p>{props.nodeData.content}</p> 
             </StyledCardSide>
-            <StyledCardSide id="back-side" isVisible={backSideVisible}>
+            <StyledCardSide id="back-side" isVisible={backSideVisible} isHovered={isHovered}>
                 <h1 > Node #{currNodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
                 <p>Inspiration: {props.nodeData.inspiration}  </p><br></br>
                 <p className="frequency">
@@ -71,8 +76,8 @@ export default function NodeCard(props) {
 }
 
 let StyledCardSide = styled.div`
-  opacity: ${props => props.isVisible ? "1": ".1"};
-  filter: ${props => props.isVisible ? "none": "blur(7px)"};
+  opacity: ${props => props.isVisible ? "1": ".15"};
+  filter: ${props => props.isVisible ? "none": (props.isHovered ? "blur(3px)" : "blur(9px)") };
   transform: ${props => props.isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
   padding: 10px 0px;
   grid-area: 1/1;
@@ -86,12 +91,13 @@ let StyledNodeCard = styled.div`
   padding: 20px 30px 30px;
   width: 525px;
   margin: 10px;
-  backdrop-filter: blur(5px);
   position: relative;
   color: #EEE;
+  //backdrop-filter: blur(5px);
+  background-color: #ffffff0C;
 
   :hover{
-    background-color: #ffffff08;
+    background-color: #ffffff00;
   }
 
   .card-controls{
