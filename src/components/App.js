@@ -4,22 +4,45 @@ import { ForceGraph3D } from "react-force-graph";
 import IdeaCompositionArea from "./IdeaCompositionArea.js";
 import styled from "styled-components";
 import NodeCardsArea from "./NodeCardsArea.js";
-import defaultNodes from "./nodes.json";
-import create from "zustand";
+import nodesFromJSON from "./nodes.json";
+import create from 'zustand'
 
-const useLocalStorage = (key, initialValue) => {
-	const storedValue = JSON.parse(localStorage.getItem(key))
-	const [value, setValue] = React.useState( storedValue ?? initialValue)
-	
-	React.useEffect(() => {
-	  localStorage.setItem(key, JSON.stringify(value))
-	}, [value, key])
-  
-	return [value, setValue]
-};
+export const useNodesStore = create((set) => ({
+	nodes: [],
+	setNodes: (newNodes) => set((state) => ({nodes: [...newNodes]}))
+}))
 
 function App() {
-	const [nodes, setNodes] = useLocalStorage("nodes", defaultNodes);
+	const useLocalStorage = (key, initialValue) => {
+		const storedValue = JSON.parse(localStorage.getItem(key))
+		const [value, setValue] = React.useState( storedValue ?? initialValue)
+		
+		React.useEffect(() => {
+		  localStorage.setItem(key, JSON.stringify(value))
+		}, [value, key])
+	  
+		return [value, setValue]
+	};
+	
+	const [initialNodes, _] = useLocalStorage("nodes", nodesFromJSON);
+	
+	useEffect(() => {
+		setNodes(initialNodes)
+		setWordCounts()
+	},[])
+
+	const nodes = useNodesStore(state => state.nodes)
+	const setNodes = useNodesStore(state => state.setNodes)
+
+	function getNodeWordCount (node) {
+		let titleCount = node.title.split(" ").filter(word => word !== "").length
+		let contentCount = node.content.split(" ").filter(word => word !== "").length
+		return titleCount + contentCount
+	}
+
+	useEffect(() => {
+		console.log("nodes",nodes)
+	},[nodes])
 
   	let gData = () => {
 		// Random tree
@@ -35,22 +58,21 @@ function App() {
 		};
 	};
 
-	function addNode(newNode){
-		setNodes((prevNodes)=>{
-			updateNodeFrequencies()
-			let newNodeData = {
-				id: nodes.length,
-				title: newNode.title,
-				content: newNode.content,
-				inspiration: newNode.inspiration,
-				frequency: 1 / (prevNodes.length+1)
-			}
-			return [...prevNodes,newNodeData]
-		})
-		console.log("nodes",nodes)
+	function addNode(newNodeData){
+		let upDatedNodes = updateNodeFrequencies(nodes)
+		let newNode = {
+			id: nodes.length,
+			title: newNodeData.title,
+			content: newNodeData.content,
+			inspiration: newNodeData.inspiration,
+			frequency: 1 / (nodes.length+1),
+			wordCount: getNodeWordCount(newNodeData)
+		}
+		let newNodes = [...upDatedNodes,newNode]
+		setNodes(newNodes)
 	}
 
-	function updateNodeFrequencies() {
+	function updateNodeFrequencies(nodes) {
         let oldNumNodes = nodes.length
         let newNumNodes = oldNumNodes + 1
         let oldDefaultFreq = 1 / oldNumNodes
@@ -60,16 +82,24 @@ function App() {
 			let probRatio = node.frequency / oldDefaultFreq
 			node.frequency = probRatio * newDefaultFreq
         });
+		return nodes
     }
 
+
+	function setWordCounts(){
+		nodes.forEach(node => {
+			node.wordCount = getNodeWordCount(node)
+		});
+	}
+				
 	return (
 		<StyledApp id="App">
 			<div className="force-graph">
-				<ForceGraph3D graphData={gData()} width={850} />
+				<ForceGraph3D graphData={gData()} width={850}>
+				</ForceGraph3D>
 			</div>
 			<div>
 				<IdeaCompositionArea onAdd={addNode} />
-				<NodeCardsArea nodes={nodes} />
 			</div>
 		</StyledApp>
 	);

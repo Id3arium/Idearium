@@ -1,30 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
-import { useNodeCardsAreaStore } from "./NodeCardsArea";
+import { useNodesTimelineStore } from "./NodeCardsArea.js";
+import { useNodesStore } from "./App.js";
 
 export default function NodeCard(props) {
     const [backSideVisible, setBackSideVisible] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
-    let nodeIDsTimeline = useNodeCardsAreaStore(state => state.nodeIDsTimeline)
-    let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
-    let currNodeID = useNodeCardsAreaStore(state => state.currNodeID)
+    let nodeIDsTimeline = useNodesTimelineStore(state => state.nodeIDsTimeline)
+    let currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
+    let currNodeID = useNodesTimelineStore(state => state.currNodeID)
+    let isAtEndOfTimeline = useNodesStore(state => state.isAtEndOfTimeline)
+    let nodes = useNodesStore(state => state.nodes)
 
-	console.log("nodecard props", props)
+    let nodeData = nodes[currNodeID]
 	function handleClick(e){ 
-		console.log("e.target",e.target)
-		//if (e.target.className === "card-content"){
 		if (e.target.id === "node-card"){
 			setBackSideVisible(!backSideVisible)
 		}
 	}
     const deleteNodeCard = () => {
-        props.onDelete(props.nodeData.id);
+        props.onDelete(nodeData.id);
     };
+
+    useEffect(()=>{
+        if (!backSideVisible) {
+            let currNodeCard = nodes[currNodeID]
+            let interval = currNodeCard.wordCount * props.timePerWord
+            console.log(`Showing node ${currNodeID+1} for ${interval} miliseconds `)
+            const intervalID = setInterval(() => {
+                if(isAtEndOfTimeline){
+                    props.onNext()
+                }
+            }, interval);
+            return ()=> clearInterval(intervalID) 
+        }
+    },[backSideVisible])
     
     return (
     <StyledNodeCard id="node-card" 
@@ -59,14 +74,14 @@ export default function NodeCard(props) {
         
         <div className="card-content" >
             <StyledCardSide id="front-side" isVisible={!backSideVisible} isHovered={isHovered}>
-                {props.nodeData.title && <h1 >{props.nodeData.title} </h1>}
-                <p>{props.nodeData.content}</p> 
+                {nodeData.title && <h1 >{nodeData.title} </h1>}
+                <p>{nodeData.content}</p> 
             </StyledCardSide>
             <StyledCardSide id="back-side" isVisible={backSideVisible} isHovered={isHovered}>
                 <h1 > Node #{currNodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
-                <p>Inspiration: {props.nodeData.inspiration}  </p><br></br>
+                <p>Inspiration: {nodeData.inspiration}  </p><br></br>
                 <p className="frequency">
-                    {(props.nodeData.frequency * 100).toFixed(1)}% Likely to appear
+                    {(nodeData.frequency * 100).toFixed(1)}% Likely to appear
                 </p>
             </StyledCardSide>
         </div>
@@ -93,7 +108,7 @@ let StyledNodeCard = styled.div`
   margin: 10px;
   position: relative;
   color: #EEE;
-  //backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
   background-color: #ffffff0C;
 
   :hover{

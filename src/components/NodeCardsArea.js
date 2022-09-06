@@ -2,14 +2,17 @@ import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
 import create from 'zustand'
+import { useNodesStore } from "./App.js";
 
-export const useNodeCardsAreaStore = create((set) => ({
+export const useNodesTimelineStore = create((set) => ({
 	nodeIDsTimeline: [],
 	currTimelineIdx: 0,
 	currNodeID:0,
+	isAtEndOfTimeline: true,
 	setCurrTimelineIdx: (idx) => set((state) => ({
 		currTimelineIdx: idx,
-		currNodeID: state.nodeIDsTimeline[idx]
+		currNodeID: state.nodeIDsTimeline[idx],
+		isAtEndOfTimeline: idx+1 === state.nodeIDsTimeline.length
 	})),
 	addNodeIDToTimeline: (newNodeID) => set((state) => ({
 		nodeIDsTimeline: [...state.nodeIDsTimeline,newNodeID],
@@ -17,11 +20,12 @@ export const useNodeCardsAreaStore = create((set) => ({
 }))
 
 export default function NodeCardsArea(props) {
-	let nodeIDsTimeline = useNodeCardsAreaStore(state => state.nodeIDsTimeline)
-	let addNodeIDToTimeline = useNodeCardsAreaStore(state => state.addNodeIDToTimeline)
-    let currTimelineIdx = useNodeCardsAreaStore(state => state.currTimelineIdx)
-	let setCurrTimelineIdx = useNodeCardsAreaStore(state => state.setCurrTimelineIdx)
-	let currNodeID = useNodeCardsAreaStore(state => state.currNodeID)
+	let nodeIDsTimeline = useNodesTimelineStore(state => state.nodeIDsTimeline)
+	let addNodeIDToTimeline = useNodesTimelineStore(state => state.addNodeIDToTimeline)
+    let currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
+	let setCurrTimelineIdx = useNodesTimelineStore(state => state.setCurrTimelineIdx)
+	let nodes = useNodesStore(state => state.nodes)
+	console.log("nodes",nodes)
 
 	if (nodeIDsTimeline.length === 0){
 		addNodeIDToTimeline(getWeightedRandomNodeID())
@@ -37,7 +41,6 @@ export default function NodeCardsArea(props) {
 			}
 			addNodeIDToTimeline(newNodeID)
 			setCurrTimelineIdx(currTimelineIdx+1)
-			console.log("nodesTimeline",nodeIDsTimeline)
 		} else {
 			setCurrTimelineIdx(currTimelineIdx+1)
 		}
@@ -53,12 +56,12 @@ export default function NodeCardsArea(props) {
 	function getWeightedRandomNodeID() {
 		let randNum = Math.random(); // range of [0,1)
 		let counter = 0;
-		for (let i = 0; i < props.nodes.length; i++) {
-			let currNodeFreq = props.nodes[i].frequency
+		for (let i = 0; i < nodes.length; i++) {
+			let currNodeFreq = nodes[i].frequency
 			//likelyhood of randNum being inside the range is === to the nodes appearance frequency
 			let isRandNumInNodeRange = randNum >= counter && randNum < (counter + currNodeFreq)
 			if (isRandNumInNodeRange) {
-				return props.nodes[i].id
+				return nodes[i].id
 			} else {
 				counter += currNodeFreq
 			}
@@ -66,41 +69,43 @@ export default function NodeCardsArea(props) {
 	}
 
 	function changeNodeFrquency(nodeID, isIncreased) {
-		let numNodes = props.nodes.length;
+		let numNodes = nodes.length;
 		let numerator = isIncreased ? 1 : -1;
 		let freqModifier = numerator / (numNodes * numNodes);
 
-		let newFrequency = props.nodes[nodeID].frequency + numNodes * freqModifier;
+		let newFrequency = nodes[nodeID].frequency + numNodes * freqModifier;
 
 		if (Math.abs(1 - newFrequency) >= 1e-12) {
-			props.nodes[nodeID].frequency = newFrequency;
+			nodes[nodeID].frequency = newFrequency;
 
-			props.nodes.forEach((node) => {
+			nodes.forEach((node) => {
 				node.frequency -= freqModifier;
 			});
 		}
 	}
 
-	let getCurrNodeData = () => props.nodes[currNodeID]
 	let increaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, true)
 	let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
 	return (
 		<StyledNodeCardsArea id="node-cards-area">
 			<NodeCard 
-				nodeData={getCurrNodeData()} 
 				onNext={onNextNodeCard} 
 				onPrev={onPrevNodeCard} 
 				onIncreaseNodeFreq={increaseNodeFreq} 
 				onDecreaseNodeFreq={decreaseNodeFreq} 
+				timePerWord={300}
 			/>
 		</StyledNodeCardsArea>
 	);
 }
 
 let StyledNodeCardsArea = styled.div`
+	position: absolute;
+	top: 200px;
+	left: 100px;
+	transform: translate(0%,0%);
 	margin: 20px;
 	overflow-y: hidden;
 	height: 600px;
 	width: 600px;
-	border: 2px solid black;
 `;
