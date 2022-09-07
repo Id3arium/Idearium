@@ -1,23 +1,7 @@
 import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
-import create from 'zustand'
-import { useNodesStore } from "./App.js";
-
-export const useNodesTimelineStore = create((set) => ({
-	nodeIDsTimeline: [],
-	currTimelineIdx: 0,
-	currNodeID:0,
-	isAtEndOfTimeline: true,
-	setCurrTimelineIdx: (idx) => set((state) => ({
-		currTimelineIdx: idx,
-		currNodeID: state.nodeIDsTimeline[idx],
-		isAtEndOfTimeline: idx+1 === state.nodeIDsTimeline.length
-	})),
-	addNodeIDToTimeline: (newNodeID) => set((state) => ({
-		nodeIDsTimeline: [...state.nodeIDsTimeline,newNodeID],
-	})),
-}))
+import { useNodesStore, useNodesTimelineStore } from "../Store.js";
 
 export default function NodeCardsArea(props) {
 	let nodeIDsTimeline = useNodesTimelineStore(state => state.nodeIDsTimeline)

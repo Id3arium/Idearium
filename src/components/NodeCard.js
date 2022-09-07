@@ -5,8 +5,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
-import { useNodesTimelineStore } from "./NodeCardsArea.js";
-import { useNodesStore } from "./App.js";
+import { useNodesStore, useNodesTimelineStore } from "../Store.js";
 
 export default function NodeCard(props) {
     const [backSideVisible, setBackSideVisible] = useState(false)

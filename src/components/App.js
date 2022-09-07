@@ -4,45 +4,19 @@ import { ForceGraph3D } from "react-force-graph";
 import IdeaCompositionArea from "./IdeaCompositionArea.js";
 import styled from "styled-components";
 import NodeCardsArea from "./NodeCardsArea.js";
-import nodesFromJSON from "./nodes.json";
-import create from 'zustand'
-
-export const useNodesStore = create((set) => ({
-	nodes: [],
-	setNodes: (newNodes) => set((state) => ({nodes: [...newNodes]}))
-}))
+import { useNodesStore } from "../Store.js";
 
 function App() {
-	const useLocalStorage = (key, initialValue) => {
-		const storedValue = JSON.parse(localStorage.getItem(key))
-		const [value, setValue] = React.useState( storedValue ?? initialValue)
-		
-		React.useEffect(() => {
-		  localStorage.setItem(key, JSON.stringify(value))
-		}, [value, key])
-	  
-		return [value, setValue]
-	};
-	
-	const [initialNodes, _] = useLocalStorage("nodes", nodesFromJSON);
-	
-	useEffect(() => {
-		setNodes(initialNodes)
-		setWordCounts()
-	},[])
-
 	const nodes = useNodesStore(state => state.nodes)
 	const setNodes = useNodesStore(state => state.setNodes)
+	
+	setWordCounts()
 
 	function getNodeWordCount (node) {
 		let titleCount = node.title.split(" ").filter(word => word !== "").length
 		let contentCount = node.content.split(" ").filter(word => word !== "").length
 		return titleCount + contentCount
 	}
-
-	useEffect(() => {
-		console.log("nodes",nodes)
-	},[nodes])
 
   	let gData = () => {
 		// Random tree
@@ -85,7 +59,6 @@ function App() {
 		return nodes
     }
 
-
 	function setWordCounts(){
 		nodes.forEach(node => {
 			node.wordCount = getNodeWordCount(node)
@@ -100,6 +73,7 @@ function App() {
 			</div>
 			<div>
 				<IdeaCompositionArea onAdd={addNode} />
+				<NodeCardsArea/>
 			</div>
 		</StyledApp>
 	);
