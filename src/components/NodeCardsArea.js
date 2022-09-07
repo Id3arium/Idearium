@@ -3,7 +3,7 @@ import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
 import { useNodesStore, useNodesTimelineStore } from "../Store.js";
 
-export default function NodeCardsArea(props) {
+export default function NodeCardsArea() {
 	let nodeIDsTimeline = useNodesTimelineStore(state => state.nodeIDsTimeline)
 	let addNodeIDToTimeline = useNodesTimelineStore(state => state.addNodeIDToTimeline)
     let currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
@@ -13,8 +13,15 @@ export default function NodeCardsArea(props) {
 
 	if (nodeIDsTimeline.length === 0){
 		addNodeIDToTimeline(getWeightedRandomNodeID())
-		setCurrTimelineIdx(0)
 	}
+
+	
+	useEffect(() => {
+		const intervalID = setInterval(() => {}, 3000);
+		return () => {
+		  clearInterval(intervalID);
+		};
+	  }, []);
 
 	function onNextNodeCard(){
 		let isAtEndOfTimeline = currTimelineIdx === nodeIDsTimeline.length - 1
@@ -24,7 +31,6 @@ export default function NodeCardsArea(props) {
 				newNodeID = getWeightedRandomNodeID()
 			}
 			addNodeIDToTimeline(newNodeID)
-			setCurrTimelineIdx(currTimelineIdx+1)
 		} else {
 			setCurrTimelineIdx(currTimelineIdx+1)
 		}
@@ -77,7 +83,7 @@ export default function NodeCardsArea(props) {
 				onPrev={onPrevNodeCard} 
 				onIncreaseNodeFreq={increaseNodeFreq} 
 				onDecreaseNodeFreq={decreaseNodeFreq} 
-				timePerWord={300}
+				timePerWord={100}
 			/>
 		</StyledNodeCardsArea>
 	);
