@@ -27,14 +27,17 @@ export default function NodeCard(props) {
     };
 
     useEffect(()=>{
-        if (!backSideVisible && !isHovered) {
-            let currNodeCard = nodes[currNodeID]
-            let interval = currNodeCard.wordCount * props.timePerWord
-            console.log(`Showing node ${currNodeID+1} for ${interval} miliseconds `)
-            const intervalID = setInterval(() => { props.onNext() }, 10000);
-            return ()=> clearInterval(intervalID) 
+        let currNodeCard = nodes[currNodeID]
+        let interval = Math.max(5000, currNodeCard.charCount * props.timePerChar)
+        console.log(`Showing node ${currNodeID+1} for ${interval/1000} seconds `)
+        const timeoutID = setTimeout(() => { props.onNext() }, interval);
+
+        if (backSideVisible || isHovered){
+            clearTimeout(timeoutID) 
+        } else {
+            return () => clearTimeout(timeoutID) 
         }
-    },[backSideVisible,isHovered])
+    },[backSideVisible,isHovered,currNodeID])
     
     return (
     <StyledNodeCard id="node-card" 

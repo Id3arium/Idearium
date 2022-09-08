@@ -12,9 +12,10 @@ function App() {
 	
 	setWordCounts()
 
-	function getNodeWordCount (node) {
-		let titleCount = node.title.split(" ").filter(word => word !== "").length
-		let contentCount = node.content.split(" ").filter(word => word !== "").length
+	function getNodeCharCount (node) {
+		//let titleCount = node.title.split(" ").filter(word => word !== "").length
+		let titleCount = node.title.length
+		let contentCount = node.content.length
 		return titleCount + contentCount
 	}
 
@@ -40,7 +41,7 @@ function App() {
 			content: newNodeData.content,
 			inspiration: newNodeData.inspiration,
 			frequency: 1 / (nodes.length+1),
-			wordCount: getNodeWordCount(newNodeData)
+			charCount: getNodeCharCount(newNodeData)
 		}
 		let newNodes = [...upDatedNodes,newNode]
 		setNodes(newNodes)
@@ -61,7 +62,7 @@ function App() {
 
 	function setWordCounts(){
 		nodes.forEach(node => {
-			node.wordCount = getNodeWordCount(node)
+			node.charCount = getNodeCharCount(node)
 		});
 	}
 				

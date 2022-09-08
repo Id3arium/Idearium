@@ -18,10 +18,10 @@ let nodesTimelineStore = (set) => ({
 		isAtEndOfTimeline: idx+1 === state.nodeIDsTimeline.length
 	})),
 	addNodeIDToTimeline: (newNodeID) => set((state) => ({
-		nodeIDsTimeline: [...state.nodeIDsTimeline,newNodeID],
 		currTimelineIdx: state.nodeIDsTimeline.length,
 		currNodeID: newNodeID,
 		isAtEndOfTimeline: true,
+		nodeIDsTimeline: [...state.nodeIDsTimeline,newNodeID],
 	})),
 })
 

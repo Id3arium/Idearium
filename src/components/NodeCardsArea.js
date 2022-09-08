@@ -9,19 +9,10 @@ export default function NodeCardsArea() {
     let currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
 	let setCurrTimelineIdx = useNodesTimelineStore(state => state.setCurrTimelineIdx)
 	let nodes = useNodesStore(state => state.nodes)
-	console.log("nodes",nodes)
 
 	if (nodeIDsTimeline.length === 0){
 		addNodeIDToTimeline(getWeightedRandomNodeID())
 	}
-
-	
-	useEffect(() => {
-		const intervalID = setInterval(() => {}, 3000);
-		return () => {
-		  clearInterval(intervalID);
-		};
-	  }, []);
 
 	function onNextNodeCard(){
 		let isAtEndOfTimeline = currTimelineIdx === nodeIDsTimeline.length - 1
@@ -83,7 +74,7 @@ export default function NodeCardsArea() {
 				onPrev={onPrevNodeCard} 
 				onIncreaseNodeFreq={increaseNodeFreq} 
 				onDecreaseNodeFreq={decreaseNodeFreq} 
-				timePerWord={100}
+				timePerChar={150}
 			/>
 		</StyledNodeCardsArea>
 	);
@@ -96,6 +87,5 @@ let StyledNodeCardsArea = styled.div`
 	transform: translate(0%,0%);
 	margin: 20px;
 	overflow-y: hidden;
-	height: 600px;
 	width: 600px;
 `;
