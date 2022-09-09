@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Idearium/static/css/main.e59ab97d.css",
-    "main.js": "/Idearium/static/js/main.f04a9fbe.js",
+    "main.js": "/Idearium/static/js/main.19284365.js",
     "static/js/787.6ae02fee.chunk.js": "/Idearium/static/js/787.6ae02fee.chunk.js",
     "index.html": "/Idearium/index.html",
     "main.e59ab97d.css.map": "/Idearium/static/css/main.e59ab97d.css.map",
-    "main.f04a9fbe.js.map": "/Idearium/static/js/main.f04a9fbe.js.map",
+    "main.19284365.js.map": "/Idearium/static/js/main.19284365.js.map",
     "787.6ae02fee.chunk.js.map": "/Idearium/static/js/787.6ae02fee.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e59ab97d.css",
-    "static/js/main.f04a9fbe.js"
+    "static/js/main.19284365.js"
   ]
 }
