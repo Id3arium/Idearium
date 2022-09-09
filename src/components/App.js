@@ -11,7 +11,6 @@ function App() {
 	const setNodes = useNodesStore(state => state.setNodes)
 	
 	setWordCounts()
-
 	function getNodeCharCount (node) {
 		//let titleCount = node.title.split(" ").filter(word => word !== "").length
 		let titleCount = node.title.length
@@ -21,12 +20,10 @@ function App() {
 
   	let gData = () => {
 		// Random tree
-		const clusterSize = 100;
+		const clusterSize = nodes.length;
 		return {
 		nodes: [...Array(clusterSize).keys()].map((i) => ({ id: i })),
-		links: [...Array(clusterSize).keys()]
-			.filter((id) => id)
-			.map((id) => ({
+		links: [...Array(clusterSize).keys()].filter((id) => id).map((id) => ({
 			source: id,
 			target: Math.round(Math.random() * (id - 1)),
 			})),
@@ -69,8 +66,7 @@ function App() {
 	return (
 		<StyledApp id="App">
 			<div className="force-graph">
-				<ForceGraph3D graphData={gData()} width={850}>
-				</ForceGraph3D>
+				<ForceGraph3D graphData={gData()} width={1500}/>
 			</div>
 			<div>
 				<IdeaCompositionArea onAdd={addNode} />

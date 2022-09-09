@@ -103,7 +103,7 @@ let StyledNodeCard = styled.div`
   box-shadow: 0px 0px 4px #ccc;
   padding: 20px 30px 30px;
   width: 525px;
-  margin: 10px;
+  margin: 4px;
   position: relative;
   color: #EEE;
   backdrop-filter: blur(5px);
