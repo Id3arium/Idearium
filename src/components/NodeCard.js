@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -6,6 +6,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { useNodesStore, useNodesTimelineStore } from "../Store.js";
+import { useSpring,animated } from "react-spring";
 
 export default function NodeCard(props) {
     const [backSideVisible, setBackSideVisible] = useState(false)
@@ -15,32 +16,46 @@ export default function NodeCard(props) {
     let currNodeID = useNodesTimelineStore(state => state.currNodeID)
     let isAtEndOfTimeline = useNodesStore(state => state.isAtEndOfTimeline)
     let nodes = useNodesStore(state => state.nodes)
-
     let nodeData = nodes[currNodeID]
+
+    const [timerBarStyles, timerBarAnim] = useSpring(() => ({
+        from: { opacity: .25 },
+        to: { opacity: 1 },
+        config:{duration: Math.max(50, nodes[currNodeID].charCount * props.timePerChar)},
+        loop: true,
+        onRest: (o)=>{console.log("onRest",nodes[currNodeID].charCount); props.onNext()},
+    }))
+
 	function handleClick(e){ 
-		if (e.target.id === "node-card"){
-			setBackSideVisible(!backSideVisible)
+        if (e.target.id === "node-card"){
+            setBackSideVisible(!backSideVisible)
 		}
 	}
+
     const deleteNodeCard = () => {
         props.onDelete(nodeData.id);
     };
 
     useEffect(()=>{
-        let currNodeCard = nodes[currNodeID]
-        let interval = Math.max(5000, currNodeCard.charCount * props.timePerChar)
-        console.log(`Showing node ${currNodeID+1} for ${interval/1000} seconds `)
-        const timeoutID = setTimeout(() => { props.onNext() }, interval);
-
         if (backSideVisible || isHovered){
-            clearTimeout(timeoutID) 
+            timerBarAnim.pause()
         } else {
-            return () => clearTimeout(timeoutID) 
+            timerBarAnim.resume()
         }
-    },[backSideVisible,isHovered,currNodeID])
+    },[backSideVisible,isHovered])
+    useEffect(()=>{
+        //let timePerChar = props.timePerChar
+        //let charCount = nodes[currNodeID].charCount
+        //let duration =  Math.max(1000, charCount * timePerChar)
+        //console.log("currNodeID",currNodeID, "charCount",charCount, "duration", duration)
+        //timerBarAnim.start({ config:{
+        //    duration:duration},
+        //})
+        
+    },[currNodeID, nodes, props.timePerChar,timerBarAnim])
     
     return (
-    <StyledNodeCard id="node-card" 
+    <StyledNodeCard as={animated.div} id="node-card" style={timerBarStyles}
         onClick={handleClick}  
         onMouseEnter={()=>{setIsHovered(true)}} 
         onMouseLeave={()=>{setIsHovered(false)}}

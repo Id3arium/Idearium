@@ -74,7 +74,7 @@ export default function NodeCardsArea() {
 				onPrev={onPrevNodeCard} 
 				onIncreaseNodeFreq={increaseNodeFreq} 
 				onDecreaseNodeFreq={decreaseNodeFreq} 
-				timePerChar={150}
+				timePerChar={10}
 			/>
 		</StyledNodeCardsArea>
 	);
