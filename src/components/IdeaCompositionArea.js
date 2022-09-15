@@ -25,11 +25,13 @@ function IdeaCompositionArea(props) {
       setNote(emptyNote);
     }
   }
-  function expandArea() {
-    setIsExpanded(true);
-  }
+
   return (
-    <StyledCreateArea id="create-area">
+    <StyledCreateArea 
+      id="create-area"
+      onFocus={()=>setIsExpanded(true)}
+      onBlur={()=>setIsExpanded(false)}
+    >
       <form className="create-note">
         {isExpanded && 
           <input
@@ -46,7 +48,7 @@ function IdeaCompositionArea(props) {
           rows={isExpanded ? "4" : "1"}
           value={note.content}
           onChange={handleChange}
-          onFocus={expandArea}
+
         />
         {isExpanded && <input
           name="inspiration"
@@ -74,7 +76,7 @@ let StyledCreateArea = styled.div`
   form.create-note {
     position: relative;
     background: #CCC;
-    padding: 15px;
+    padding: 10px;
     border-radius: 7px;
     box-shadow: 0 1px 5px rgb(138, 137, 137);
   }
@@ -82,6 +84,7 @@ let StyledCreateArea = styled.div`
   form.create-note input,
   form.create-note textarea {
     width: 100%;
+    height: 30px;
     border: none;
     background: #CCC;
     padding: 4px;

@@ -7,6 +7,13 @@ let nodesStore = (set) => ({
 	setNodes: (newNodes) => set((state) => ({nodes: [...newNodes]}))
 })
 
+let nodeCardStore = (set) => ({
+	frontSideVisible: true,
+	setFrontSideVisible: (isVisible) => set((state) => ({frontSideVisible: isVisible})),
+	isHovered: true,
+	setIsHovered: (isHovered) => set((state) => ({isHovered: isHovered})),
+})
+
 let nodesTimelineStore = (set) => ({
 	nodeIDsTimeline: [],
 	currTimelineIdx: 0,
@@ -26,4 +33,5 @@ let nodesTimelineStore = (set) => ({
 })
 
 export const useNodesStore = create(persist(devtools(nodesStore), {name:'nodes'}))
+export const useNodeCardStore = create(devtools(nodeCardStore))
 export const useNodesTimelineStore = create(devtools(nodesTimelineStore))

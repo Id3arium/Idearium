@@ -5,14 +5,15 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
-import { useNodesTimelineStore } from "../Store.js";
+import { useNodesTimelineStore ,useNodeCardStore} from "../Store.js";
 import { motion, useAnimationControls } from "framer-motion";
 
 export default function NodeCard(props) {
-    const [backSideVisible, setBackSideVisible] = useState(false)
-    const [isHovered, setIsHovered] = useState(false)
-    let nodeIDsTimeline = useNodesTimelineStore(state => state.nodeIDsTimeline)
-    let currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
+
+    const [isHovered, setIsHovered] = useNodeCardStore(state => [state.isHovered,state.setIsHovered])
+    const [frontSideVisible, setFrontSideVisible] = useNodeCardStore(state => [state.frontSideVisible, state.setFrontSideVisible])
+    const nodeIDsTimeline = useNodesTimelineStore(state => state.nodeIDsTimeline)
+    const currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
 
     const animation = useAnimationControls()
     let initialStyles = { opacity: .25,width: "585px"}
@@ -23,17 +24,16 @@ export default function NodeCard(props) {
             duration: props.duration,
             ease: "linear"
         }
-     }
+    }
+    animation.start(targetStyles)
 
 	function handleClick(e){ 
         if (e.target.id === "node-card"){
-            setBackSideVisible(!backSideVisible)
+            setFrontSideVisible(!frontSideVisible)
 		}
 	}
 
-    const deleteNodeCard = () => {
-        props.onDelete(props.nodeData.id);
-    };
+    const deleteNodeCard = () => props.onDelete(props.nodeData.id)
 
     function restartCardAnimation(){
         animation.stop()
@@ -50,12 +50,12 @@ export default function NodeCard(props) {
     }
 
     useEffect(()=>{
-        if (backSideVisible || isHovered){
+        if (!frontSideVisible || isHovered){
             animation.stop()
         } else {
             animation.start(targetStyles)
         }
-    },[backSideVisible,isHovered,props.duration])
+    },[frontSideVisible,isHovered,props.duration])
     
     return (
     <StyledNodeCard id="node-card" 
@@ -63,7 +63,7 @@ export default function NodeCard(props) {
         onMouseEnter={()=>{setIsHovered(true)}} 
         onMouseLeave={()=>{setIsHovered(false)}}
     >
-        <TimerBar as={motion.div} isVisible={!backSideVisible} isHovered={isHovered}
+        <TimerBar as={motion.div} $isVisible={frontSideVisible} $isHovered={isHovered}
             animate={animation} 
             initial={initialStyles}
             onAnimationComplete={animateNextCard}
@@ -79,7 +79,7 @@ export default function NodeCard(props) {
             >
                 <KeyboardArrowRightIcon disabled={true}/>
             </IconButton>
-            {backSideVisible && <div>
+            {!frontSideVisible && <div>
                 <IconButton className="nav-btn bottom left outlined" 
                     onClick={() => {props.onDecreaseNodeFreq(props.nodeID)}}
                 >
@@ -94,12 +94,12 @@ export default function NodeCard(props) {
         </div>
         
         <div className="card-content" >
-            <StyledCardSide id="front-side" isVisible={!backSideVisible} isHovered={isHovered}>
+            <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
                 {props.nodeData.title && <h1 >{props.nodeData.title} </h1>}
                 <p>{props.nodeData.content}</p> 
             </StyledCardSide>
-            <StyledCardSide id="back-side" isVisible={backSideVisible} isHovered={isHovered}>
-                <h1 > Node #{props.nodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
+            <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
+                <h1 > Node #{props.nodeData.id+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
                 <p>Inspiration: {props.nodeData.inspiration}  </p><br></br>
                 <p className="frequency">
                     {(props.nodeData.frequency * 100).toFixed(1)}% Likely to appear
@@ -117,7 +117,7 @@ const TimerBar = styled.div`
     transform: translate(-50%, 0);
     border-radius: 1px;
     bottom: 0px;
-    filter: ${props => props.isVisible ? "none": (props.isHovered ? "blur(3px)" : "blur(9px)") };
+    filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
     pointer-events: none;
     height: 5px;
     margin: 0 auto;
@@ -125,9 +125,9 @@ const TimerBar = styled.div`
 `
 
 const StyledCardSide = styled.div`
-  opacity: ${props => props.isVisible ? "1": ".15"};
-  filter: ${props => props.isVisible ? "none": (props.isHovered ? "blur(3px)" : "blur(9px)") };
-  transform: ${props => props.isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
+  opacity: ${props => props.$isVisible ? "1": ".15"};
+  filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
+  transform: ${props => props.$isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
   padding: 10px 0px;
   grid-area: 1/1;
   pointer-events: none;
