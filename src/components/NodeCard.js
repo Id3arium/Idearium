@@ -63,7 +63,7 @@ export default function NodeCard(props) {
         onMouseEnter={()=>{setIsHovered(true)}} 
         onMouseLeave={()=>{setIsHovered(false)}}
     >
-        <TimerBar as={motion.div} $isVisible={frontSideVisible} $isHovered={isHovered}
+        <TimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
             animate={animation} 
             initial={initialStyles}
             onAnimationComplete={animateNextCard}
@@ -111,7 +111,7 @@ export default function NodeCard(props) {
     );
 }
 
-const TimerBar = styled.div`
+const TimerBar = styled(motion.div)`
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);

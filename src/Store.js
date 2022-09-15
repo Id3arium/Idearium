@@ -9,8 +9,8 @@ let nodesStore = (set) => ({
 
 let nodeCardStore = (set) => ({
 	frontSideVisible: true,
+	isHovered: false,
 	setFrontSideVisible: (isVisible) => set((state) => ({frontSideVisible: isVisible})),
-	isHovered: true,
 	setIsHovered: (isHovered) => set((state) => ({isHovered: isHovered})),
 })
 
