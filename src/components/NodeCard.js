@@ -11,19 +11,26 @@ import { useSpring,animated } from "react-spring";
 export default function NodeCard(props) {
     const [backSideVisible, setBackSideVisible] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
+    const [duration, setDuration] = useState(props.duration)
     let nodeIDsTimeline = useNodesTimelineStore(state => state.nodeIDsTimeline)
     let currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
-    let currNodeID = useNodesTimelineStore(state => state.currNodeID)
-    let isAtEndOfTimeline = useNodesStore(state => state.isAtEndOfTimeline)
     let nodes = useNodesStore(state => state.nodes)
-    let nodeData = nodes[currNodeID]
+    let nodeData = nodes[props.nodeID]
+    console.log("props.nodeID",props.nodeID)
+    console.log("props.duration",props.duration)
 
-    const [timerBarStyles, timerBarAnim] = useSpring(() => ({
+    let timerBarAnim = useSpring(() => ({
         from: { opacity: .25 },
         to: { opacity: 1 },
-        config:{duration: Math.max(50, nodes[currNodeID].charCount * props.timePerChar)},
-        loop: true,
-        onRest: (o)=>{console.log("onRest",nodes[currNodeID].charCount); props.onNext()},
+        config:{duration: Math.max(50, duration)},
+        loop: {
+           reset: true,
+        },
+        onRest: (o) => {
+            console.log("onRest",props.duration)
+            props.onNext()
+            setDuration(props.duration)
+        },
     }))
 
 	function handleClick(e){ 
@@ -43,19 +50,19 @@ export default function NodeCard(props) {
             timerBarAnim.resume()
         }
     },[backSideVisible,isHovered])
+
     useEffect(()=>{
-        //let timePerChar = props.timePerChar
-        //let charCount = nodes[currNodeID].charCount
-        //let duration =  Math.max(1000, charCount * timePerChar)
-        //console.log("currNodeID",currNodeID, "charCount",charCount, "duration", duration)
-        //timerBarAnim.start({ config:{
-        //    duration:duration},
-        //})
-        
-    },[currNodeID, nodes, props.timePerChar,timerBarAnim])
+        timerBarAnim.start({
+            config: { duration: duration }
+        });
+    },[duration])
     
     return (
-    <StyledNodeCard as={animated.div} id="node-card" style={timerBarStyles}
+    <StyledNodeCard as={animated.div} id="node-card" 
+        style={{
+            opacity: timerBarAnim.opacity.to((o) => opacity )
+        }}
+ 
         onClick={handleClick}  
         onMouseEnter={()=>{setIsHovered(true)}} 
         onMouseLeave={()=>{setIsHovered(false)}}
@@ -73,12 +80,12 @@ export default function NodeCard(props) {
             </IconButton>
             {backSideVisible && <div>
                 <IconButton className="nav-btn bottom left outlined" 
-                    onClick={() => {props.onDecreaseNodeFreq(currNodeID)}}
+                    onClick={() => {props.onDecreaseNodeFreq(props.nodeID)}}
                 >
                     <ArrowDropDownIcon />
                 </IconButton>
                 <IconButton className="nav-btn bottom right outlined" 
-                    onClick={() => {props.onIncreaseNodeFreq(currNodeID)}}
+                    onClick={() => {props.onIncreaseNodeFreq(props.nodeID)}}
                 >
                     <ArrowDropUpIcon />
                 </IconButton>
@@ -91,7 +98,7 @@ export default function NodeCard(props) {
                 <p>{nodeData.content}</p> 
             </StyledCardSide>
             <StyledCardSide id="back-side" isVisible={backSideVisible} isHovered={isHovered}>
-                <h1 > Node #{currNodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
+                <h1 > Node #{props.nodeID+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
                 <p>Inspiration: {nodeData.inspiration}  </p><br></br>
                 <p className="frequency">
                     {(nodeData.frequency * 100).toFixed(1)}% Likely to appear

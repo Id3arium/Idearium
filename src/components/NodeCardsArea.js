@@ -9,6 +9,7 @@ export default function NodeCardsArea() {
     let currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
 	let setCurrTimelineIdx = useNodesTimelineStore(state => state.setCurrTimelineIdx)
 	let nodes = useNodesStore(state => state.nodes)
+	let currNodeID = useNodesTimelineStore(state => state.currNodeID)
 
 	if (nodeIDsTimeline.length === 0){
 		addNodeIDToTimeline(getWeightedRandomNodeID())
@@ -22,8 +23,10 @@ export default function NodeCardsArea() {
 				newNodeID = getWeightedRandomNodeID()
 			}
 			addNodeIDToTimeline(newNodeID)
+			return newNodeID
 		} else {
 			setCurrTimelineIdx(currTimelineIdx+1)
+			return nodeIDsTimeline[currTimelineIdx+1]
 		}
 	}
 
@@ -31,6 +34,7 @@ export default function NodeCardsArea() {
 		let isAtBeginningOfTimeline = currTimelineIdx === 0
 		if(!isAtBeginningOfTimeline) {
 			setCurrTimelineIdx(currTimelineIdx-1)
+			return nodeIDsTimeline[currTimelineIdx+1]
 		}
 	}
 
@@ -74,7 +78,8 @@ export default function NodeCardsArea() {
 				onPrev={onPrevNodeCard} 
 				onIncreaseNodeFreq={increaseNodeFreq} 
 				onDecreaseNodeFreq={decreaseNodeFreq} 
-				timePerChar={10}
+				nodeID = {currNodeID}
+				duration = {nodes[currNodeID].charCount * 10}
 			/>
 		</StyledNodeCardsArea>
 	);
