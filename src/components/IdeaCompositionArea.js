@@ -66,8 +66,10 @@ function IdeaCompositionArea(props) {
 }
 
 let StyledCreateArea = styled.div`
-  width: 100%;
+  width: 400px;
   margin: 30px 20px;
+  position: absolute;
+  left: 0;
 
   form.create-note {
     position: relative;
