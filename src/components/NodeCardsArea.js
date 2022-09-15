@@ -88,9 +88,9 @@ export default function NodeCardsArea() {
 
 let StyledNodeCardsArea = styled.div`
 	position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
 	top: 200px;
-	left: 100px;
-	transform: translate(0%,0%);
 	margin: 20px;
 	overflow-y: hidden;
 	width: 600px;
