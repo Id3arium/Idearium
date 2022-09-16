@@ -60,7 +60,7 @@ export default function NodeCard(props) {
     },[frontSideVisible,isHovered,props.duration])
     
     return (
-    <StyledNodeCard id="node-card" 
+    <StyledNodeCard id="node-card" $isHovered={isHovered}
         onClick={handleClick}  
         onMouseEnter={()=>{setIsHovered(true)}} 
         onMouseLeave={()=>{setIsHovered(false)}}
@@ -144,8 +144,8 @@ const StyledNodeCard = styled.div`
   margin: 4px;
   position: relative;
   color: #EEE;
-  backdrop-filter: blur(5px);
-  background-color: #ffffff0C;
+  backdrop-filter: ${props => props.$isHovered ? "blur(7px)" : "blur(15px)"};
+  background-color: #30303080;
   overflow: visible;
 
   :hover{

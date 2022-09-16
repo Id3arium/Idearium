@@ -9,6 +9,7 @@ export default function NodeCardsArea() {
     let currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
 	let setCurrTimelineIdx = useNodesTimelineStore(state => state.setCurrTimelineIdx)
 	let nodes = useNodesStore(state => state.nodes)
+	let setNodes = useNodesStore(state => state.setNodes)
 	let currNodeID = useNodesTimelineStore(state => state.currNodeID)
 	let currCardDuration = nodes[currNodeID].charCount * .25
 
@@ -61,13 +62,15 @@ export default function NodeCardsArea() {
 
 		let newFrequency = nodes[nodeID].frequency + numNodes * freqModifier;
 
+		let tempNodes = [...nodes]
 		if (Math.abs(1 - newFrequency) >= 1e-12) {
-			nodes[nodeID].frequency = newFrequency;
+			tempNodes[nodeID].frequency = newFrequency;
 
-			nodes.forEach((node) => {
+			tempNodes.forEach((node) => {
 				node.frequency -= freqModifier;
 			});
 		}
+		setNodes(tempNodes)
 	}
 
 	let increaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, true)
