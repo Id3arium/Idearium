@@ -17,11 +17,11 @@ export default function NodeCard(props) {
 
     const animation = useAnimationControls()
     let initialStyles = { 
-        opacity: .05, 
+        opacity: .1, 
         width: "585px",
     }
     let targetStyles = {
-        opacity: .3, 
+        opacity: .25, 
         width: "0px",
         transition: {
             duration: props.duration,
@@ -149,7 +149,7 @@ const StyledNodeCard = styled.div`
   overflow: visible;
 
   :hover{
-    background-color: #ffffff00;
+    background-color: #30303030;
   }
 
   .card-controls{
@@ -158,11 +158,10 @@ const StyledNodeCard = styled.div`
 
   :hover > .card-controls {
     display: block;
-    color: red;
   }
 
   .outlined:hover {
-    outline: 1px solid #ffffff40;
+    outline: 1px solid #ffffff80;
   }
   
   .card-content{

@@ -93,7 +93,7 @@ let StyledNodeCardsArea = styled.div`
 	position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, -70%);
 	margin: 20px;
 	overflow-y: hidden;
 	width: 600px;
