@@ -69,24 +69,27 @@ function IdeaCompositionArea(props) {
 
 let StyledCreateArea = styled.div`
   width: 400px;
+  height: 300px;
   margin: 30px 20px;
   position: absolute;
   left: 0;
 
   form.create-note {
     position: relative;
-    background: #CCC;
+    backdrop-filter: blur(13px);
+    background: #0CCccc00;
     padding: 10px;
     border-radius: 7px;
-    box-shadow: 0 1px 5px rgb(138, 137, 137);
+    box-shadow: 0px 0px 4px #CCC;
   }
 
   form.create-note input,
   form.create-note textarea {
+    color: #EEE;
     width: 100%;
     height: 30px;
     border: none;
-    background: #CCC;
+    background: #00000000;
     padding: 4px;
     outline: none;
     font-size: 1.2em;
@@ -98,7 +101,7 @@ let StyledCreateArea = styled.div`
     position: absolute;
     right: 12px;
     bottom: -18px;
-    background: #1313f5c0;
+    background: #1313f580;
     backdrop-filter: blur(5px);
     color: #CCC;
     border: 1px solid black;

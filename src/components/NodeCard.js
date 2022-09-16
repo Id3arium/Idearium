@@ -144,7 +144,7 @@ const StyledNodeCard = styled.div`
   margin: 4px;
   position: relative;
   color: #EEE;
-  backdrop-filter: ${props => props.$isHovered ? "blur(7px)" : "blur(15px)"};
+  backdrop-filter: ${props => props.$isHovered ? "blur(7px)" : "blur(13px)"};
   background-color: #30303080;
   overflow: visible;
 
