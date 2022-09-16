@@ -17,11 +17,11 @@ export default function NodeCard(props) {
 
     const animation = useAnimationControls()
     let initialStyles = { 
-        opacity: .1, 
+        opacity: .125, 
         width: "585px",
     }
     let targetStyles = {
-        opacity: .25, 
+        opacity: .15, 
         width: "0px",
         transition: {
             duration: props.duration,
@@ -118,10 +118,10 @@ const TimerBar = styled(motion.div)`
     left: 50%;
     transform: translate(-50%, 0);
     border-radius: 2px;
-    bottom: 0px;
+    bottom: .5px;
     filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
     pointer-events: none;
-    height: 4px;
+    height: 3px;
     margin: 0 auto;
     background-color: white;
 `
@@ -145,11 +145,11 @@ const StyledNodeCard = styled.div`
   position: relative;
   color: #EEE;
   backdrop-filter: ${props => props.$isHovered ? "blur(7px)" : "blur(13px)"};
-  background-color: #30303080;
+  background-color: #222222C0;
   overflow: visible;
 
   :hover{
-    background-color: #30303030;
+    background-color: #22222230;
   }
 
   .card-controls{
@@ -185,7 +185,7 @@ const StyledNodeCard = styled.div`
 
   p {
     margin: auto;
-    font-size: 1.1em;
+    font-size: 1.2em;
   }
 
   .frequency {
