@@ -16,16 +16,18 @@ export default function NodeCard(props) {
     const currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
 
     const animation = useAnimationControls()
-    let initialStyles = { opacity: .25,width: "585px"}
+    let initialStyles = { 
+        opacity: .05, 
+        width: "585px",
+    }
     let targetStyles = {
-        opacity: .1, 
+        opacity: .3, 
         width: "0px",
         transition: {
             duration: props.duration,
             ease: "linear"
         }
     }
-    animation.start(targetStyles)
 
 	function handleClick(e){ 
         if (e.target.id === "node-card"){
@@ -115,11 +117,11 @@ const TimerBar = styled(motion.div)`
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    border-radius: 1px;
+    border-radius: 2px;
     bottom: 0px;
     filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
     pointer-events: none;
-    height: 5px;
+    height: 4px;
     margin: 0 auto;
     background-color: white;
 `

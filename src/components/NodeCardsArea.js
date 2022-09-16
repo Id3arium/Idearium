@@ -10,7 +10,7 @@ export default function NodeCardsArea() {
 	let setCurrTimelineIdx = useNodesTimelineStore(state => state.setCurrTimelineIdx)
 	let nodes = useNodesStore(state => state.nodes)
 	let currNodeID = useNodesTimelineStore(state => state.currNodeID)
-	let currCardDuration = nodes[currNodeID].charCount * .3
+	let currCardDuration = nodes[currNodeID].charCount * .25
 
 	if (nodeIDsTimeline.length === 0){
 		addNodeIDToTimeline(getWeightedRandomNodeID())
