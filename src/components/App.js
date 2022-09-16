@@ -79,6 +79,7 @@ function App() {
 export default App;
 
 let StyledApp = styled.div`
+	height: 100%;
 	display: flex;
 	text-align: center;
 `;
