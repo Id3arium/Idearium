@@ -2,6 +2,6 @@
 
 ## Be where your ideas are
 
-A novel way to visualize your ideas.
+A novel way to visualize your thoughts.
 
 Organize notes, revisit what youve learned, and make relationships between the thoughts in your mind.
