@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
-
-connectToNodesDB()
+//require('dotenv').config();
 
 export default function connectToNodesDB() {
-    mongoose.connect(process.env.IdeariumURI, { useNewUrlPArser: true });
+    //mongoose.connect(process.env.IdeariumURI, { useNewUrlPArser: true });
 
     const nodeSchema = new mongoose.Schema(
         {
@@ -16,6 +14,7 @@ export default function connectToNodesDB() {
             "ranking": Number
         }
     )
+    
     const Node = mongoose.model("Node", nodeSchema);
 
     const genesisNode = new Node({

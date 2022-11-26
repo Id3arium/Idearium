@@ -11,7 +11,7 @@ function App() {
 	const nodes = useNodesStore(state => state.nodes)
 	const setNodes = useNodesStore(state => state.setNodes)
 
-	connectToNodesDB()
+	//connectToNodesDB()
 	
 	setWordCounts()
 	function getNodeCharCount (node) {
