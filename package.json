@@ -1,59 +1,18 @@
 {
   "name": "idearium",
   "version": "0.1.0",
-  "homepage": "https://id3arium.github.io/Idearium/",
   "private": true,
-  "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
-    "@mui/icons-material": "^5.8.4",
-    "@mui/material": "^5.8.7",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "3d-force-graph": "^1.70.10",
-    "body-parser": "^1.20.1",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "framer-motion": "^7.3.5",
-    "lodash": "^4.17.21",
-    "mongoose": "^6.7.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-force-graph": "^1.41.12",
-    "react-scripts": "5.0.1",
-    "react-spring": "^9.5.3",
-    "styled-components": "^5.3.5",
-    "web-vitals": "^2.1.4",
-    "zustand": "^4.1.1"
-  },
   "scripts": {
-    "deploy": "gh-pages -d build",
-    "predeploy": "npm run build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "gh-pages": "^4.0.0"
+  "dependencies": {
+    "eslint": "8.28.0",
+    "eslint-config-next": "13.0.5",
+    "next": "13.0.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   }
 }
