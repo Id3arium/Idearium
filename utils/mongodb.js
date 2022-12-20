@@ -1,20 +1,29 @@
 import mongoose from 'mongoose';
 
-const connection = {}
-
 export default async function connectToDatabase() {
-  if (connection.isConnected) { return }
+    try {
+        const db = await mongoose.connect('mongodb://localhost:27017/mydatabase', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        console.log('Connected to MongoDB!');
+    } catch (error) {
+        console.error('Connection error:', error);
+    }
+    db.once('open', () => {
+        console.log('MongoDB database connection established successfully!!!')
+    })
+}
 
-  const db = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-  })
+// export default async function connectToDatabase() {
+//     if (connection.isConnected) { return }
 
-  connection.isConnected = db.connections[0].readyState
-  console.log('Coonection status:', connection.isConnected)
-  
-  // connection.once('open', () => {
-  //   console.log('MongoDB database connection established successfully!!!')
-  // })
-} 
+//     const db = await mongoose.connect(process.env.MONGO_URI, {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true,
+//     })
+
+//     connection.isConnected = db.connections[0].readyState
+//     console.log('Coonection status:', connection.isConnected)
+// }
 

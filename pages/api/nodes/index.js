@@ -13,69 +13,62 @@ export default async function handler(req, res){
         case 'GET':
             try {
                 const nodes = await Node.find({})
-                res.status(200).json({ sucess: true, data: nodes})
+                res.status(200).json({ request: req.method, sucess: true, data: nodes})
             } catch (error){
-                res.status(400).json({ sucess: false})
+                res.status(400).json({ request: req.method, sucess: false})
             }
             break;
         case 'POST':
             try {
-                const node = await Node.create(req.body)
-                res.status(201).json({ sucess: true, data: node})
+                const node = await Node.insertcreateOne(req.body)
+                res.status(201).json({ request: req.method, sucess: true, data: node})
             } catch (error){
-                res.status(400).json({ sucess: false})
+                res.status(400).json({ request: req.method, sucess: false})
             }
             break;
         default:
-            res.status(400).json({ sucess: false})
+            res.status(400).json({ request: req.method, sucess: false})
             break;
     }
 } 
 
-// app.get('/Nodes', (req, res) => {
-//   res.json({ test: 'test' })
+// app.get('/nodes', (req, res) => {
+//     Person.find((error, nodes) => {
+//         if (error) {
+//             res.status(500).send({ request: req.method, error: error});
+//         } else {
+//             res.send(nodes);
+//         }
+//     })
 // })
 
-// app.post('/Nodes', (req, res) => {
-//   // Get the todo text from the request body
+// app.post('/nodes', (req, res) => {
 //   const { text } = req.body
-//   // Generate a new id
-//   const id = Nodes.length + 1
-//   // Add the new todo to the Nodes array
-//   Nodes.push({ id, text, completed: false })
-//   // Return the new todo
+//   const id = Node.length + 1
+//   Node.push({ id, text, completed: false })
 //   res.json({ id, text, completed: false })
 // })
 
-// app.put('/Nodes/:id', (req, res) => {
-//   // Get the todo id from the request parameters
+// app.put('/nodes/:id', (req, res) => {
 //   const { id } = req.params
-//   // Get the updated text and completed flag from the request body
 //   const { text, completed } = req.body
-//   // Find the index of the todo with the matching id
-//   const todoIndex = Nodes.findIndex(todo => todo.id === parseInt(id))
-//   // If a todo with the matching id was found, update it
+//   const todoIndex = Node.findIndex(todo => todo.id === parseInt(id))
 //   if (todoIndex >= 0) {
-//     Nodes[todoIndex] = { id: parseInt(id), text, completed }
+//     Node[todoIndex] = { id: parseInt(id), text, completed }
 //     res.json({ id: parseInt(id), text, completed })
 //   } else {
-//     // If no todo was found, return an error
 //     res.status(404).json({ error: 'Todo not found' })
 //   }
 // })
 
-// app.delete('/Nodes/:id', (req, res) => {
-//   // Get the todo id from the request parameters
+// app.delete('/nodes/:id', (req, res) => {
 //   const { id } = req.params
-//   // Find the index of the todo with the matching id
-//   const todoIndex = Nodes.findIndex(todo => todo.id === parseInt(id))
-//   // If a todo with the matching id was found, delete it
+//   const todoIndex = Node.findIndex(todo => todo.id === parseInt(id))
 //   if (todoIndex >= 0) {
-//     Nodes.splice(todoIndex, 1)
-//     res.json({ message: 'Todo deleted' })
+//     Node.splice(todoIndex, 1)
+//     res.json({ message: 'Node deleted' })
 //   } else {
-//     // If no todo was found, return an error
-//     res.status(404).json({ error: 'Todo not found' })
+//     res.status(404).json({ error: 'Node not found' })
 //   }
 // })
 
