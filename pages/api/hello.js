@@ -1,15 +1,19 @@
-import connectToDatabase from '../../util/mongodb.js'
+import connectToDatabase from '../../utils/mongodb.js'
+import {Node} from '../../models/Node.js'
 import express from 'express'
-import mongoose from 'mongoose'
 
 const app = express()
 const port = 3000
 
 connectToDatabase()
 
-export default function handler(req, res) {
-    res.status(200).json({ name: 'John Doe' })
-    res.json({ test: 'test' })
+export default async function handler(req, res) {
+    try {
+        const nodes = await Node.find({})
+        res.status(200).json({ request: req.method, sucess: true, data: nodes})
+    } catch (error){
+        res.status(400).json({ request: req.method, sucess: false})
+    }
 }
 
 // app.get('/Nodes', (req, res) => {

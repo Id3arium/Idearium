@@ -1,14 +1,13 @@
-import connectToDatabase from '../../../util/mongodb.js'
-import Node from '../../../util/Node.js'
+import connectToDatabase from '../../../utils/mongodb.js'
+import {Node} from '../../../models/Node.js'
 import express from 'express'
-import mongoose from 'mongoose'
 
 const app = express()
 const port = 3000
 
 connectToDatabase()
 
-export default async (req, res) => {
+export default async function handler(req, res){
     const { method } = req
     switch (method) {
         case 'GET':

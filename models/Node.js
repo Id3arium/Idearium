@@ -4,7 +4,7 @@ const NodeSchema = new mongoose.Schema({
   id: {
     type: Number,
     unique: true,
-    required: true
+    // required: true
   },
   title: {
     type: String,
@@ -14,22 +14,20 @@ const NodeSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    required: true
+    // required: true
   },
   inspiration: {
     type: String,
-    required: [true, "Y no inspiration?"]
+    // required: [true, "Y no inspiration?"]
   },
   frequancy: {
     type: Number,
-    required: true
+    // required: true
   },
   ranking: {
     type: Number,
-    required: true
+    // required: true
   }
 })
 
-const Node = mongoose.models.Node || mongoose.model('Node', NodeSchema)
-
-module.exports = Node
+export const Node = mongoose.models.Node || mongoose.model('Node', NodeSchema)
