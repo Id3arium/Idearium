@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export default async function connectToDatabase() {
     try {
-        const db = await mongoose.connect('mongodb://localhost:27017/mydatabase', {
+        const db = await mongoose.connect(process.env.MONGO_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
@@ -10,9 +10,9 @@ export default async function connectToDatabase() {
     } catch (error) {
         console.error('Connection error:', error);
     }
-    db.once('open', () => {
-        console.log('MongoDB database connection established successfully!!!')
-    })
+    // db.once('open', () => {
+    //     console.log('MongoDB database connection established successfully!!!')
+    // })
 }
 
 // export default async function connectToDatabase() {
