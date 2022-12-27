@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { ForceGraph3D } from "react-force-graph";
 //import ForceGraph3d from './components/ForceGraph3D';
-import IdeaCompositionArea from "./components/IdeaCompositionArea.js";
+import IdeaCompositionArea from "./IdeaCompositionArea.js";
 import styled from "styled-components";
-import NodeCardsArea from "./components/NodeCardsArea.js";
-import { useNodesStore } from "./Store.js";
-import connectToNodesDB from "./nodesAPI.js";
+import NodeCardsArea from "./NodeCardsArea.js";
+// import { useNodesStore } from "./Store.js";
 
 function App() {
-	const nodes = useNodesStore(state => state.nodes)
-	const setNodes = useNodesStore(state => state.setNodes)
+	// const nodes = useNodesStore(state => state.nodes)
+	// const setNodes = useNodesStore(state => state.setNodes)
 
 	//connectToNodesDB()
 	
@@ -67,15 +66,16 @@ function App() {
 	}
 				
 	return (
-		<StyledApp id="App">
-			<div className="force-graph">
-				<ForceGraph3D graphData={gData()}/>
-			</div>
-			<div>
-				<IdeaCompositionArea onAdd={addNode} />
-				<NodeCardsArea/>
-			</div>
-		</StyledApp>
+		<div>Hello</div>
+		// <StyledApp id="App">
+		// 	<div className="force-graph">
+		// 		<ForceGraph3D graphData={gData()}/>
+		// 	</div>
+		// 	<div>
+		// 		<IdeaCompositionArea onAdd={addNode} />
+		// 		<NodeCardsArea/>
+		// 	</div>
+		// </StyledApp>
 	);
 }
 
