@@ -20,7 +20,7 @@ export default async function handler(req, res){
             break;
         case 'POST':
             try {
-                const node = await Node.insertcreateOne(req.body)
+                const node = await Node.create(req.body)
                 res.status(201).json({ request: req.method, sucess: true, data: node})
             } catch (error){
                 res.status(400).json({ request: req.method, sucess: false})
