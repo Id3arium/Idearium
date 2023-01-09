@@ -5,8 +5,7 @@ import App from '../public/components/App.js'
 
 export default function Home() {
 	return (
-		// <App></App>
-		<div>Hello</div>
+		<App></App>
 	);
 }
 

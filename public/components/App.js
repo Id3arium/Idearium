@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { ForceGraph3D } from "react-force-graph";
-//import ForceGraph3d from './components/ForceGraph3D';
 import IdeaCompositionArea from "./IdeaCompositionArea.js";
 import styled from "styled-components";
 import NodeCardsArea from "./NodeCardsArea.js";
-// import { useNodesStore } from "./Store.js";
+import { useNodesStore } from "../Store.js";
 
 function App() {
-	// const nodes = useNodesStore(state => state.nodes)
-	// const setNodes = useNodesStore(state => state.setNodes)
+	const nodes = useNodesStore(state => state.nodes)
+	const setNodes = useNodesStore(state => state.setNodes)
 
-	//connectToNodesDB()
+	// connectToNodesDB()
 	
 	setWordCounts()
 	function getNodeCharCount (node) {
@@ -66,16 +65,15 @@ function App() {
 	}
 				
 	return (
-		<div>Hello</div>
-		// <StyledApp id="App">
-		// 	<div className="force-graph">
-		// 		<ForceGraph3D graphData={gData()}/>
-		// 	</div>
-		// 	<div>
-		// 		<IdeaCompositionArea onAdd={addNode} />
-		// 		<NodeCardsArea/>
-		// 	</div>
-		// </StyledApp>
+		<StyledApp id="App">
+			<div className="force-graph">
+				<ForceGraph3D graphData={gData()}/>
+			</div>
+			<div>
+				<IdeaCompositionArea onAdd={addNode} />
+				<NodeCardsArea/>
+			</div>
+		</StyledApp>
 	);
 }
 
