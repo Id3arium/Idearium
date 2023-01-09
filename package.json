@@ -1,6 +1,7 @@
 {
   "name": "idearium",
   "version": "0.1.0",
+  "homepage": "https://id3arium.github.io/Idearium",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,6 +14,7 @@
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.2",
+    "3d-force-graph": "^1.70.19",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
     "express": "^4.18.2",
