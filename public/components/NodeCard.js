@@ -40,7 +40,7 @@ export default function NodeCard(props) {
     function restartCardAnimation(){
         animation.stop()
         animation.set(initialStyles)
-        animation.start(targetStyles)
+        // animation.start(targetStyles)
     }
     function animateNextCard(){
         props.onNext()
@@ -55,7 +55,7 @@ export default function NodeCard(props) {
         if (!frontSideVisible || isHovered){
             animation.stop()
         } else {
-            animation.start(targetStyles)
+            // animation.start(targetStyles)
         }
     },[frontSideVisible,isHovered,props.duration])
     
