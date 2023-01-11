@@ -1,7 +1,9 @@
 import connectToDatabase from '../../../utils/mongodb.js'
 import { Node } from '../../../models/Node.js'
 
-connectToDatabase()
+console.log("connecting to Database")
+await connectToDatabase()
+console.log("connected to Database")
 
 export default async function handler(req, res) {
     const { query: { id }, method } = req

@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 import {Node} from '../models/Node.js'
 
 export const getStaticProps = async (context) => {
-	await mongoose.connect(process.env.MONGO_URI, {
+	mongoose.connect(process.env.IDEARIUM_URI, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true
 	});
@@ -36,7 +36,7 @@ export default function Home({ dataJSON }) {
 				))}
 			</ul>
 			<div className="force-graph">
-				
+
 			</div>
 			<div>
 				{/* <IdeaCompositionArea onAdd={addNode} /> */}

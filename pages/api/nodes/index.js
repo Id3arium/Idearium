@@ -5,7 +5,9 @@ import express from 'express'
 const app = express()
 const port = 3000
 
-connectToDatabase()
+console.log("connecting to Database")
+await connectToDatabase()
+console.log("connected to Database")
 
 export default async function handler(req, res){
     const { method } = req

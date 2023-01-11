@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export default async function connectToDatabase() {
     try {
-        const db = await mongoose.connect(process.env.MONGO_URI, {
+        const db = mongoose.connect(process.env.IDEARIUM_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
