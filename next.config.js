@@ -6,6 +6,7 @@ const nextConfig = {
 // module.exports = nextConfig
 module.exports = {
   env: {
-    MONGO_URI: process.env.IDEARIUM_URI
+    IDEARIUM_URI: process.env.IDEARIUM_URI,
+    TEST_URI: process.env.TEST_URI,
   }
 }
