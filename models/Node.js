@@ -1,10 +1,11 @@
 import mongoose from 'mongoose'
-
+import { v4 as uuidv4 } from 'uuid';
 const NodeSchema = new mongoose.Schema({
-  id: {
-    type: Number,
+  _id: {
+    type: String,
+    default : uuidv4(),
     unique: true,
-    // required: true
+    required: true
   },
   title: {
     type: String,
@@ -18,9 +19,9 @@ const NodeSchema = new mongoose.Schema({
   },
   inspiration: {
     type: String,
-    // required: [true, "Y no inspiration?"]
+    required: [true, "Y no inspiration?"]
   },
-  frequancy: {
+  frequency: {
     type: Number,
     // required: true
   },
