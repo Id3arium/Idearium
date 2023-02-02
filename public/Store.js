@@ -3,7 +3,7 @@ import {devtools, persist} from 'zustand/middleware'
 import nodesFromJSON from "./nodes.json";
 
 let nodesStore = (set) => ({
-	nodes: nodesFromJSON,
+	nodes: {nodesFromJSON},
 	setNodes: (newNodes) => set((state) => ({nodes: [...newNodes]}))
 })
 

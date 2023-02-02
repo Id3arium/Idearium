@@ -8,31 +8,30 @@ import mongoose from 'mongoose';
 import {Node} from '../models/Node.js'
 
 export const getStaticProps = async (context) => {
-	mongoose.connect(process.env.IDEARIUM_URI, {
+	await mongoose.connect(process.env.IDEARIUM_URI, {
 		useNewUrlParser: true,
-		useUnifiedTopology: true
+		useUnifiedTopology: true,
 	});
-    const data = await Node.find().exec();
-	const dataJSON = data.map(d => { // convert each instance of model to plain object
-		d = d.toObject();
-		d._id = d._id.toHexString();
-		return d;
-	});
+	// const data = await db.collection('asdfg').toArray();
+	let nodes = await Node.find({}).exec()
+
+	let nodesString = JSON.stringify(nodes)
+	
     await mongoose.connection.close();
     return {
 		props: {
-			dataJSON
+			nodesString
         }
     }
 }
 
-export default function Home({ dataJSON }) {
-	console.log("dataJSON",dataJSON)
+export default function Home({ nodesString }) {
+	let nodes = JSON.parse(nodesString)
 	return (
 		<StyledHome id="Home">
 			<ul>
-				{dataJSON.map(item => (
-					<li key={item.id}>{item.title} {item.content}</li>
+				{nodes.map(node => (
+					<li key={node._id}>[{node._id}]: {node.title} {node.content}</li>
 				))}
 			</ul>
 			<div className="force-graph">
@@ -40,7 +39,7 @@ export default function Home({ dataJSON }) {
 			</div>
 			<div>
 				{/* <IdeaCompositionArea onAdd={addNode} /> */}
-				<NodeCardsArea />
+				{/* <NodeCardsArea /> */}
 			</div>
 		</StyledHome>
 	);
