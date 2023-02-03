@@ -39,7 +39,7 @@ export default function Home({ nodesString }) {
 			</div>
 			<div>
 				{/* <IdeaCompositionArea onAdd={addNode} /> */}
-				{/* <NodeCardsArea /> */}
+				<NodeCardsArea />
 			</div>
 		</StyledHome>
 	);
