@@ -59,61 +59,68 @@ export default function NodeCard(props) {
         }
     },[frontSideVisible,isHovered,props.duration])
     
-    return (
-    <StyledNodeCard id="node-card" $isHovered={isHovered}
-        onClick={handleClick}  
-        onMouseEnter={()=>{setIsHovered(true)}} 
-        onMouseLeave={()=>{setIsHovered(false)}}
-    >
-        <TimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
+
+    let TimerBar =
+        <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
             animate={animation} 
             initial={initialStyles}
             onAnimationComplete={animateNextCard}
         />
-        <div className="card-controls" >
-            <IconButton className="nav-btn top left outlined" 
-                onClick={animatePrevCard}
+
+    let CardControls =
+    <div className="card-controls" >
+        <IconButton className="nav-btn top left outlined" 
+            onClick={animatePrevCard}
+        >
+            <KeyboardArrowLeftIcon  />
+        </IconButton>
+        <IconButton className="nav-btn top right outlined" 
+            onClick={animateNextCard}
+        >
+            <KeyboardArrowRightIcon disabled={true}/>
+        </IconButton>
+        {!frontSideVisible && <div>
+            <IconButton className="nav-btn bottom left outlined" 
+                onClick={() => {props.onDecreaseNodeFreq(props.nodeID)}}
             >
-                <KeyboardArrowLeftIcon  />
+                <ArrowDropDownIcon />
             </IconButton>
-            <IconButton className="nav-btn top right outlined" 
-                onClick={animateNextCard}
+            <IconButton className="nav-btn bottom right outlined" 
+                onClick={() => {props.onIncreaseNodeFreq(props.nodeID)}}
             >
-                <KeyboardArrowRightIcon disabled={true}/>
+                <ArrowDropUpIcon />
             </IconButton>
-            {!frontSideVisible && <div>
-                <IconButton className="nav-btn bottom left outlined" 
-                    onClick={() => {props.onDecreaseNodeFreq(props.nodeID)}}
-                >
-                    <ArrowDropDownIcon />
-                </IconButton>
-                <IconButton className="nav-btn bottom right outlined" 
-                    onClick={() => {props.onIncreaseNodeFreq(props.nodeID)}}
-                >
-                    <ArrowDropUpIcon />
-                </IconButton>
-            </div>}
-        </div>
-        
-        <div className="card-content" >
-            <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
-                {props.nodeData?.title && <h1 >{props.nodeData?.title} </h1>}
-                <p>{props.nodeData?.content}</p> 
-            </StyledCardSide>
-            <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
-                <h1> Node #{props.nodeData?.id+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
-                <p> Inspiration: {props.nodeData?.inspiration}  </p><br></br>
-                <p className="frequency">
-                    {(props.nodeData?.frequency * 100).toFixed(1)}% Likely to appear
-                </p>
-            </StyledCardSide>
-        </div>
-        
-    </StyledNodeCard>
+        </div>}
+    </div>
+
+    let CardContent = <div className="card-content" >
+        <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
+            {props.nodeData?.title && <h1 >{props.nodeData?.title} </h1>}
+            <p>{props.nodeData?.content}</p> 
+        </StyledCardSide>
+        <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
+            <h1> Node #{props.nodeData?.id+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
+            <p> Inspiration: {props.nodeData?.inspiration}  </p><br></br>
+            <p className="frequency">
+                {(props.nodeData?.frequency * 100).toFixed(1)}% Likely to appear
+            </p>
+        </StyledCardSide>
+    </div>
+
+    return (
+        <StyledNodeCard id="node-card" $isHovered={isHovered}
+            onClick={handleClick}  
+            onMouseEnter={()=>{setIsHovered(true)}} 
+            onMouseLeave={()=>{setIsHovered(false)}}
+        >
+            {/* {TimerBar} */}
+            {CardControls}
+            {/* {CardContent} */}
+        </StyledNodeCard>
     );
 }
 
-const TimerBar = styled(motion.div)`
+const StyledTimerBar = styled(motion.div)`
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);

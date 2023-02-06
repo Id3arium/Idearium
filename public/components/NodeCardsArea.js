@@ -77,14 +77,15 @@ export default function NodeCardsArea() {
 	let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
 	return (
 		<StyledNodeCardsArea id="node-cards-area">
-			<NodeCard 
-				onNext={onNextNodeCard} 
-				onPrev={onPrevNodeCard} 
-				onIncreaseNodeFreq={increaseNodeFreq} 
-				onDecreaseNodeFreq={decreaseNodeFreq} 
-				nodeData = {nodes[currNodeID]}
-				duration = {currCardDuration}
-			/>
+			<div>Hello world</div>
+		 	<NodeCard 
+		 		onNext={onNextNodeCard} 
+		 		onPrev={onPrevNodeCard} 
+		 		onIncreaseNodeFreq={increaseNodeFreq} 
+		 		onDecreaseNodeFreq={decreaseNodeFreq} 
+		 		nodeData = {nodes[currNodeID]}
+		 		duration = {currCardDuration}
+		 	/>
 		</StyledNodeCardsArea>
 	);
 }
