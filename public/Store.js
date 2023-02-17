@@ -1,9 +1,8 @@
 import create from 'zustand'
 import {devtools, persist} from 'zustand/middleware'
-import nodesFromJSON from "./nodes.json";
 
 let nodesStore = (set) => ({
-	nodes: {nodesFromJSON},
+	nodes: [],
 	setNodes: (newNodes) => set((state) => ({nodes: [...newNodes]}))
 })
 

@@ -10,10 +10,12 @@ import { motion, useAnimationControls } from "framer-motion";
 
 export default function NodeCard(props) {
 
-    const [isHovered, setIsHovered] = useNodeCardStore(state => [state.isHovered,state.setIsHovered])
+    const [isHovered, setIsHovered] = useNodeCardStore(state => [state.isHovered, state.setIsHovered])
     const [frontSideVisible, setFrontSideVisible] = useNodeCardStore(state => [state.frontSideVisible, state.setFrontSideVisible])
     const nodeIDsTimeline = useNodesTimelineStore(state => state.nodeIDsTimeline)
     const currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
+
+    console.log("nodeCard data:", props.nodeData)
 
     const animation = useAnimationControls()
     let initialStyles = { 
@@ -57,7 +59,7 @@ export default function NodeCard(props) {
         } else {
             // animation.start(targetStyles)
         }
-    },[frontSideVisible,isHovered,props.duration])
+    },[frontSideVisible, isHovered, props.duration])
     
 
     let TimerBar =
@@ -93,18 +95,20 @@ export default function NodeCard(props) {
         </div>}
     </div>
 
-    let CardContent = <div className="card-content" >
+    let CardContent =
+    <div className="card-content" >
         <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
-            {props.nodeData?.title && <h1 >{props.nodeData?.title} </h1>}
-            <p>{props.nodeData?.content}</p> 
+            {/* {props.nodeData?.title && <h1 >{props.nodeData?.title} </h1>} */}
+            {/* <h1> {props.nodeData.title} </h1>
+            <p> {props.nodeData.content} </p>  */}
         </StyledCardSide>
-        <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
+        {/* <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
             <h1> Node #{props.nodeData?.id+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
             <p> Inspiration: {props.nodeData?.inspiration}  </p><br></br>
             <p className="frequency">
                 {(props.nodeData?.frequency * 100).toFixed(1)}% Likely to appear
             </p>
-        </StyledCardSide>
+        </StyledCardSide> */}
     </div>
 
     return (
@@ -113,9 +117,9 @@ export default function NodeCard(props) {
             onMouseEnter={()=>{setIsHovered(true)}} 
             onMouseLeave={()=>{setIsHovered(false)}}
         >
-            {/* {TimerBar} */}
+            {TimerBar}
             {CardControls}
-            {/* {CardContent} */}
+            {CardContent}
         </StyledNodeCard>
     );
 }
