@@ -1,18 +1,21 @@
 'use client';
 // import React, {useState, useEffect} from "react";
-// import styled from "styled-components";
-// import NodeCard from "./NodeCard.js";
+import styled from "styled-components";
+import NodeCard from "./NodeCard.js";
 // import { useNodesStore, useNodesTimelineStore } from "../Store.js";
 import { atom, useAtom } from 'jotai';
 
-
 export default function NodeCardsArea({nodesData}) {
 	const nodesAtom = atom(nodesData)
+    const [nodes, setNodes] = useAtom(nodesAtom)
+
+	const currNodeIDAtom = atom(nodesData[0]._id)
+    const [currNodeID, setCurrNodeID] = useAtom(currNodeIDAtom)
+
 	// const printNodesAtom = atom(
     //     (get) => get(nodesAtom).map(node => console.log("Node",node._id ,":", node.title, node.content) )
     // )
     
-    const [nodes, setNodes] = useAtom(nodesAtom)
     // const [printNodes] = useAtom(printNodesAtom)
     // const showNodesAtom = atom(
     //     (get) => get(nodesAtom).map(node => <li key={node._id}>[{node._id}]: {node.title} {node.content}</li> )
@@ -84,34 +87,33 @@ export default function NodeCardsArea({nodesData}) {
 	// let increaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, true)
 	// let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
 	return (
-        <ul>
-            {nodes.map(node => (
-                <li key={node._id}>[{node._id}]: {node.title} {node.content}</li>
-            ))}
-        </ul>
-		// <StyledNodeCardsArea id="node-cards-area">
-		// 	<ul>
-		// 		<li key={nodes[currNodeID]._id}>[{nodes[currNodeID]._id}]: {nodes[currNodeID].title} {nodes[currNodeID].content}</li>
-		// 	</ul>
-		//  	<NodeCard 
-		//  		onNext={onNextNodeCard} 
-		//  		onPrev={onPrevNodeCard} 
-		//  		onIncreaseNodeFreq={increaseNodeFreq} 
-		//  		onDecreaseNodeFreq={decreaseNodeFreq} 
-		//  		nodeData = {nodes[currNodeID]}
-		//  		duration = {1000}
-		//  		// duration = {currCardDuration}
-		//  	/>
-		// </StyledNodeCardsArea>
+        
+		<StyledNodeCardsArea id="node-cards-area">
+            <div> {"Node Cards Area"}</div>
+            <ul>
+                {nodes.map(node => (
+                    <li key={node._id}>[{node._id}]: {node.title} {node.content}</li>
+                ))}
+            </ul>
+		 	<NodeCard 
+		 		// onNext={onNextNodeCard} 
+		 		// onPrev={onPrevNodeCard} 
+		 		// onIncreaseNodeFreq={increaseNodeFreq} 
+		 		// onDecreaseNodeFreq={decreaseNodeFreq} 
+		 		// nodeData = {nodes[currNodeID]}
+		 		// duration = {1000}
+		 		// duration = {currCardDuration}
+		 	/>
+		</StyledNodeCardsArea>
 	);
 }
 
-// let StyledNodeCardsArea = styled.div`
-// 	position: absolute;
-//     left: 50%;
-//     top: 50%;
-//     transform: translate(-50%, -70%);
-// 	margin: 20px;
-// 	overflow-y: hidden;
-// 	width: 600px;
-// `;
+let StyledNodeCardsArea = styled.div`
+	position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -70%);
+	margin: 20px;
+	overflow-y: hidden;
+	width: 600px;
+`;
