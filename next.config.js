@@ -2,6 +2,10 @@
 
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    // Required:
+    appDir: true,
+  },
   env: {
     IDEARIUM_URI: process.env.IDEARIUM_URI,
     TEST_URI: process.env.TEST_URI,
@@ -10,5 +14,5 @@ const nextConfig = {
     styledComponents: true,
   },
 }
-
 module.exports = nextConfig
+
