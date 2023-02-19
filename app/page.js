@@ -6,16 +6,11 @@ import IdeaCompositionArea from '../public/components/IdeaCompositionArea.js';
 import mongoose from 'mongoose';
 import {Node} from '../models/Node.js'
 import {useNodesStore} from '../public/Store';
-// import { atom, useAtom } from 'jotai'
 
+'use client';
 export default async function Home() {
 	// const [nodes, setNodes] = useNodesStore(state => [state.nodes, state.setNodes])  //causes useref is not a funcion error
-	// const nodesAtom = atom([])
-	// const [nodes, setNodes] = useAtom(nodesAtom)
-
-	// const showNodesAtom = atom(
-	// 	(get) => get(nodesAtom).map( node => <div></div>)
-	// )
+	
 	async function getNodesFromDB(){
 		await mongoose.connect(process.env.IDEARIUM_URI, {
 			useNewUrlParser: true,
@@ -29,7 +24,6 @@ export default async function Home() {
 	}
 	
 	let testNodes = await getNodesFromDB()
-	console.log("stestNodes:", testNodes)
 
 	// useEffect(() => {
 	// 	let nodesJSON = JSON.parse(nodesString)
@@ -77,11 +71,7 @@ export default async function Home() {
 		<main className={styles.main}>
 			<div id="Home">
 				<div>Hello World</div>
-				<ul>
-					{testNodes.map(node => (
-						<li key={node._id}>[{node._id}]: {node.title} {node.content}</li>
-					))}
-				</ul>
+				<NodeCardsArea nodesData={testNodes} />
 			</div>
 		</main>
 	);

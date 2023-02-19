@@ -98,7 +98,7 @@ export default async function Home({ nodesString }) {
 			</div>
 			<div>
 				{/* <IdeaCompositionArea onAdd={addNode} /> */}
-				{/* <NodeCardsArea /> */}
+				<NodeCardsArea />
 			</div>
 		</StyledHome>
 	);
