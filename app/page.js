@@ -1,8 +1,8 @@
 import styles from "./page.module.css";
 
-import styled from "styled-components";
+// import styled from "styled-components";
 import NodeCardsArea from '../public/components/NodeCardsArea.js';
-import IdeaCompositionArea from '../public/components/IdeaCompositionArea.js';
+// import IdeaCompositionArea from '../public/components/IdeaCompositionArea.js';
 import mongoose from 'mongoose';
 import {Node} from '../models/Node.js'
 import {useNodesStore} from '../public/Store';

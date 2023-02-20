@@ -7,20 +7,18 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
-// import { useNodesTimelineStore ,useNodeCardStore} from "../Store.js";
 import { atom, useAtom } from 'jotai';
+import { getNodesListAtom } from "@components/NodeCardsArea.js"
 
-export default function NodeCard(props) {
+const isHoveredAtom = atom(false)
+const frontSideVisibleAtom = atom(false)
 
-    // const [isHovered, setIsHovered] = useNodeCardStore(state => [state.isHovered, state.setIsHovered])
-    // const [frontSideVisible, setFrontSideVisible] = useNodeCardStore(state => [state.frontSideVisible, state.setFrontSideVisible])
-    // const nodeIDsTimeline = useNodesTimelineStore(state => state.nodeIDsTimeline)
-    // const currTimelineIdx = useNodesTimelineStore(state => state.currTimelineIdx)
+export default function NodeCard() {
 
-    const isHoveredAtom = atom(false)
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
-    const frontSideVisibleAtom = atom(false)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
+
+    const [nodesList] = useAtom(getNodesListAtom)
 
     // console.log("nodeCard data:", props.nodeData)
 
