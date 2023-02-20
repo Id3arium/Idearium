@@ -6,9 +6,9 @@ import { atom, useAtom } from 'jotai';
 import { useNodesTimelineStore } from './../Store';
 
 export const nodesAtom = atom([])
-export const currNodeIdxAtom = atom(0)
+export const currentNodeAtom = atom(null)
 export const nodeIDsTimelineAtom = atom([])
-export const currTimelineIdxAtom = atom('')
+export const currentTimelineIndexAtom = atom(-1)
 
 // export const getNodesListAtom = atom( (get) => get(nodesStateAtom).nodes.map((node) => <li key={node._id}> {node._id} {node.title} { node.content} </li>) )
 export const getNodesListAtom = atom( (get) => get(nodesAtom).map((node) => <li key={node._id}> {node._id} {node.title} { node.content} </li>) )
@@ -19,25 +19,48 @@ export const nodesStateAtom = atom({
 	currentTimelineIndex: -1 // new atom to keep track of the current index in the timeline
 })
 
-export const previousNodeAtom = atom((get, set) => {
-	const currentTimelineIndex = get(nodesStateAtom).currentTimelineIndex
+//gets a random node, but nodes with higher frequency are more likely to be chosen
+export const getWeightedRandomNodeAtom = atom( (get) => {
+	const nodes = get(nodesAtom)
+	if (!nodes) { return null; }
+	let randNum = Math.random(); // range of [0,1)
+	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
+
+	for (let i = 0; i < nodes.length; i++) {
+		let currentNodeFrequency = nodes[i].frequency
+		console.log("node ", i, "has frequency", nodes[i].frequency)
+		//likelyhood of randNum being inside the range is === to the nodes appearance frequency
+		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + currentNodeFrequency)
+		if (isRandNumInNodeRange) {
+			console.log("random node is node at index", i, nodes[i].title)
+			return nodes[i]
+		} else {
+			frequencySigma += currentNodeFrequency
+		}
+	}
+})
+
+export const previousNodeAtom = atom((get) => {
+	const currentTimelineIndex = get(currentTimelineIndexAtom)
 	if (currentTimelineIndex > 0) {
 		const newCurrentTimelineIndex = currentTimelineIndex - 1
-		const nodeIDsTimeline = get(nodesStateAtom).nodeIDsTimeline
-		const nodes = get(nodesStateAtom).nodes
+		const nodeIDsTimeline = get(nodeIDsTimelineAtom)
+		const nodes = get(nodesAtom)
 		const newCurrentNode = nodes.find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
-		set(nodesStateAtom, (prev) => ({
-			...prev,
-			currentNode: newCurrentNode,
-			currentTimelineIndex: newCurrentTimelineIndex
-		}))
+		set(currentNodeAtom, newCurrentNode)
+		set(currentTimelineIndexAtom, newCurrentTimelineIndex)
+		// set(nodesStateAtom, (prev) => ({
+		// 	...prev,
+		// 	currentNode: newCurrentNode,
+		// 	currentTimelineIndex: newCurrentTimelineIndex
+		// }))
 	}
 })
 
 export const nextNodeAtom = atom((get) => {
-	const currentTimelineIndex = get(nodesStateAtom).currentTimelineIndex
-	const nodeIDsTimeline = get(nodesStateAtom).nodeIDsTimeline
-	const nodes = get(nodesStateAtom).nodes
+	const nodes = get(nodesAtom)
+	const nodeIDsTimeline = get(nodeIDsTimelineAtom)
+	const currentTimelineIndex = get(currentTimelineIndexAtom)
 	
 	const newCurrentTimelineIndex = currentTimelineIndex + 1
 	const atEndOfTimeline = currentTimelineIndex === nodeIDsTimeline.length - 1
@@ -48,11 +71,13 @@ export const nextNodeAtom = atom((get) => {
 	} else {
 		newCurrentNode = nodes.find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
 	}
-	set(nodesStateAtom, (prev) => ({
-		...prev,
-		currentNode: newCurrentNode,
-		currentTimelineIndex: newCurrentTimelineIndex
-	}))
+	set(currentNodeAtom, newCurrentNode)
+	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
+	// set(nodesStateAtom, (prev) => ({
+	// 	...prev,
+	// 	currentNode: newCurrentNode,
+	// 	currentTimelineIndex: newCurrentTimelineIndex
+	// }))
 })
 
 export default function NodeCardsArea({nodesData}) {
@@ -60,13 +85,18 @@ export default function NodeCardsArea({nodesData}) {
 	// setNodesState( prev => ({...prev, nodes: nodesData}) )
 
 	const [nodes, setNodes] = useAtom(nodesAtom)
+	const [weightedRandomNode] = useAtom(getWeightedRandomNodeAtom)
+	const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
 
 	setNodes(nodesData)
-    const [nodesList] = useAtom(getNodesListAtom)
+	// setCurrentNode(getWeightedRandomNode(nodes))
+	setCurrentNode(weightedRandomNode)
+
+	console.log("NodeCardsArea nodes", nodes)
 
 	useEffect( () => {
 		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
-	}, [nodes])
+	}, [nodes, currentNode])
 
 	// if (nodeIDsTimeline.length === 0){
 	// 	setNodeIDsTimeline((prev) => [...prev, getWeightedRandomNode()] )
@@ -96,20 +126,25 @@ export default function NodeCardsArea({nodesData}) {
 	// 	}
 	// }
 
-	// function getWeightedRandomNode() {
-	// 	let randNum = Math.random(); // range of [0,1)
-	// 	let counter = 0;
-	// 	for (let i = 0; i < nodes.length; i++) {
-	// 		let currNodeFreq = nodes[i].frequency
-	// 		//likelyhood of randNum being inside the range is === to the nodes appearance frequency
-	// 		let isRandNumInNodeRange = randNum >= counter && randNum < (counter + currNodeFreq)
-	// 		if (isRandNumInNodeRange) {
-	// 			return nodes[i]
-	// 		} else {
-	// 			counter += currNodeFreq
-	// 		}
-	// 	}
-	// }
+	// gets a random node, but nodes with higher frequency are more likely to be chosen
+	function getWeightedRandomNode(nodes) {
+		let randNum = Math.random(); // range of [0,1)
+		let frequencySigma = 0; //the frequency of all nodes must add up to ~1 
+		console.log("picking random weighted node from", nodes)
+		
+		for (let i = 0; i < nodes.length; i++) {
+			let currentNodeFrequency = nodes[i].frequency
+			console.log("node ", i, "has frequency", nodes[i].frequency)
+			//likelyhood of randNum being inside the range is === to the nodes appearance frequency
+			let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + currentNodeFrequency)
+			if (isRandNumInNodeRange) {
+				console.log("random node is node at index", i, nodes[i].title)
+				return nodes[i]
+			} else {
+				frequencySigma += currentNodeFrequency
+			}
+		}
+	}
 
 	// function changeNodeFrquency(nodeIdx, isIncreased) {
 	// 	let numNodes = nodes.length;
@@ -135,11 +170,11 @@ export default function NodeCardsArea({nodesData}) {
         
 		<StyledNodeCardsArea id="node-cards-area">
             <div> Node Cards Area </div>
-			<ul>{ nodesList }</ul>
+			
 		 	<NodeCard 
 		 		// onIncreaseNodeFreq={increaseNodeFreq} 
 		 		// onDecreaseNodeFreq={decreaseNodeFreq} 
-		 		// nodeData = {nodes[currNodeID]}
+		 		nodeData = {currentNode}
 		 		duration = {1000}
 		 		// duration = {currCardDuration}
 		 	/>
