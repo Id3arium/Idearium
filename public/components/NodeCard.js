@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -8,7 +8,7 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom } from 'jotai';
-import { getNodesListAtom } from "@components/NodeCardsArea.js"
+import { getNodesListAtom, nextNodeAtom, previousNodeAtom } from "@components/NodeCardsArea.js"
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
@@ -128,33 +128,33 @@ export default function NodeCard() {
         >
             {/* {TimerBar} */}
             {/* {CardControls} */}
-            {CardContent}
-            <ul>{ nodesList }</ul>
+            {/* {CardContent} */}
+            {/* <ul>{ nodesList }</ul> */}
         </StyledNodeCard>
     );
 }
 
-// const StyledTimerBar = styled(motion.div)`
-//     position: absolute;
-//     left: 50%;
-//     transform: translate(-50%, 0);
-//     border-radius: 2px;
-//     bottom: .5px;
-//     filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
-//     pointer-events: none;
-//     height: 3px;
-//     margin: 0 auto;
-//     background-color: white;
-// `
+const StyledTimerBar = styled(motion.div)`
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-radius: 2px;
+    bottom: .5px;
+    filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
+    pointer-events: none;
+    height: 3px;
+    margin: 0 auto;
+    background-color: white;
+`
 
-// const StyledCardSide = styled.div`
-//   opacity: ${props => props.$isVisible ? "1": ".15"};
-//   filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
-//   transform: ${props => props.$isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
-//   padding: 10px 0px;
-//   grid-area: 1/1;
-//   pointer-events: none;
-// `
+const StyledCardSide = styled.div`
+  opacity: ${props => props.$isVisible ? "1": ".15"};
+  filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
+  transform: ${props => props.$isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
+  padding: 10px 0px;
+  grid-area: 1/1;
+  pointer-events: none;
+`
 
 const StyledNodeCard = styled.div`
   background: #00219708;
