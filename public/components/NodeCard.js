@@ -8,21 +8,20 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom } from 'jotai';
-import { getNodesListAtom, nextNodeAtom, previousNodeAtom } from "@components/NodeCardsArea.js"
+import {nextNodeAtom, previousNodeAtom, currentNodeAtom, getWeightedRandomNodeAtom } from "@components/NodeCardsArea.js"
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
 
-export default function NodeCard() {
-
+export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
-    const [nodesList] = useAtom(getNodesListAtom)
-
+    const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
+    
     useEffect( () => {
       console.log("rerendering NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
-
-    }, [isHovered, frontSideVisible, nodesList])
+      console.log("NodeCardsArea currentNode", currentNode)
+    }, [isHovered, frontSideVisible, currentNode])
 
     // console.log("nodeCard data:", props.nodeData)
 
@@ -106,11 +105,12 @@ export default function NodeCard() {
 
     let CardContent =
     <div className="card-content" >
-        {/* <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
-            {props.nodeData?.title && <h1 >{props.nodeData?.title} </h1>}
-            <h1> {props.nodeData.title} </h1>
-            <p> {props.nodeData.content} </p> 
-        </StyledCardSide> */}
+        <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
+            {/* <h1>{ currentNode}</h1> */}
+            {/* {props.nodeData?.title && <h1 >{props.nodeData?.title} </h1>} */}
+            {/* <h1> {props.nodeData.title} </h1> */}
+            {/* <p> {props.nodeData.content} </p>  */}
+        </StyledCardSide>
         {/* <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
             <h1> Node #{props.nodeData?.id+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
             <p> Inspiration: {props.nodeData?.inspiration}  </p><br></br>
@@ -129,7 +129,12 @@ export default function NodeCard() {
             {/* {TimerBar} */}
             {/* {CardControls} */}
             {/* {CardContent} */}
-            {/* <ul>{ nodesList }</ul> */}
+            {/* <ul>
+              <li key={currentNode?._id}> {currentNode?._id} {currentNode?.title} { currentNode?.content} </li> 
+            </ul> */}
+            <ul>
+              <li key={props.nodeData?._id}> {props.nodeData?._id} {props.nodeData?.title} { props.nodeData?.content} </li>
+            </ul>
         </StyledNodeCard>
     );
 }
