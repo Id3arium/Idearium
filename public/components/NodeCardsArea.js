@@ -1,5 +1,5 @@
 'use client';
-// import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
 import { atom, useAtom } from 'jotai';
@@ -19,6 +19,10 @@ export default function NodeCardsArea({nodesData}) {
 
 	setNodes(nodesData)
     const [nodesList] = useAtom(getNodesListAtom)
+
+	useEffect( () => {
+		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
+	}, [])
 
 	// if (nodeIDsTimeline.length === 0){
 	// 	setNodeIDsTimeline((prev) => [...prev, getWeightedRandomNodeID()] )
@@ -86,17 +90,17 @@ export default function NodeCardsArea({nodesData}) {
 	return (
         
 		<StyledNodeCardsArea id="node-cards-area">
-            <div> Node Cards Area </div>
-			<ul>{ nodesList }</ul>
-		 	{/* <NodeCard 
+            {/* <div> Node Cards Area </div> */}
+			
+		 	<NodeCard 
 		 		// onNext={onNextNodeCard} 
 		 		// onPrev={onPrevNodeCard} 
 		 		// onIncreaseNodeFreq={increaseNodeFreq} 
 		 		// onDecreaseNodeFreq={decreaseNodeFreq} 
-		 		nodeData = {nodes[currNodeID]}
+		 		// nodeData = {nodes[currNodeID]}
 		 		duration = {1000}
 		 		// duration = {currCardDuration}
-		 	/> */}
+		 	/>
 		</StyledNodeCardsArea>
 	);
 }

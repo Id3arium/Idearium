@@ -11,14 +11,18 @@ import { atom, useAtom } from 'jotai';
 import { getNodesListAtom } from "@components/NodeCardsArea.js"
 
 const isHoveredAtom = atom(false)
-const frontSideVisibleAtom = atom(false)
+const frontSideVisibleAtom = atom(true)
 
 export default function NodeCard() {
 
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
-
     const [nodesList] = useAtom(getNodesListAtom)
+
+    useEffect( () => {
+      console.log("rerendering NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
+
+    }, [isHovered, frontSideVisible, nodesList])
 
     // console.log("nodeCard data:", props.nodeData)
 
@@ -102,11 +106,11 @@ export default function NodeCard() {
 
     let CardContent =
     <div className="card-content" >
-        <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
-            {/* {props.nodeData?.title && <h1 >{props.nodeData?.title} </h1>} */}
-            {/* <h1> {props.nodeData.title} </h1>
-            <p> {props.nodeData.content} </p>  */}
-        </StyledCardSide>
+        {/* <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
+            {props.nodeData?.title && <h1 >{props.nodeData?.title} </h1>}
+            <h1> {props.nodeData.title} </h1>
+            <p> {props.nodeData.content} </p> 
+        </StyledCardSide> */}
         {/* <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
             <h1> Node #{props.nodeData?.id+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
             <p> Inspiration: {props.nodeData?.inspiration}  </p><br></br>
@@ -125,31 +129,32 @@ export default function NodeCard() {
             {/* {TimerBar} */}
             {/* {CardControls} */}
             {CardContent}
+            <ul>{ nodesList }</ul>
         </StyledNodeCard>
     );
 }
 
-const StyledTimerBar = styled(motion.div)`
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
-    border-radius: 2px;
-    bottom: .5px;
-    filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
-    pointer-events: none;
-    height: 3px;
-    margin: 0 auto;
-    background-color: white;
-`
+// const StyledTimerBar = styled(motion.div)`
+//     position: absolute;
+//     left: 50%;
+//     transform: translate(-50%, 0);
+//     border-radius: 2px;
+//     bottom: .5px;
+//     filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
+//     pointer-events: none;
+//     height: 3px;
+//     margin: 0 auto;
+//     background-color: white;
+// `
 
-const StyledCardSide = styled.div`
-  opacity: ${props => props.$isVisible ? "1": ".15"};
-  filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
-  transform: ${props => props.$isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
-  padding: 10px 0px;
-  grid-area: 1/1;
-  pointer-events: none;
-`
+// const StyledCardSide = styled.div`
+//   opacity: ${props => props.$isVisible ? "1": ".15"};
+//   filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
+//   transform: ${props => props.$isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
+//   padding: 10px 0px;
+//   grid-area: 1/1;
+//   pointer-events: none;
+// `
 
 const StyledNodeCard = styled.div`
   background: #00219708;
@@ -219,5 +224,4 @@ const StyledNodeCard = styled.div`
   .top { top: 20px; }
 
   .bottom { bottom: 15px; }
-
 `;
