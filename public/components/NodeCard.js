@@ -8,7 +8,7 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom } from 'jotai';
-import {nextNodeAtom, previousNodeAtom, currentNodeAtom, getWeightedRandomNodeAtom } from "@components/NodeCardsArea.js"
+import { nextNodeAtom, previousNodeAtom, currentNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
@@ -17,12 +17,12 @@ export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
     const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
-    
-    useEffect( () => {
-      console.log("rerendering NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
-      console.log("NodeCardsArea currentNode", currentNode)
-    }, [isHovered, frontSideVisible, currentNode])
 
+    // useEffect( () => {
+    //   console.log("NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
+    // }, [isHovered, frontSideVisible, currentNode])
+    
+      console.log("NodeCard currentNode", currentNode?._id)
     // console.log("nodeCard data:", props.nodeData)
 
     // const animation = useAnimationControls()
@@ -129,9 +129,6 @@ export default function NodeCard(props) {
             {/* {TimerBar} */}
             {/* {CardControls} */}
             {/* {CardContent} */}
-            {/* <ul>
-              <li key={currentNode?._id}> {currentNode?._id} {currentNode?.title} { currentNode?.content} </li> 
-            </ul> */}
             <ul>
               <li key={props.nodeData?._id}> {props.nodeData?._id} {props.nodeData?.title} { props.nodeData?.content} </li>
             </ul>

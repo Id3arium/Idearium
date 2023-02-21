@@ -1,15 +1,15 @@
 import { atom, createStore } from 'jotai';
 
-const nodesAtom = atom([])
-const currentNodeAtom = atom(null)
-const nodeIDsTimelineAtom = atom([])
-const currentTimelineIndexAtom = atom(-1)
+export const nodesAtom = atom([])
+export const currentNodeAtom = atom(null)
+export const nodeIDsTimelineAtom = atom([])
+export const currentTimelineIndexAtom = atom(-1)
 
 // export const getNodesListAtom = atom( (get) => get(nodesStateAtom).nodes.map((node) => <li key={node._id}> {node._id} {node.title} { node.content} </li>) )
-const getNodesListAtom = atom( (get) => get(nodesAtom).map((node) => <li key={node._id}> {node._id} {node.title} { node.content} </li>) )
+export const getNodesListAtom = atom( (get) => get(nodesAtom).map((node) => <li key={node._id}> {node._id} {node.title} { node.content} </li>) )
 
 //gets a random node, but nodes with higher frequency are more likely to be chosen
-const getWeightedRandomNodeAtom = atom( (get) => {
+export const getWeightedRandomNodeAtom = atom( (get) => {
 	const nodes = get(nodesAtom)
 	if (!nodes) { return null; }
 	let randNum = Math.random(); // range of [0,1)
@@ -17,11 +17,10 @@ const getWeightedRandomNodeAtom = atom( (get) => {
 
 	for (let i = 0; i < nodes.length; i++) {
 		let currentNodeFrequency = nodes[i].frequency
-		console.log("node ", i, "has frequency", nodes[i].frequency)
 		//likelyhood of randNum being inside the range is === to the nodes appearance frequency
 		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + currentNodeFrequency)
 		if (isRandNumInNodeRange) {
-			console.log("random node is node at index", i, nodes[i].title)
+			console.log("random node is", nodes[i]._id)
 			return nodes[i]
 		} else {
 			frequencySigma += currentNodeFrequency
@@ -29,7 +28,7 @@ const getWeightedRandomNodeAtom = atom( (get) => {
 	}
 })
 
-const previousNodeAtom = atom((get) => {
+export const previousNodeAtom = atom((get) => {
 	const currentTimelineIndex = get(currentTimelineIndexAtom)
 	if (currentTimelineIndex > 0) {
 		const newCurrentTimelineIndex = currentTimelineIndex - 1
@@ -46,7 +45,7 @@ const previousNodeAtom = atom((get) => {
 	}
 })
 
-const nextNodeAtom = atom((get) => {
+export const nextNodeAtom = atom((get) => {
 	const nodes = get(nodesAtom)
 	const nodeIDsTimeline = get(nodeIDsTimelineAtom)
 	const currentTimelineIndex = get(currentTimelineIndexAtom)

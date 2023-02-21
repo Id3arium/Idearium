@@ -1,13 +1,10 @@
 import styles from "./page.module.css";
-
 // import styled from "styled-components";
 import NodeCardsArea from '../public/components/NodeCardsArea.js';
 // import IdeaCompositionArea from '../public/components/IdeaCompositionArea.js';
 import mongoose from 'mongoose';
-import {Node} from '../models/Node.js'
-import {useNodesStore} from '../public/Store';
+import { Node } from '../models/Node.js';
 
-'use client';
 export default async function Home() {
 	// const [nodes, setNodes] = useNodesStore(state => [state.nodes, state.setNodes])  //causes useref is not a funcion error
 	
@@ -69,10 +66,12 @@ export default async function Home() {
 	// }
 	return (
 		<main className={styles.main}>
-			<div id="Home">
-				<div>Hello World</div>
-				<NodeCardsArea nodesData={testNodes} />
-			</div>
+			{/* <Provider store={nodesStore}> */}
+				<div id="Home">
+					<div>Hello World</div>
+					<NodeCardsArea nodesData={testNodes} />
+				</div>
+			{/* </Provider> */}
 		</main>
 	);
 }
