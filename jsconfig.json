@@ -3,9 +3,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/ui/*": ["ui/*"],
-      "@/lib/*": ["lib/*"],
-      "@/styles/*": ["styles/*"]
+        "@/*": ["./*"],
     }
   }
 }

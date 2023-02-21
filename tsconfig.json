@@ -23,11 +23,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@ui/*": ["ui/*"],
-      "@lib/*": ["lib/*"],
-      "@styles/*": ["styles/*"],
-      "@public/*": ["public/*"],
-      "@components/*": ["public/components/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
