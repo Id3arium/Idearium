@@ -2,22 +2,29 @@
 import React, {useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
-import { useAtom, Provider, useStore } from 'jotai';
-import { nodesStore, nodesAtom, currentNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
+import { atom, useAtom, Provider } from 'jotai';
+import { testStore, nodesStore, currentNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
+import { useAtomValue, useHydrateAtoms } from 'jotai/utils';
 
-export default function NodeCardsArea({nodesData}) {
+const nodesAtom = atom([])
+
+export default function NodeCardsArea(nodesFromServer) {
+
+	useHydrateAtoms([[nodesAtom, nodesFromServer]])
 	const [nodes, setNodes] = useAtom(nodesAtom)
+	// console.log("NodeCardsArea nodes", nodes)
+	
 	const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
 	const [weightedRandomNode] = useAtom(getWeightedRandomNodeAtom)
     
-	setNodes(nodesData)
+	console.log("NodeCardsArea nodes", weightedRandomNode)
 	setCurrentNode(weightedRandomNode)
-	// console.log("NodeCardsArea nodes", nodes)
 	console.log("NodeCardsArea currentNode", currentNode?._id)
 	// setCurrentNode(getWeightedRandomNode(nodes))
-	// useEffect( () => {
-	// 	// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
-	// }, [nodes, currentNode])
+
+	useEffect( () => {
+		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
+	}, [nodes, currentNode])
 
 	// if (nodeIDsTimeline.length === 0){
 	// 	setNodeIDsTimeline((prev) => [...prev, getWeightedRandomNode()] )
@@ -92,7 +99,7 @@ export default function NodeCardsArea({nodesData}) {
 			<ul>
               <li key={currentNode?._id}> {currentNode?._id} {currentNode?.title} { currentNode?.content} </li> 
             </ul>
-			<Provider>
+			<Provider store={testStore}>
 				<NodeCard
 					// onIncreaseNodeFreq={increaseNodeFreq} 
 					// onDecreaseNodeFreq={decreaseNodeFreq} 

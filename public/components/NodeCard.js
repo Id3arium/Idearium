@@ -7,7 +7,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useStore } from 'jotai';
 import { nextNodeAtom, previousNodeAtom, currentNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
 
 const isHoveredAtom = atom(false)
@@ -17,6 +17,8 @@ export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
     const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
+
+    // const store = useStore()
 
     // useEffect( () => {
     //   console.log("NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
@@ -129,9 +131,9 @@ export default function NodeCard(props) {
             {/* {TimerBar} */}
             {/* {CardControls} */}
             {/* {CardContent} */}
-            <ul>
+            {/* <ul>
               <li key={props.nodeData?._id}> {props.nodeData?._id} {props.nodeData?.title} { props.nodeData?.content} </li>
-            </ul>
+            </ul> */}
         </StyledNodeCard>
     );
 }

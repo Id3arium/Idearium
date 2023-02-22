@@ -1,11 +1,13 @@
+import dynamic from 'next/dynamic';
 import styles from "./page.module.css";
 // import styled from "styled-components";
-import NodeCardsArea from '../public/components/NodeCardsArea.js';
+import NodeCardsArea from '@/public/components/NodeCardsArea.js';
 // import IdeaCompositionArea from '../public/components/IdeaCompositionArea.js';
 import mongoose from 'mongoose';
-import { Node } from '../models/Node.js';
+import {Node} from '../models/Node.js';
 
 export default async function Home() {
+
 	// const [nodes, setNodes] = useNodesStore(state => [state.nodes, state.setNodes])  //causes useref is not a funcion error
 	
 	async function getNodesFromDB(){
@@ -20,7 +22,7 @@ export default async function Home() {
 		return nodesJSON
 	}
 	
-	let testNodes = await getNodesFromDB()
+	let nodesFromServer = await getNodesFromDB()
 
 	// useEffect(() => {
 	// 	let nodesJSON = JSON.parse(nodesString)
@@ -69,7 +71,7 @@ export default async function Home() {
 			{/* <Provider store={nodesStore}> */}
 				<div id="Home">
 					<div>Hello World</div>
-					<NodeCardsArea nodesData={testNodes} />
+					<NodeCardsArea nodesFromServer={nodesFromServer} />
 				</div>
 			{/* </Provider> */}
 		</main>

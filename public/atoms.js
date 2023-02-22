@@ -1,9 +1,18 @@
+"use client";
 import { atom, createStore } from 'jotai';
+
+export const testAtom = atom(0)
+export const test2Atom = atom("test2")
 
 export const nodesAtom = atom([])
 export const currentNodeAtom = atom(null)
 export const nodeIDsTimelineAtom = atom([])
 export const currentTimelineIndexAtom = atom(-1)
+
+// const decrementCountAtom = atom(
+// 	(get) => get(countAtom),
+// 	(get, set, _arg) => set(countAtom, get(countAtom) - 1)
+// )
 
 // export const getNodesListAtom = atom( (get) => get(nodesStateAtom).nodes.map((node) => <li key={node._id}> {node._id} {node.title} { node.content} </li>) )
 export const getNodesListAtom = atom( (get) => get(nodesAtom).map((node) => <li key={node._id}> {node._id} {node.title} { node.content} </li>) )
@@ -73,4 +82,9 @@ export const nodesStore = createStore({
 	currentNode: currentNodeAtom,
 	nodeIDsTimeline: nodeIDsTimelineAtom,
 	currentTimelineIndex: currentTimelineIndexAtom 
+})
+
+export const testStore = createStore({
+	test: testAtom,
+	test2: test2Atom,
 })
