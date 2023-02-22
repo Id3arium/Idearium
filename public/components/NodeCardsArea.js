@@ -3,23 +3,48 @@ import React, {useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
 import { atom, useAtom, Provider } from 'jotai';
-import { testStore, nodesStore, currentNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
+import { testStore } from '@/public/atoms.js';
 import { useAtomValue, useHydrateAtoms } from 'jotai/utils';
 
-const nodesAtom = atom([])
+export const nodesAtom = atom([])
+export const currentNodeAtom = atom(null)
+export const nodeIDsTimelineAtom = atom([])
+export const currentTimelineIndexAtom = atom(-1)
+
+//gets a random node, but nodes with higher frequency are more likely to be chosen
+export const getWeightedRandomNodeAtom = atom( (get) => {
+	const nodes = get(nodesAtom)
+	if (!nodes) { return null; }
+	let randNum = Math.random(); // range of [0,1)
+	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
+	console.log( "picking random node from:", nodes)
+	for (let i = 0; i < nodes.length; i++) {
+		let currentNodeFrequency = nodes[i].frequency
+		//likelyhood of randNum being inside the range is === to the nodes appearance frequency
+		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + currentNodeFrequency)
+		if (isRandNumInNodeRange) {
+			console.log("random node is", nodes[i]._id)
+			return nodes[i]
+		} else {
+			frequencySigma += currentNodeFrequency
+		}
+	}
+})
 
 export default function NodeCardsArea(nodesFromServer) {
+	console.log("NodeCardsArea nodesFromServer", nodesFromServer)
 
-	useHydrateAtoms([[nodesAtom, nodesFromServer]])
+	useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]])
 	const [nodes, setNodes] = useAtom(nodesAtom)
-	// console.log("NodeCardsArea nodes", nodes)
+	console.log("NodeCardsArea nodes1", nodes)
 	
 	const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
+
 	const [weightedRandomNode] = useAtom(getWeightedRandomNodeAtom)
-    
-	console.log("NodeCardsArea nodes", weightedRandomNode)
+	console.log("NodeCardsArea weightedRandomNode", weightedRandomNode)
 	setCurrentNode(weightedRandomNode)
-	console.log("NodeCardsArea currentNode", currentNode?._id)
+    
+	// console.log("NodeCardsArea currentNode", currentNode?._id)
 	// setCurrentNode(getWeightedRandomNode(nodes))
 
 	useEffect( () => {
@@ -100,12 +125,12 @@ export default function NodeCardsArea(nodesFromServer) {
               <li key={currentNode?._id}> {currentNode?._id} {currentNode?.title} { currentNode?.content} </li> 
             </ul>
 			<Provider store={testStore}>
-				<NodeCard
+				{/* <NodeCard
 					// onIncreaseNodeFreq={increaseNodeFreq} 
 					// onDecreaseNodeFreq={decreaseNodeFreq} 
 					// nodeData = {currentNode}
 					duration = {1000}
-				/>
+				/> */}
 			</Provider>
 		</div>
 	);

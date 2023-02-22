@@ -71,7 +71,7 @@ export default async function Home() {
 			{/* <Provider store={nodesStore}> */}
 				<div id="Home">
 					<div>Hello World</div>
-					<NodeCardsArea nodesFromServer={nodesFromServer} />
+					<NodeCardsArea nodes={nodesFromServer} />
 				</div>
 			{/* </Provider> */}
 		</main>

@@ -16,7 +16,7 @@ const frontSideVisibleAtom = atom(true)
 export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
-    const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
+    // const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
 
     // const store = useStore()
 
@@ -24,7 +24,7 @@ export default function NodeCard(props) {
     //   console.log("NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
     // }, [isHovered, frontSideVisible, currentNode])
     
-      console.log("NodeCard currentNode", currentNode?._id)
+      // console.log("NodeCard currentNode", currentNode?._id)
     // console.log("nodeCard data:", props.nodeData)
 
     // const animation = useAnimationControls()
