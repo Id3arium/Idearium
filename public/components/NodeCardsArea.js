@@ -2,12 +2,12 @@
 import React, {useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
-import { atom, useAtom, Provider } from 'jotai';
+import { atom, useAtom, Provider, useAtomValue} from 'jotai';
 import { testStore } from '@/public/atoms.js';
-import { useAtomValue, useHydrateAtoms } from 'jotai/utils';
+import { useHydrateAtoms } from 'jotai/utils';
 
 export const nodesAtom = atom([])
-export const currentNodeAtom = atom(null)
+export const currentNodeAtom = atom({})
 export const nodeIDsTimelineAtom = atom([])
 export const currentTimelineIndexAtom = atom(-1)
 
@@ -20,8 +20,10 @@ export const getWeightedRandomNodeAtom = atom( (get) => {
 	console.log( "picking random node from:", nodes)
 	for (let i = 0; i < nodes.length; i++) {
 		let currentNodeFrequency = nodes[i].frequency
+		let isGTEfreqSigma = randNum >= frequencySigma
+		let isLTNewFrequencySigma = randNum < (frequencySigma + currentNodeFrequency)
 		//likelyhood of randNum being inside the range is === to the nodes appearance frequency
-		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + currentNodeFrequency)
+		let isRandNumInNodeRange = isGTEfreqSigma && isLTNewFrequencySigma
 		if (isRandNumInNodeRange) {
 			console.log("random node is", nodes[i]._id)
 			return nodes[i]
@@ -35,21 +37,19 @@ export default function NodeCardsArea(nodesFromServer) {
 	console.log("NodeCardsArea nodesFromServer", nodesFromServer)
 
 	useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]])
-	const [nodes, setNodes] = useAtom(nodesAtom)
+	const nodes = useAtomValue(nodesAtom)
 	console.log("NodeCardsArea nodes1", nodes)
 	
 	const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
-
-	const [weightedRandomNode] = useAtom(getWeightedRandomNodeAtom)
-	console.log("NodeCardsArea weightedRandomNode", weightedRandomNode)
-	setCurrentNode(weightedRandomNode)
-    
-	// console.log("NodeCardsArea currentNode", currentNode?._id)
-	// setCurrentNode(getWeightedRandomNode(nodes))
+	const weightedRandomNode = useAtomValue(getWeightedRandomNodeAtom)
 
 	useEffect( () => {
+		setCurrentNode(weightedRandomNode)
+		console.log("NodeCardsArea weightedRandomNode", weightedRandomNode)
+		console.log("NodeCardsArea currentNode", currentNode._id)
+
 		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
-	}, [nodes, currentNode])
+	}, [])
 
 	// if (nodeIDsTimeline.length === 0){
 	// 	setNodeIDsTimeline((prev) => [...prev, getWeightedRandomNode()] )
