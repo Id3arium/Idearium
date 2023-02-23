@@ -8,7 +8,8 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useStore } from 'jotai';
-import { nextNodeAtom, previousNodeAtom, currentNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
+import { nextNodeAtom, previousNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
+import { currentNodeAtom } from '@/public/components/NodeCardsArea.js';
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
@@ -16,15 +17,20 @@ const frontSideVisibleAtom = atom(true)
 export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
-    // const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
+    const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
 
     // const store = useStore()
 
-    // useEffect( () => {
-    //   console.log("NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
-    // }, [isHovered, frontSideVisible, currentNode])
+    useEffect( () => {
+      console.log("NodeCard currentNode", currentNode?._id)
+    }, [])
+
+    useEffect( () => {
+      console.log("NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
+
+    }, [isHovered, frontSideVisible])
     
-      // console.log("NodeCard currentNode", currentNode?._id)
+    
     // console.log("nodeCard data:", props.nodeData)
 
     // const animation = useAnimationControls()
