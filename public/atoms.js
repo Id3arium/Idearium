@@ -17,22 +17,7 @@ export const testStore = createStore({
 // export const getNodesListAtom = atom( (get) => get(nodesStateAtom).nodes.map((node) => <li key={node._id}> {node._id} {node.title} { node.content} </li>) )
 // export const getNodesListAtom = atom( (get) => get(nodesAtom).map((node) => <li key={node._id}> {node._id} {node.title} { node.content} </li>) )
 
-// export const previousNodeAtom = atom((get) => {
-// 	const currentTimelineIndex = get(currentTimelineIndexAtom)
-// 	if (currentTimelineIndex > 0) {
-// 		const newCurrentTimelineIndex = currentTimelineIndex - 1
-// 		const nodeIDsTimeline = get(nodeIDsTimelineAtom)
-// 		const nodes = get(nodesAtom)
-// 		const newCurrentNode = nodes.find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
-// 		set(currentNodeAtom, newCurrentNode)
-// 		set(currentTimelineIndexAtom, newCurrentTimelineIndex)
-// 		// set(nodesStateAtom, (prev) => ({
-// 		// 	...prev,
-// 		// 	currentNode: newCurrentNode,
-// 		// 	currentTimelineIndex: newCurrentTimelineIndex
-// 		// }))
-// 	}
-// })
+
 
 // export const nextNodeAtom = atom((get) => {
 // 	const nodes = get(nodesAtom)

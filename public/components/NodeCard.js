@@ -132,7 +132,7 @@ export default function NodeCard(props) {
             {/* {CardControls} */}
             {/* {CardContent} */}
             {/* <ul>
-              <li key={props.nodeData?._id}> {props.nodeData?._id} {props.nodeData?.title} { props.nodeData?.content} </li>
+              <li key={currentNode?._id}> {currentNode?._id} {currentNode?.title} { currentNode?.content} </li> 
             </ul> */}
         </StyledNodeCard>
     );
