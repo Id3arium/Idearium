@@ -4,12 +4,9 @@ import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
 import {atom, useAtom, useSetAtom, useAtomValue, createStore} from 'jotai';
 import {useHydrateAtoms} from 'jotai/utils';
-// import { nodesAtom, currentNodeAtom, nodeIDsTimelineAtom, currentTimelineIndexAtom, testStore } from '@/public/atoms.js';
+// import { ForceGraph3D } from "react-force-graph";
+import { nodesAtom, currentNodeAtom, nodeIDsTimelineAtom, currentTimelineIndexAtom, testStore } from '@/public/atoms.js';
 
-export const nodesAtom = atom([])
-export const currentNodeAtom = atom(null)
-export const nodeIDsTimelineAtom = atom([])
-export const currentTimelineIndexAtom = atom(-1)
 // export const clickCountAtom = atom(0)
 // export const increaseClickCountAtom = atom( null, // it's a convention to pass `null` for the first argument
 // 	(get, set, update) => {
@@ -25,24 +22,7 @@ export const nodesStore = createStore({
 })
 
 //gets a random node, but nodes with higher frequency are more likely to be chosen
-export const getWeightedRandomNodeAtom = atom( (get) => {
-	const nodes = get(nodesAtom)
-	if (!nodes) { return null; }
-	let randNum = Math.random(); // range of [0,1)
-	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
-	for (let i = 0; i < nodes.length; i++) {
-		let currentNodeFrequency = nodes[i].frequency
-		let isGTEfreqSigma = randNum >= frequencySigma
-		let isLTNewFrequencySigma = randNum < (frequencySigma + currentNodeFrequency)
-		//likelyhood of randNum being inside the range is === to the nodes appearance frequency
-		let isRandNumInNodeRange = isGTEfreqSigma && isLTNewFrequencySigma
-		if (isRandNumInNodeRange) {
-			return nodes[i]
-		} else {
-			frequencySigma += currentNodeFrequency
-		}
-	}
-})
+
 
 export default function NodeCardsArea(nodesFromServer) {
 	// console.log("NodeCardsArea nodesFromServer", nodesFromServer)
@@ -61,7 +41,7 @@ export default function NodeCardsArea(nodesFromServer) {
 		// console.log("NodeCardsArea currentNode", currentNode?._id)
 
 		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
-	}, [currentNode])
+	}, [currentNode,weightedRandomNode])
 
 	// if (nodeIDsTimeline.length === 0){
 	// 	setNodeIDsTimeline((prev) => [...prev, getWeightedRandomNode()] )
@@ -79,14 +59,6 @@ export default function NodeCardsArea(nodesFromServer) {
 	// 		return newNodeID
 	// 	} else {
 	// 		setCurrTimelineIdx(currTimelineIdx+1)
-	// 		return nodeIDsTimeline[currTimelineIdx+1]
-	// 	}
-	// }
-
-	// function onPrevNodeCard(){
-	// 	let isAtBeginningOfTimeline = currTimelineIdx === 0
-	// 	if(!isAtBeginningOfTimeline) {
-	// 		setCurrTimelineIdx(currTimelineIdx-1)
 	// 		return nodeIDsTimeline[currTimelineIdx+1]
 	// 	}
 	// }
@@ -132,10 +104,11 @@ export default function NodeCardsArea(nodesFromServer) {
 		<StyledNodeCardsArea id="node-cards-area">
 			<div> Node Cards Area </div>
 			<button onClick={() => {
-				setCurrentNode(getWeightedRandomNode(nodes))
+				setCurrentNode(weightedRandomNode)
 			}}>
 				randomize
 			</button>
+			{/* <ForceGraph3D graphData={gData()}/> */}
 			<NodeCard
 				nodeData = {currentNode}
 				duration = {10}

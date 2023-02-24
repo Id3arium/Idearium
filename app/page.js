@@ -3,8 +3,9 @@ import styles from "./page.module.css";
 // import styled from "styled-components";
 import NodeCardsArea from '@/public/components/NodeCardsArea.js';
 // import IdeaCompositionArea from '../public/components/IdeaCompositionArea.js';
+
 import mongoose from 'mongoose';
-import {Node} from '../models/Node.js';
+import { Node } from '../models/Node.js';
 
 export default async function Home() {
 
@@ -68,6 +69,7 @@ export default async function Home() {
 		<main className={styles.main}>
 			<div id="Home">
 				<div>Hello World</div>
+
 				<NodeCardsArea nodes={nodesFromServer} />
 			</div>
 		</main>

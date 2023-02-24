@@ -7,9 +7,10 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
-import { atom, useAtom, useAtomValue, useStore } from 'jotai';
-// import { nextNodeAtom, previousNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
-import {nodesAtom, currentNodeAtom, nodeIDsTimelineAtom, currentTimelineIndexAtom} from '@/public/components/NodeCardsArea.js';
+import { atom, useAtom, useAtomValue, useStore, useSetAtom } from 'jotai';
+// import { nextNodeAtom, previousNodeAtom, getWeightedRandomNodeAtom } from ;
+// import {nodesAtom, currentNodeAtom, nodeIDsTimelineAtom, currentTimelineIndexAtom} from '@/public/components/NodeCardsArea.js';
+import {currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, onPrevNodeCardAtom, onNextNodeCardAtom} from '@/public/atoms.js';
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
@@ -18,15 +19,22 @@ export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
     
-    const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
-    const [nodeIDsTimeline, setNodeIDsTimeline] = useAtom(nodeIDsTimelineAtom)
-    const [currentTimelineIndex, setCurrentTimelineIndex] = useAtom(currentTimelineIndexAtom)
+    const currentNode = useAtomValue(currentNodeAtom)
+    const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
+    const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
+    const onPrevNodeCard = useSetAtom(onPrevNodeCardAtom)
+    const onNextNodeCard = useSetAtom(onNextNodeCardAtom)
   
     // console.log("NodeCard nodesStore", nodeStore)
     // console.log("NodeCard clickCount", clickCount)
     useEffect( () => {
         console.log("NodeCard currentNode", currentNode?._id)
     }, [currentNode])
+    
+    useEffect(() => {
+        console.log("NodeCard currentTimelineIndex", currentTimelineIndex)
+        console.log("NodeCard nodeIDsTimelineLength", nodeIDsTimelineLength)
+    }, [currentTimelineIndex, nodeIDsTimelineLength])
 
     useEffect(() => {
     //   console.log("NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
@@ -67,7 +75,7 @@ export default function NodeCard(props) {
         restartCardAnimation()
     }
     function animatePrevCard(){
-        // props.onPrev()
+        onPrevNodeCard()
         restartCardAnimation()
     }
 
@@ -90,7 +98,7 @@ export default function NodeCard(props) {
     let CardControls =
     <div className="card-controls" >
         <IconButton className="nav-btn top left outlined" 
-            // onClick={animatePrevCard}
+            onClick={animatePrevCard}
         >
             <KeyboardArrowLeftIcon  />
         </IconButton>
@@ -120,7 +128,7 @@ export default function NodeCard(props) {
             <p> {currentNode?.content} </p> 
         </StyledCardSide>
         <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
-            <h1> Node #{currentNode?._id+1} [{currentTimelineIndex+1} / {nodeIDsTimeline.length}] </h1>
+            <h1> Node #{currentNode?._id+1} [{currentTimelineIndex+1} / {nodeIDsTimelineLength}] </h1>
             <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
             <p className="frequency">
                 {(currentNode?.frequency * 100).toFixed(1)}% Likely to appear
