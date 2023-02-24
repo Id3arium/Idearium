@@ -24,25 +24,25 @@ export const nodesStore = createStore({
 	currentTimelineIndex: currentTimelineIndexAtom 
 })
 
-// //gets a random node, but nodes with higher frequency are more likely to be chosen
-// export const getWeightedRandomNodeAtom = atom( (get) => {
-// 	const nodes = get(nodesAtom)
-// 	if (!nodes) { return null; }
-// 	let randNum = Math.random(); // range of [0,1)
-// 	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
-// 	for (let i = 0; i < nodes.length; i++) {
-// 		let currentNodeFrequency = nodes[i].frequency
-// 		let isGTEfreqSigma = randNum >= frequencySigma
-// 		let isLTNewFrequencySigma = randNum < (frequencySigma + currentNodeFrequency)
-// 		//likelyhood of randNum being inside the range is === to the nodes appearance frequency
-// 		let isRandNumInNodeRange = isGTEfreqSigma && isLTNewFrequencySigma
-// 		if (isRandNumInNodeRange) {
-// 			return nodes[i]
-// 		} else {
-// 			frequencySigma += currentNodeFrequency
-// 		}
-// 	}
-// })
+//gets a random node, but nodes with higher frequency are more likely to be chosen
+export const getWeightedRandomNodeAtom = atom( (get) => {
+	const nodes = get(nodesAtom)
+	if (!nodes) { return null; }
+	let randNum = Math.random(); // range of [0,1)
+	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
+	for (let i = 0; i < nodes.length; i++) {
+		let currentNodeFrequency = nodes[i].frequency
+		let isGTEfreqSigma = randNum >= frequencySigma
+		let isLTNewFrequencySigma = randNum < (frequencySigma + currentNodeFrequency)
+		//likelyhood of randNum being inside the range is === to the nodes appearance frequency
+		let isRandNumInNodeRange = isGTEfreqSigma && isLTNewFrequencySigma
+		if (isRandNumInNodeRange) {
+			return nodes[i]
+		} else {
+			frequencySigma += currentNodeFrequency
+		}
+	}
+})
 
 export default function NodeCardsArea(nodesFromServer) {
 	// console.log("NodeCardsArea nodesFromServer", nodesFromServer)
@@ -138,7 +138,7 @@ export default function NodeCardsArea(nodesFromServer) {
 			</button>
 			<NodeCard
 				nodeData = {currentNode}
-				duration = {1000}
+				duration = {10}
 			/>
 		</StyledNodeCardsArea>
 	);

@@ -8,8 +8,6 @@ import {Node} from '../models/Node.js';
 
 export default async function Home() {
 
-	// const [nodes, setNodes] = useNodesStore(state => [state.nodes, state.setNodes])  //causes useref is not a funcion error
-	
 	async function getNodesFromDB(){
 		await mongoose.connect(process.env.IDEARIUM_URI, {
 			useNewUrlParser: true,

@@ -35,19 +35,19 @@ export default function NodeCard(props) {
     
     // console.log("nodeCard data:", currentNode)
 
-    // const animation = useAnimationControls()
-    // let initialStyles = { 
-    //     opacity: .125, 
-    //     width: "585px",
-    // }
-    // let targetStyles = {
-    //     opacity: .15, 
-    //     width: "0px",
-    //     transition: {
-    //         duration: props.duration,
-    //         ease: "linear"
-    //     }
-    // }
+    const animation = useAnimationControls()
+    let initialStyles = { 
+        opacity: .125, 
+        width: "585px",
+    }
+    let targetStyles = {
+        opacity: .15, 
+        width: "0px",
+        transition: {
+            duration: props.duration,
+            ease: "linear"
+        }
+    }
 
     function handleClick(e){ 
         if (e.target.id === "node-card"){
@@ -57,35 +57,35 @@ export default function NodeCard(props) {
 
     // const deleteNodeCard = () => props.onDelete(currentNode.id)
 
-    // function restartCardAnimation(){
-    //     animation.stop()
-    //     animation.set(initialStyles)
-    //     // animation.start(targetStyles)
-    // }
-    // function animateNextCard(){
-    //     props.onNext()
-    //     restartCardAnimation()
-    // }
-    // function animatePrevCard(){
-    //     props.onPrev()
-    //     restartCardAnimation()
-    // }
+    function restartCardAnimation(){
+        animation.stop()
+        animation.set(initialStyles)
+        animation.start(targetStyles)
+    }
+    function animateNextCard(){
+        // props.onNext()
+        restartCardAnimation()
+    }
+    function animatePrevCard(){
+        // props.onPrev()
+        restartCardAnimation()
+    }
 
-    // useEffect(()=>{
-    //     if (!frontSideVisible || isHovered){
-    //         animation.stop()
-    //     } else {
-    //         // animation.start(targetStyles)
-    //     }
-    // },[frontSideVisible, isHovered, props.duration])
+    useEffect(()=>{
+        if (!frontSideVisible || isHovered){
+            animation.stop()
+        } else {
+            animation.start(targetStyles)
+        }
+    },[frontSideVisible, isHovered, props.duration])
     
 
-    // let TimerBar =
-    //     <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
-    //         animate={animation} 
-    //         initial={initialStyles}
-    //         onAnimationComplete={animateNextCard}
-    //     />
+    let TimerBar =
+        <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
+            animate={animation} 
+            initial={initialStyles}
+            onAnimationComplete={animateNextCard}
+        />
 
     let CardControls =
     <div className="card-controls" >
@@ -134,7 +134,7 @@ export default function NodeCard(props) {
             onMouseEnter={()=>{setIsHovered(true)}} 
             onMouseLeave={()=>{setIsHovered(false)}}
         >
-            {/* {TimerBar} */}
+            {TimerBar}
             {CardControls}
             {CardContent}
         </StyledNodeCard>
