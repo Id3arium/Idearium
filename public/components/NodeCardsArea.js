@@ -2,14 +2,27 @@
 import React, {useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
-import { atom, useAtom, Provider, useAtomValue} from 'jotai';
-import { useHydrateAtoms } from 'jotai/utils';
+import {atom, useAtom, useSetAtom, useAtomValue, createStore} from 'jotai';
+import {useHydrateAtoms} from 'jotai/utils';
 // import { nodesAtom, currentNodeAtom, nodeIDsTimelineAtom, currentTimelineIndexAtom, testStore } from '@/public/atoms.js';
 
 export const nodesAtom = atom([])
 export const currentNodeAtom = atom(null)
 export const nodeIDsTimelineAtom = atom([])
 export const currentTimelineIndexAtom = atom(-1)
+// export const clickCountAtom = atom(0)
+// export const increaseClickCountAtom = atom( null, // it's a convention to pass `null` for the first argument
+// 	(get, set, update) => {
+// 		set(clickCountAtom, get(clickCountAtom)  + 1)
+// 	}
+// )
+
+export const nodesStore = createStore({
+	nodes: nodesAtom,
+	currentNode: currentNodeAtom,
+	nodeIDsTimeline: nodeIDsTimelineAtom,
+	currentTimelineIndex: currentTimelineIndexAtom 
+})
 
 // //gets a random node, but nodes with higher frequency are more likely to be chosen
 // export const getWeightedRandomNodeAtom = atom( (get) => {
@@ -35,8 +48,9 @@ export default function NodeCardsArea(nodesFromServer) {
 	// console.log("NodeCardsArea nodesFromServer", nodesFromServer)
 	useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]])
 
-	const nodes = useAtomValue(nodesAtom)
 	const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
+	const nodes = useAtomValue(nodesAtom)
+	
 	const weightedRandomNode = getWeightedRandomNode(nodes)
 	// const weightedRandomNode = useAtomValue(getWeightedRandomNodeAtom)
 	// console.log("NodeCardsArea nodes1", nodes)
@@ -116,21 +130,16 @@ export default function NodeCardsArea(nodesFromServer) {
 	// let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
 	return (
 		<StyledNodeCardsArea id="node-cards-area">
-            <div> Node Cards Area </div>
-			<button onClick={() => setCurrentNode(getWeightedRandomNode(nodes))}>
+			<div> Node Cards Area </div>
+			<button onClick={() => {
+				setCurrentNode(getWeightedRandomNode(nodes))
+			}}>
 				randomize
 			</button>
-			<ul>
-              <li key={currentNode?._id}> {currentNode?._id} {currentNode?.title} { currentNode?.content} </li> 
-            </ul>
-			<Provider >
-				<NodeCard
-					// onIncreaseNodeFreq={increaseNodeFreq} 
-					// onDecreaseNodeFreq={decreaseNodeFreq} 
-					// nodeData = {currentNode}
-					duration = {1000}
-				/>
-			</Provider>
+			<NodeCard
+				nodeData = {currentNode}
+				duration = {1000}
+			/>
 		</StyledNodeCardsArea>
 	);
 }

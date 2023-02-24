@@ -42,10 +42,5 @@ export const testStore = createStore({
 // 	// }))
 // })
 
-// export const nodesStore = createStore({
-// 	nodes: nodesAtom,
-// 	currentNode: currentNodeAtom,
-// 	nodeIDsTimeline: nodeIDsTimelineAtom,
-// 	currentTimelineIndex: currentTimelineIndexAtom 
-// })
+
 

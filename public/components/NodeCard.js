@@ -7,9 +7,9 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
-import { atom, useAtom, useStore } from 'jotai';
-import { nextNodeAtom, previousNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
-import { currentNodeAtom } from '@/public/components/NodeCardsArea.js';
+import { atom, useAtom, useAtomValue, useStore } from 'jotai';
+// import { nextNodeAtom, previousNodeAtom, getWeightedRandomNodeAtom } from '@/public/atoms.js';
+import { nodesAtom, currentNodeAtom, nodeIDsTimelineAtom, currentTimelineIndexAtom } from '@/public/components/NodeCardsArea.js';
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
@@ -18,12 +18,12 @@ export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
     const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
-
-    // const store = useStore()
-
+  
+    // console.log("NodeCard nodesStore", nodeStore)
+    // console.log("NodeCard clickCount", clickCount)
     useEffect( () => {
-      console.log("NodeCard currentNode", currentNode?._id)
-    }, [])
+        console.log("NodeCard currentNode", currentNode?._id)
+    }, [currentNode])
 
     useEffect( () => {
       console.log("NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
@@ -31,7 +31,7 @@ export default function NodeCard(props) {
     }, [isHovered, frontSideVisible])
     
     
-    // console.log("nodeCard data:", props.nodeData)
+    // console.log("nodeCard data:", currentNode)
 
     // const animation = useAnimationControls()
     // let initialStyles = { 
@@ -53,7 +53,7 @@ export default function NodeCard(props) {
 	// 	}
 	// }
 
-    // const deleteNodeCard = () => props.onDelete(props.nodeData.id)
+    // const deleteNodeCard = () => props.onDelete(currentNode.id)
 
     // function restartCardAnimation(){
     //     animation.stop()
@@ -114,16 +114,14 @@ export default function NodeCard(props) {
     let CardContent =
     <div className="card-content" >
         <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
-            {/* <h1>{ currentNode}</h1> */}
-            {/* {props.nodeData?.title && <h1 >{props.nodeData?.title} </h1>} */}
-            {/* <h1> {props.nodeData.title} </h1> */}
-            {/* <p> {props.nodeData.content} </p>  */}
+            {currentNode?.title && <h1 >{currentNode?.title} </h1>}
+            <p> {currentNode?.content} </p> 
         </StyledCardSide>
         {/* <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
-            <h1> Node #{props.nodeData?.id+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
-            <p> Inspiration: {props.nodeData?.inspiration}  </p><br></br>
+            <h1> Node #{currentNode?.id+1} [{currTimelineIdx+1} / {nodeIDsTimeline.length}] </h1>
+            <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
             <p className="frequency">
-                {(props.nodeData?.frequency * 100).toFixed(1)}% Likely to appear
+                {(currentNode?.frequency * 100).toFixed(1)}% Likely to appear
             </p>
         </StyledCardSide> */}
     </div>
@@ -136,10 +134,7 @@ export default function NodeCard(props) {
         >
             {/* {TimerBar} */}
             {/* {CardControls} */}
-            {/* {CardContent} */}
-            {/* <ul>
-              <li key={currentNode?._id}> {currentNode?._id} {currentNode?.title} { currentNode?.content} </li> 
-            </ul> */}
+            {CardContent}
         </StyledNodeCard>
     );
 }

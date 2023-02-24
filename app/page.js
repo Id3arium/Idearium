@@ -68,12 +68,10 @@ export default async function Home() {
 	// }
 	return (
 		<main className={styles.main}>
-			{/* <Provider store={nodesStore}> */}
-				<div id="Home">
-					<div>Hello World</div>
-					<NodeCardsArea nodes={nodesFromServer} />
-				</div>
-			{/* </Provider> */}
+			<div id="Home">
+				<div>Hello World</div>
+				<NodeCardsArea nodes={nodesFromServer} />
+			</div>
 		</main>
 	);
 }
