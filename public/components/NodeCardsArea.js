@@ -7,12 +7,6 @@ import {useHydrateAtoms} from 'jotai/utils';
 // import { ForceGraph3D } from "react-force-graph";
 import { nodesAtom, currentNodeAtom, nodeIDsTimelineAtom, currentTimelineIndexAtom, testStore } from '@/public/atoms.js';
 
-// export const clickCountAtom = atom(0)
-// export const increaseClickCountAtom = atom( null, // it's a convention to pass `null` for the first argument
-// 	(get, set, update) => {
-// 		set(clickCountAtom, get(clickCountAtom)  + 1)
-// 	}
-// )
 
 export const nodesStore = createStore({
 	nodes: nodesAtom,
@@ -37,8 +31,6 @@ export default function NodeCardsArea(nodesFromServer) {
 
 	useEffect( () => {
 		setCurrentNode(!currentNode ? weightedRandomNode : currentNode)
-		// console.log("NodeCardsArea weightedRandomNode", weightedRandomNode?._id)
-		// console.log("NodeCardsArea currentNode", currentNode?._id)
 
 		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
 	}, [currentNode,weightedRandomNode])
@@ -80,26 +72,6 @@ export default function NodeCardsArea(nodesFromServer) {
 			}
 		}
 	}
-	// function changeNodeFrquency(nodeIdx, isIncreased) {
-	// 	let numNodes = nodes.length;
-	// 	let numerator = isIncreased ? 1 : -1;
-	// 	let freqModifier = numerator / (numNodes * numNodes);
-
-	// 	let newFrequency = nodes[nodeIdx].frequency + numNodes * freqModifier;
-
-	// 	let tempNodes = [...nodes]
-	// 	if (Math.abs(1 - newFrequency) >= 1e-12) {
-	// 		tempNodes[nodeIdx].frequency = newFrequency;
-
-	// 		tempNodes.forEach((node) => {
-	// 			node.frequency -= freqModifier;
-	// 		});
-	// 	}
-	// 	setNodes(tempNodes)
-	// }
-
-	// let increaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, true)
-	// let decreaseNodeFreq = (nodeID) => changeNodeFrquency(nodeID, false)
 	return (
 		<StyledNodeCardsArea id="node-cards-area">
 			<div> Node Cards Area </div>
