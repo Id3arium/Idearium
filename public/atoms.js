@@ -7,6 +7,14 @@ import { atom, createStore } from 'jotai';
 // 	length: nodeIDsTimelineLengthAtom
 // })
 
+
+// export const nodesStore = createStore({
+// 	nodes: nodesAtom,
+// 	currentNode: currentNodeAtom,
+// 	nodeIDsTimeline: nodeIDsTimelineAtom,
+// 	currentTimelineIndex: currentTimelineIndexAtom 
+// })
+
 export const nodesAtom = atom([])
 export const currentNodeAtom = atom(null)
 export const currentTimelineIndexAtom = atom(-1)
