@@ -28,17 +28,16 @@ export default function NodeCard(props) {
     // console.log("NodeCard nodesStore", nodeStore)
     // console.log("NodeCard clickCount", clickCount)
     useEffect( () => {
-        console.log("NodeCard currentNode", currentNode?._id)
+        // console.log("NodeCard currentNode", currentNode?._id)
     }, [currentNode])
     
     useEffect(() => {
-        console.log("NodeCard currentTimelineIndex", currentTimelineIndex)
-        console.log("NodeCard nodeIDsTimelineLength", nodeIDsTimelineLength)
+        console.log("NodeCard timeline", currentTimelineIndex+1, "/", nodeIDsTimelineLength)
     }, [currentTimelineIndex, nodeIDsTimelineLength])
 
     useEffect(() => {
     //   console.log("NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
-    }, [isHovered, frontSideVisible])
+    }, [isHovered])
     
     
     // console.log("nodeCard data:", currentNode)
@@ -46,7 +45,7 @@ export default function NodeCard(props) {
     const animation = useAnimationControls()
     let initialStyles = { 
         opacity: .125, 
-        width: "585px",
+        width: "525px",
     }
     let targetStyles = {
         opacity: .15, 
@@ -71,7 +70,7 @@ export default function NodeCard(props) {
         animation.start(targetStyles)
     }
     function animateNextCard(){
-        // props.onNext()
+        onNextNodeCard()
         restartCardAnimation()
     }
     function animatePrevCard(){
@@ -103,7 +102,7 @@ export default function NodeCard(props) {
             <KeyboardArrowLeftIcon  />
         </IconButton>
         <IconButton className="nav-btn top right outlined" 
-            // onClick={animateNextCard}
+            onClick={animateNextCard}
         >
             <KeyboardArrowRightIcon disabled={true}/>
         </IconButton>

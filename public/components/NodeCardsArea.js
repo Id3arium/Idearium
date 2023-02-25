@@ -111,7 +111,7 @@ export default function NodeCardsArea(nodesFromServer) {
 			{/* <ForceGraph3D graphData={gData()}/> */}
 			<NodeCard
 				nodeData = {currentNode}
-				duration = {10}
+				duration = {50}
 			/>
 		</StyledNodeCardsArea>
 	);
