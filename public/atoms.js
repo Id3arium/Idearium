@@ -1,12 +1,6 @@
 "use client";
 import { atom, createStore } from 'jotai';
 
-// export const nodeIdsTimelineStore = createStore({
-// 	timeline: nodeIDsTimelineAtom,
-// 	currentIndex: currentTimelineIndexAtom,
-// 	length: nodeIDsTimelineLengthAtom
-// })
-
 // export const nodesStore = createStore({
 // 	nodes: nodesAtom,
 // 	currentNode: currentNodeAtom,
@@ -72,26 +66,6 @@ export const onNextNodeCardAtom = atom(null, (get, set) => {
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
 })
 
-// export const increaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
-// 	const nodes = get(nodesAtom)
-
-// 	let numNodes = nodes.length;
-// 	let numerator = 1;
-// 	// let freqModifier = numerator / (numNodes * numNodes);
-
-// 	// let newFrequency = nodes[nodeIdx].frequency + numNodes * freqModifier;
-
-// 	// let tempNodes = [...nodes]
-// 	// if (Math.abs(1 - newFrequency) >= 1e-12) {
-// 	// 	tempNodes[nodeIdx].frequency = newFrequency;
-
-// 	// 	tempNodes.forEach((node) => {
-// 	// 		node.frequency -= freqModifier;
-// 	// 	});
-// 	// }
-// 	// setNodes(tempNodes)
-// })
-
 export const decreaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
 	let nodes = get(nodesAtom)
 	let numerator = -1;
@@ -113,27 +87,13 @@ function getUpdatedNodeFrequencies(nodes, nodeID, numerator) {
 	const freqModifier = numerator / (numNodes * numNodes)
 	const nodeIndex = nodes.findIndex(node => node._id == nodeID) 
 
-	console.log("getUpdatedNodeFrequencies currentNode", nodes[nodeIndex])
-
 	const newFrequency = nodes[nodeIndex].frequency + numNodes * freqModifier
 	let tempNodes = [...nodes]
-
 	const newFreqIsLessThanOne = Math.abs(1 - newFrequency) >= 1e-12
+
 	if (newFreqIsLessThanOne) {
 		tempNodes[nodeIndex].frequency = newFrequency
-
 		tempNodes.forEach( node => { node.frequency -= freqModifier } )
 	}
 	return tempNodes
 }
-
-// function onPrevNodeCard(){
-// 	let isAtBeginningOfTimeline = currTimelineIdx === 0
-// 	if(!isAtBeginningOfTimeline) {
-// 		setCurrTimelineIdx(currTimelineIdx-1)
-// 		return nodeIDsTimeline[currTimelineIdx+1]
-// 	}
-// }
-
-
-
