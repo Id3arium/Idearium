@@ -11,26 +11,17 @@ export default function NodeCardsArea(nodesFromServer) {
 	useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]])
 
 	const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
-	const nodes = useAtomValue(nodesAtom)
-	const weightedRandomNode = getWeightedRandomNode(nodes)
 	
 	useEffect( () => {
 		setCurrentNode(!currentNode ? weightedRandomNode : currentNode)
-
 		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
-	}, [currentNode,weightedRandomNode])
-
-	// if (nodeIDsTimeline.length === 0){
-	// 	setNodeIDsTimeline((prev) => [...prev, getWeightedRandomNode()] )
-	// 	// addNodeIDToTimeline()
-	// }
+	}, [currentNode])
 
 	return (
 		<StyledNodeCardsArea id="node-cards-area">
 			<div> Node Cards Area </div>
 			{/* <ForceGraph3D graphData={gData()}/> */}
 			<NodeCard
-				nodeData = {currentNode}
 				duration = {50}
 			/>
 		</StyledNodeCardsArea>
