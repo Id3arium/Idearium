@@ -20,12 +20,12 @@ export const currentTimelineIndexAtom = atom(-1)
 export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
 
-export const nodeByIDAtom = atom(
-	(get, set, nodeID) => get(nodesAtom).find(node => node._id == nodeID),
-	(get, set, nodeID) => {
-		let node = get(nodesAtom).find(node => node._id == nodeID)
-	}
-)
+// export const nodeByIDAtom = atom(
+// 	(get, set, nodeID) => get(nodesAtom).find(node => node._id == nodeID),
+// 	(get, set, nodeID) => {
+// 		let node = get(nodesAtom).find(node => node._id == nodeID)
+// 	}
+// )
 
 export const weightedRandomNodeAtom = atom((get) => {
 	const nodes = get(nodesAtom)
@@ -72,47 +72,60 @@ export const onNextNodeCardAtom = atom(null, (get, set) => {
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
 })
 
-export const increaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
-	const nodes = get(nodesAtom)
+// export const increaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
+// 	const nodes = get(nodesAtom)
 
-	let numNodes = nodes.length;
-	let numerator = 1;
-	// let freqModifier = numerator / (numNodes * numNodes);
+// 	let numNodes = nodes.length;
+// 	let numerator = 1;
+// 	// let freqModifier = numerator / (numNodes * numNodes);
 
-	// let newFrequency = nodes[nodeIdx].frequency + numNodes * freqModifier;
+// 	// let newFrequency = nodes[nodeIdx].frequency + numNodes * freqModifier;
 
-	// let tempNodes = [...nodes]
-	// if (Math.abs(1 - newFrequency) >= 1e-12) {
-	// 	tempNodes[nodeIdx].frequency = newFrequency;
+// 	// let tempNodes = [...nodes]
+// 	// if (Math.abs(1 - newFrequency) >= 1e-12) {
+// 	// 	tempNodes[nodeIdx].frequency = newFrequency;
 
-	// 	tempNodes.forEach((node) => {
-	// 		node.frequency -= freqModifier;
-	// 	});
-	// }
-	// setNodes(tempNodes)
-})
+// 	// 	tempNodes.forEach((node) => {
+// 	// 		node.frequency -= freqModifier;
+// 	// 	});
+// 	// }
+// 	// setNodes(tempNodes)
+// })
 
 export const decreaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
-	const nodes = get(nodesAtom)
-
-	let numNodes = nodes.length;
-	let numerator = 1;
-	let freqModifier = numerator / (numNodes * numNodes);
-
-	// let currentNode = get(getNodeByID(nodeID))
-	// console.log("decreaseNodeFrquencyAtom currentNode",currentNode)
-	// let newFrequency = nodes[nodeIdx].frequency + numNodes * freqModifier;
-
-	// let tempNodes = [...nodes]
-	// if (Math.abs(1 - newFrequency) >= 1e-12) {
-	// 	tempNodes[nodeIdx].frequency = newFrequency;
-
-	// 	tempNodes.forEach((node) => {
-	// 		node.frequency -= freqModifier;
-	// 	});
-	// }
-	// setNodes(tempNodes)
+	let nodes = get(nodesAtom)
+	let numerator = -1;
+	console.log("decreaseNodeFrquencyAtom")
+	
+	set(nodesAtom, getUpdatedNodeFrequencies(nodes, nodeID, numerator))
 })
+
+export const increaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
+	let nodes = get(nodesAtom)
+	let numerator = 1;
+	console.log("increaseNodeFrquencyAtom")
+
+	set(nodesAtom, getUpdatedNodeFrequencies(nodes, nodeID, numerator))
+})
+
+function getUpdatedNodeFrequencies(nodes, nodeID, numerator) { 
+	const numNodes = nodes.length
+	const freqModifier = numerator / (numNodes * numNodes)
+	const nodeIndex = nodes.findIndex(node => node._id == nodeID) 
+
+	console.log("getUpdatedNodeFrequencies currentNode", nodes[nodeIndex])
+
+	const newFrequency = nodes[nodeIndex].frequency + numNodes * freqModifier
+	let tempNodes = [...nodes]
+
+	const newFreqIsLessThanOne = Math.abs(1 - newFrequency) >= 1e-12
+	if (newFreqIsLessThanOne) {
+		tempNodes[nodeIndex].frequency = newFrequency
+
+		tempNodes.forEach( node => { node.frequency -= freqModifier } )
+	}
+	return tempNodes
+}
 
 // function onPrevNodeCard(){
 // 	let isAtBeginningOfTimeline = currTimelineIdx === 0

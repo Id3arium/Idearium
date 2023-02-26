@@ -8,9 +8,9 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useStore, useSetAtom } from 'jotai';
-// import { nextNodeAtom, previousNodeAtom, getWeightedRandomNodeAtom } from ;
-// import {nodesAtom, currentNodeAtom, nodeIDsTimelineAtom, currentTimelineIndexAtom} from '@/public/components/NodeCardsArea.js';
-import {currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, onPrevNodeCardAtom, onNextNodeCardAtom} from '@/public/atoms.js';
+import { currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, onPrevNodeCardAtom,
+    onNextNodeCardAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom
+} from '@/public/atoms.js';
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
@@ -24,6 +24,8 @@ export default function NodeCard(props) {
     const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
     const onPrevNodeCard = useSetAtom(onPrevNodeCardAtom)
     const onNextNodeCard = useSetAtom(onNextNodeCardAtom)
+    const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
+    const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
 
     useEffect( () => {
         console.log("NodeCard currentNode", currentNode, "duration in seconds", props.duration)
@@ -103,12 +105,12 @@ export default function NodeCard(props) {
         </IconButton>
         {!frontSideVisible && <div>
             <IconButton className="nav-btn bottom left outlined" 
-                // onClick={() => {props.onDecreaseNodeFreq(props.nodeID)}}
+                onClick={() => {decreaseNodeFrquency(currentNode._id)}}
             >
                 <ArrowDropDownIcon />
             </IconButton>
             <IconButton className="nav-btn bottom right outlined" 
-                // onClick={() => {props.onIncreaseNodeFreq(props.nodeID)}}
+                onClick={() => {increaseNodeFrquency(currentNode._id)}}
             >
                 <ArrowDropUpIcon />
             </IconButton>
