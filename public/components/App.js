@@ -34,7 +34,7 @@ function App() {
 	};
 
 	function addNode(newNodeData){
-		let upDatedNodes = updateNodeFrequencies(nodes)
+		let upDatedNodes = redistributeNodeFrequencies(nodes)
 		let newNode = {
 			id: nodes.length,
 			title: newNodeData.title,
@@ -47,11 +47,9 @@ function App() {
 		setNodes(newNodes)
 	}
 
-	function updateNodeFrequencies(nodes) {
-        let oldNumNodes = nodes.length
-        let newNumNodes = oldNumNodes + 1
-        let oldDefaultFreq = 1 / oldNumNodes
-        let newDefaultFreq = 1 / newNumNodes
+	function redistributeNodeFrequencies(nodes) {
+        let oldDefaultFreq = 1 / nodes.length
+        let newDefaultFreq = 1 / (nodes.length + 1)
 
         nodes.forEach((node) => {
 			let probRatio = node.frequency / oldDefaultFreq

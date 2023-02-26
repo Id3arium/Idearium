@@ -1,5 +1,5 @@
 "use client";
-import { atom, createStore } from 'jotai';
+import { atom, useAtomValue, createStore } from 'jotai';
 
 // export const nodesStore = createStore({
 // 	nodes: nodesAtom,
@@ -20,6 +20,33 @@ export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).
 // 		let node = get(nodesAtom).find(node => node._id == nodeID)
 // 	}
 // )
+
+export const addNodeAtom = atom(null, (get, set, newNodeData) => {
+	let nodes = get(nodesAtom)
+	let newNode = {
+		_id: nodes.length,
+		title: newNodeData.title,
+		content: newNodeData.content,
+		inspiration: newNodeData.inspiration,
+		frequency: 1 / (nodes.length + 1),
+		// charCount: getNodeCharCount(newNodeData)
+	}
+	let newFreqRatio = nodes.length / (nodes.length + 1)
+	nodes.forEach(node => { node.frequency *= newFreqRatio })
+	
+	set(nodesAtom, [...nodes, newNode])
+})
+
+export const removeNodeAtom = atom(null, (get, set, nodeID) => {
+	let nodes = get(nodesAtom)
+	const nodeIndex = nodes.findIndex(node => node._id == nodeID) 
+	nodes.splice(nodeIndex,1)
+
+	let newFreqRatio = nodes.length / (nodes.length - 1)
+	nodes.forEach(node => { node.frequency *= newFreqRatio })
+
+	set(nodesAtom, nodes)
+})
 
 export const weightedRandomNodeAtom = atom((get) => {
 	const nodes = get(nodesAtom)
@@ -67,22 +94,18 @@ export const onNextNodeCardAtom = atom(null, (get, set) => {
 })
 
 export const decreaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
-	let nodes = get(nodesAtom)
 	let numerator = -1;
-	console.log("decreaseNodeFrquencyAtom")
-	
-	set(nodesAtom, getUpdatedNodeFrequencies(nodes, nodeID, numerator))
+	set(nodesAtom, getUpdatedFrequencies( get(nodesAtom), nodeID, numerator ))
 })
 
 export const increaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
-	let nodes = get(nodesAtom)
 	let numerator = 1;
-	console.log("increaseNodeFrquencyAtom")
-
-	set(nodesAtom, getUpdatedNodeFrequencies(nodes, nodeID, numerator))
+	set(nodesAtom, getUpdatedFrequencies( get(nodesAtom), nodeID, numerator ))
 })
 
-function getUpdatedNodeFrequencies(nodes, nodeID, numerator) { 
+function getUpdatedFrequencies(nodes, nodeID, numerator) { 
+	console.log("getUpdatedNodeFrequencies nodes",nodes)
+
 	const numNodes = nodes.length
 	const freqModifier = numerator / (numNodes * numNodes)
 	const nodeIndex = nodes.findIndex(node => node._id == nodeID) 

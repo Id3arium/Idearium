@@ -28,7 +28,7 @@ export default function NodeCard(props) {
     const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
 
     useEffect( () => {
-        console.log("NodeCard currentNode", currentNode, "duration in seconds", props.duration)
+        console.log("NodeCard currentNode", currentNode?._id, "duration in seconds", props.duration)
     }, [currentNode])
     
     useEffect(() => {
