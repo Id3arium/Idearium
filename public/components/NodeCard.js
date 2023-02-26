@@ -26,7 +26,7 @@ export default function NodeCard(props) {
     const onNextNodeCard = useSetAtom(onNextNodeCardAtom)
 
     useEffect( () => {
-        // console.log("NodeCard currentNode", currentNode?._id)
+        console.log("NodeCard currentNode", currentNode, "duration in seconds", props.duration)
     }, [currentNode])
     
     useEffect(() => {
