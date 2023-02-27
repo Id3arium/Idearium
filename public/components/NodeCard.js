@@ -124,7 +124,7 @@ export default function NodeCard(props) {
             <p> {currentNode?.content} </p> 
         </StyledCardSide>
         <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
-            <h1> Node #{currentNode?._id+1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
+            <h1> Node #{+currentNode?._id + 1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
             <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
             <p className="frequency">
                 {(currentNode?.frequency * 100).toFixed(1)}% Likely to appear

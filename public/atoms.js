@@ -95,12 +95,12 @@ export const onNextNodeCardAtom = atom(null, (get, set) => {
 
 export const decreaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
 	let numerator = -1;
-	set(nodesAtom, getUpdatedFrequencies( get(nodesAtom), nodeID, numerator ))
+	set(nodesAtom, getUpdatedFrequencies(get(nodesAtom), nodeID, numerator))
 })
 
 export const increaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
 	let numerator = 1;
-	set(nodesAtom, getUpdatedFrequencies( get(nodesAtom), nodeID, numerator ))
+	set(nodesAtom, getUpdatedFrequencies(get(nodesAtom), nodeID, numerator))
 })
 
 function getUpdatedFrequencies(nodes, nodeID, numerator) { 

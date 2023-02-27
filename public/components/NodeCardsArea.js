@@ -12,7 +12,7 @@ export default function NodeCardsArea(nodesFromServer) {
 
 	const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
     const weightedRandomNode = useAtomValue(weightedRandomNodeAtom)
-	const wordsPerMinute = 50
+	const wordsPerMinute = 200
 	useEffect( () => {
 		setCurrentNode(!currentNode ? weightedRandomNode : currentNode)
 		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
@@ -32,7 +32,6 @@ export default function NodeCardsArea(nodesFromServer) {
 
 	return (
 		<StyledNodeCardsArea id="node-cards-area">
-			<div> Node Cards Area </div>
 			{/* <ForceGraph3D graphData={gData()}/> */}
 			<NodeCard
 				duration = {getCurrentNodeCardDuration(wordsPerMinute)}
