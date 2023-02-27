@@ -1,11 +1,12 @@
 import dynamic from 'next/dynamic';
 import styles from "./page.module.css";
-// import styled from "styled-components";
+import React from 'react'
 import NodeCardsArea from '@/public/components/NodeCardsArea.js';
-// import IdeaCompositionArea from '../public/components/IdeaCompositionArea.js';
+import IdeaCompositionArea from '../public/components/IdeaCompositionArea.js';
 
 import mongoose from 'mongoose';
 import { Node } from '../models/Node.js';
+import { Suspense } from 'react';
 
 export default async function Home() {
 
@@ -26,9 +27,10 @@ export default async function Home() {
 	return (
 		<main className={styles.main}>
 			<div id="Home">
-				<div>Hello World</div>
-
-				<NodeCardsArea nodes={nodesFromServer} />
+				<IdeaCompositionArea />
+				{/* <React.Suspense fallback={<div>Loading Card</div>}> */}
+					<NodeCardsArea nodes={nodesFromServer} />
+				{/* </React.Suspense> */}
 			</div>
 		</main>
 	);
