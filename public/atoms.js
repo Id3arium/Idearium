@@ -2,19 +2,17 @@
 import { atom, useAtomValue, createStore } from 'jotai';
 import _ from 'lodash';
 
-// export const nodesStore = createStore({
-// 	nodes: nodesAtom,
-// 	currentNode: currentNodeAtom,
-// 	nodeIDsTimeline: nodeIDsTimelineAtom,
-// 	currentTimelineIndex: currentTimelineIndexAtom 
-// })
-
 export const nodesAtom = atom([])
 export const currentNodeAtom = atom(null)
 export const currentTimelineIndexAtom = atom(0)
 export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
   
+export const addToNodeIDsTimelineAtom = atom(null, (get, set, newNodeID) => { 
+	set(nodeIDsTimelineAtom, [...get(nodeIDsTimelineAtom), newNodeID])
+	set(moveToNextTimelineNodeAtom)
+})
+
 export const addNodeAtom = atom(null, (get, set, newNode) => {
 	let nodes = get(nodesAtom)
 	
@@ -25,11 +23,6 @@ export const addNodeAtom = atom(null, (get, set, newNode) => {
 	set(addToNodeIDsTimelineAtom)
 })
 
-export const addToNodeIDsTimelineAtom = atom(null, (get, set, newNodeID) => { 
-	set(nodeIDsTimelineAtom, [...get(nodeIDsTimelineAtom), newNodeID])
-	set(moveToNextTimelineNodeAtom)
-})
-
 export const removeNodeAtom = atom(null, (get, set, nodeID) => {
 	let nodes = get(nodesAtom)
 	const nodeIndex = nodes.findIndex(node => node.id == nodeID) 
@@ -37,7 +30,6 @@ export const removeNodeAtom = atom(null, (get, set, nodeID) => {
 
 	let newFreqRatio = nodes.length / (nodes.length - 1)
 	nodes.forEach(node => { node.frequency *= newFreqRatio })
-
 	set(nodesAtom, nodes)
 })
 
@@ -84,7 +76,6 @@ export const onNextNodeAtom = atom(null, (get, set) => {
 	if (isAtEndOfList) {
 		let newCurrentNode = get(weightedRandomNodeAtom)
 		set(addToNodeIDsTimelineAtom, newCurrentNode?.id)
-		// set(nodeIDsTimelineAtom, [...nodeIDsTimeline, newCurrentNode?.id])
 	} else {
 		set(moveToNextTimelineNodeAtom)
 	}
