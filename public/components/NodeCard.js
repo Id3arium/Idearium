@@ -8,8 +8,8 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useStore, useSetAtom } from 'jotai';
-import { currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, onPrevNodeCardAtom,
-    onNextNodeCardAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom
+import { currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, onPrevNodeAtom,
+    onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom
 } from '@/public/atoms.js';
 
 const isHoveredAtom = atom(false)
@@ -22,13 +22,13 @@ export default function NodeCard(props) {
     const currentNode = useAtomValue(currentNodeAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
-    const onPrevNodeCard = useSetAtom(onPrevNodeCardAtom)
-    const onNextNodeCard = useSetAtom(onNextNodeCardAtom)
+    const onPrevNodeCard = useSetAtom(onPrevNodeAtom)
+    const onNextNodeCard = useSetAtom(onNextNodeAtom)
     const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
     const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
 
     useEffect( () => {
-        console.log("NodeCard currentNode", currentNode?._id, "duration in seconds", props.duration)
+        console.log("NodeCard currentNode", currentNode?.id, "duration in seconds", props.duration)
     }, [currentNode])
     
     useEffect(() => {
@@ -105,12 +105,12 @@ export default function NodeCard(props) {
         </IconButton>
         {!frontSideVisible && <div>
             <IconButton className="nav-btn bottom left outlined" 
-                onClick={() => {decreaseNodeFrquency(currentNode._id)}}
+                onClick={() => {decreaseNodeFrquency(currentNode.id)}}
             >
                 <ArrowDropDownIcon />
             </IconButton>
             <IconButton className="nav-btn bottom right outlined" 
-                onClick={() => {increaseNodeFrquency(currentNode._id)}}
+                onClick={() => {increaseNodeFrquency(currentNode.id)}}
             >
                 <ArrowDropUpIcon />
             </IconButton>
@@ -124,7 +124,7 @@ export default function NodeCard(props) {
             <p> {currentNode?.content} </p> 
         </StyledCardSide>
         <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
-            <h1> Node #{+currentNode?._id + 1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
+            <h1> Node #{currentNode?.id + 1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
             <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
             <p className="frequency">
                 {(currentNode?.frequency * 100).toFixed(1)}% Likely to appear

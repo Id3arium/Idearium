@@ -15,37 +15,39 @@ export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
 
 // export const nodeByIDAtom = atom(
-// 	(get, set, nodeID) => get(nodesAtom).find(node => node._id == nodeID),
+// 	(get, set, nodeID) => get(nodesAtom).find(node => node.id== nodeID),
 // 	(get, set, nodeID) => {
-// 		let node = get(nodesAtom).find(node => node._id == nodeID)
+// 		let node = get(nodesAtom).find(node => node.id == nodeID)
 // 	}
 // )
 
-export const addNodeAtom = atom(null, (get, set, newNodeData) => {
+export const addNodeAtom = atom(null, (get, set, newNode) => {
 	let nodes = get(nodesAtom)
-	let newNode = {
-		_id: nodes.length,
-		title: newNodeData.title,
-		content: newNodeData.content,
-		inspiration: newNodeData.inspiration,
-		frequency: 1 / (nodes.length + 1),
-		// charCount: getNodeCharCount(newNodeData)
-	}
+	// let newNode = {
+	// 	id: nodes.length,
+	// 	title: newNodeData.title,
+	// 	content: newNodeData.content,
+	// 	inspiration: newNodeData.inspiration,
+	// 	frequency: 1 / (nodes.length + 1),
+	// 	// charCount: getNodeCharCount(newNodeData)
+	// }
 	let newFreqRatio = nodes.length / (nodes.length + 1)
 	nodes.forEach(node => { node.frequency *= newFreqRatio })
 	
 	set(nodesAtom, [...nodes, newNode])
+	set(currentNodeAtom, newNode)
 })
 
 export const removeNodeAtom = atom(null, (get, set, nodeID) => {
 	let nodes = get(nodesAtom)
-	const nodeIndex = nodes.findIndex(node => node._id == nodeID) 
-	nodes.splice(nodeIndex,1)
+	const nodeIndex = nodes.findIndex(node => node.id == nodeID) 
+	nodes.splice(nodeIndex, 1)
 
 	let newFreqRatio = nodes.length / (nodes.length - 1)
 	nodes.forEach(node => { node.frequency *= newFreqRatio })
 
 	set(nodesAtom, nodes)
+	set(currentNodeAtom, newNode)
 })
 
 export const weightedRandomNodeAtom = atom((get) => {
@@ -53,7 +55,7 @@ export const weightedRandomNodeAtom = atom((get) => {
 	let randNum = Math.random(); // range of [0,1)
 	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
 	for (let i = 0; i < nodes.length; i++) {
-		if (nodes[i]._id === get(currentNodeAtom)?._id) { continue; }
+		if (nodes[i].id === get(currentNodeAtom)?.id) { continue; }
 		//likelyhood of randNum being inside the range is = to the nodes appearance frequency
 		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + nodes[i].frequency)
 		if (isRandNumInNodeRange) {
@@ -65,29 +67,29 @@ export const weightedRandomNodeAtom = atom((get) => {
 	return null;
 })
 
-export const onPrevNodeCardAtom = atom(null, (get, set) => {
+export const onPrevNodeAtom = atom(null, (get, set) => {
 	const nodeIDsTimeline = get(nodeIDsTimelineAtom)
 	const currentTimelineIndex = get(currentTimelineIndexAtom)
-	
 	const newCurrentTimelineIndex = currentTimelineIndex == 0 ? 0 : currentTimelineIndex - 1
-	const newCurrentNode = get(nodesAtom).find(node => node._id === nodeIDsTimeline[newCurrentTimelineIndex])
+	
+	const newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
 	
 	set(currentNodeAtom, newCurrentNode)
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
 })
 
-export const onNextNodeCardAtom = atom(null, (get, set) => {
+export const onNextNodeAtom = atom(null, (get, set) => {
 	const nodeIDsTimeline = get(nodeIDsTimelineAtom)
 	const currentTimelineIndex = get(currentTimelineIndexAtom)
-	
 	const newCurrentTimelineIndex = currentTimelineIndex + 1
+	
 	let newCurrentNode = null
 	let isAtEndOfList = currentTimelineIndex === nodeIDsTimeline.length - 1
 	if (isAtEndOfList) {
 		newCurrentNode = get(weightedRandomNodeAtom)
-		set(nodeIDsTimelineAtom, [...nodeIDsTimeline, newCurrentNode?._id])
+		set(nodeIDsTimelineAtom, [...nodeIDsTimeline, newCurrentNode?.id])
 	} else {
-		newCurrentNode = get(nodesAtom).find(node => node._id === nodeIDsTimeline[newCurrentTimelineIndex])
+		newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
 	}
 	set(currentNodeAtom, newCurrentNode)
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
@@ -108,7 +110,7 @@ function getUpdatedFrequencies(nodes, nodeID, numerator) {
 
 	const numNodes = nodes.length
 	const freqModifier = numerator / (numNodes * numNodes)
-	const nodeIndex = nodes.findIndex(node => node._id == nodeID) 
+	const nodeIndex = nodes.findIndex(node => node.id == nodeID) 
 
 	const newFrequency = nodes[nodeIndex].frequency + numNodes * freqModifier
 	let tempNodes = [...nodes]
