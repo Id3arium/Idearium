@@ -1,5 +1,6 @@
 "use client";
 import { atom, useAtomValue, createStore } from 'jotai';
+import _ from 'lodash';
 
 // export const nodesStore = createStore({
 // 	nodes: nodesAtom,
@@ -19,7 +20,7 @@ export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).
 // 	(get, set, nodeID) => {
 // 		let node = get(nodesAtom).find(node => node.id == nodeID)
 // 	}
-// )
+// )    					
 
 export const addNodeAtom = atom(null, (get, set, newNode) => {
 	let nodes = get(nodesAtom)
@@ -36,6 +37,7 @@ export const addNodeAtom = atom(null, (get, set, newNode) => {
 	nodes.forEach(node => { node.frequency *= newFreqRatio })
 	
 	set(nodesAtom, [...nodes, newNode])
+	set(currentTimelineIndexAtom, get(currentTimelineIndexAtom) + 1 )
 	set(currentNodeAtom, newNode)
 })
 
@@ -48,7 +50,6 @@ export const removeNodeAtom = atom(null, (get, set, nodeID) => {
 	nodes.forEach(node => { node.frequency *= newFreqRatio })
 
 	set(nodesAtom, nodes)
-	set(currentNodeAtom, newNode)
 })
 
 export const weightedRandomNodeAtom = atom((get) => {
@@ -75,8 +76,8 @@ export const onPrevNodeAtom = atom(null, (get, set) => {
 	
 	const newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
 	
-	set(currentNodeAtom, newCurrentNode)
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
+	set(currentNodeAtom, newCurrentNode)
 })
 
 export const onNextNodeAtom = atom(null, (get, set) => {
@@ -92,8 +93,8 @@ export const onNextNodeAtom = atom(null, (get, set) => {
 	} else {
 		newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
 	}
-	set(currentNodeAtom, newCurrentNode)
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
+	set(currentNodeAtom, newCurrentNode)
 })
 
 export const decreaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
@@ -107,7 +108,7 @@ export const increaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
 })
 
 function getUpdatedFrequencies(nodes, nodeID, numerator) { 
-	console.log("getUpdatedNodeFrequencies nodes",nodes)
+	console.log("getUpdatedNodeFrequencies nodes", nodes)
 
 	const numNodes = nodes.length
 	const freqModifier = numerator / (numNodes * numNodes)
@@ -115,9 +116,8 @@ function getUpdatedFrequencies(nodes, nodeID, numerator) {
 
 	const newFrequency = nodes[nodeIndex].frequency + numNodes * freqModifier
 	let tempNodes = [...nodes]
-	const newFreqIsLessThanOne = Math.abs(1 - newFrequency) >= 1e-12
 
-	if (newFreqIsLessThanOne) {
+	if (_.inRange(newFrequency, 0, 1)) {
 		tempNodes[nodeIndex].frequency = newFrequency
 		tempNodes.forEach( node => { node.frequency -= freqModifier } )
 	}
