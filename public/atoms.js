@@ -14,13 +14,33 @@ export const currentNodeAtom = atom(null)
 export const currentTimelineIndexAtom = atom(-1)
 export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
+  
+export const addNodeAtom = atom(null, (get, set, newNode) => {
+	let nodes = get(nodesAtom)
+	
+	let newFreqRatio = nodes.length / (nodes.length + 1)
+	nodes.forEach(node => { node.frequency *= newFreqRatio })
+	
+	set(nodesAtom, [...nodes, newNode])
+	set(addToNodeIDsTimelineAtom)
+})
 
-// export const nodeByIDAtom = atom(
-	// 	(get, set, nodeID) => get(nodesAtom).find(node => node.id== nodeID),
-	// 	(get, set, nodeID) => {
-		// 		let node = get(nodesAtom).find(node => node.id == nodeID)
-		// 	}
-		// )    					
+export const addToNodeIDsTimelineAtom = atom(null, (get, set, newNodeID) => { 
+	set(nodeIDsTimelineAtom, [...get(nodeIDsTimelineAtom), newNodeID])
+	set(moveToNextTimelineNodeAtom)
+})
+
+export const removeNodeAtom = atom(null, (get, set, nodeID) => {
+	let nodes = get(nodesAtom)
+	const nodeIndex = nodes.findIndex(node => node.id == nodeID) 
+	nodes.splice(nodeIndex, 1)
+
+	let newFreqRatio = nodes.length / (nodes.length - 1)
+	nodes.forEach(node => { node.frequency *= newFreqRatio })
+
+	set(nodesAtom, nodes)
+})
+
 export const moveToNextTimelineNodeAtom = atom(null, (get, set) => {
 	let nodeIDsTimeline = get(nodeIDsTimelineAtom)
 	let maxIdx = nodeIDsTimeline.length - 1
@@ -36,38 +56,6 @@ export const moveToPrevTimelineNodeAtom = atom(null, (get, set) => {
 	const newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
 	set(currentNodeAtom, newCurrentNode)
-})
-
-
-
-export const addNodeAtom = atom(null, (get, set, newNode) => {
-	let nodes = get(nodesAtom)
-	// let newNode = {
-	//  _id: uuidv4(),
-	// 	id: nodes.length,
-	// 	title: newNodeData.title,
-	// 	content: newNodeData.content,
-	// 	inspiration: newNodeData.inspiration,
-	// 	frequency: 1 / (nodes.length + 1),
-	// 	// charCount: getNodeCharCount(newNodeData)
-	// }
-	let newFreqRatio = nodes.length / (nodes.length + 1)
-	nodes.forEach(node => { node.frequency *= newFreqRatio })
-	
-	set(nodesAtom, [...nodes, newNode])
-	set(currentTimelineIndexAtom, get(currentTimelineIndexAtom) + 1)
-	set(currentNodeAtom, newNode)
-})
-
-export const removeNodeAtom = atom(null, (get, set, nodeID) => {
-	let nodes = get(nodesAtom)
-	const nodeIndex = nodes.findIndex(node => node.id == nodeID) 
-	nodes.splice(nodeIndex, 1)
-
-	let newFreqRatio = nodes.length / (nodes.length - 1)
-	nodes.forEach(node => { node.frequency *= newFreqRatio })
-
-	set(nodesAtom, nodes)
 })
 
 export const weightedRandomNodeAtom = atom((get) => {
@@ -92,20 +80,14 @@ export const onPrevNodeAtom = atom(null, (get, set) => {
 })
 
 export const onNextNodeAtom = atom(null, (get, set) => {
-	const nodeIDsTimeline = get(nodeIDsTimelineAtom)
-	const currentTimelineIndex = get(currentTimelineIndexAtom)
-	const newCurrentTimelineIndex = currentTimelineIndex + 1
-	
-	let newCurrentNode = null
-	let isAtEndOfList = currentTimelineIndex === nodeIDsTimeline.length - 1
+	let isAtEndOfList = get(currentTimelineIndexAtom) === get(nodeIDsTimelineAtom).length - 1
 	if (isAtEndOfList) {
-		newCurrentNode = get(weightedRandomNodeAtom)
-		set(nodeIDsTimelineAtom, [...nodeIDsTimeline, newCurrentNode?.id])
+		let newCurrentNode = get(weightedRandomNodeAtom)
+		set(addToNodeIDsTimelineAtom, newCurrentNode?.id)
+		// set(nodeIDsTimelineAtom, [...nodeIDsTimeline, newCurrentNode?.id])
 	} else {
-		newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
+		set(moveToNextTimelineNodeAtom)
 	}
-	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
-	set(currentNodeAtom, newCurrentNode)
 })
 
 export const decreaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {

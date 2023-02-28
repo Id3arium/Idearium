@@ -23,6 +23,15 @@ function IdeaCompositionArea(props) {
     let emptyNote = { title: "", content: "", inspiration: "" };
     if (!_.isEqual(note, emptyNote)) {
       props.onAdd(note);
+      // let newNode = {
+      //  _id: uuidv4(),
+      // 	id: nodes.length,
+      // 	title: newNodeData.title,
+      // 	content: newNodeData.content,
+      // 	inspiration: newNodeData.inspiration,
+      // 	frequency: 1 / (nodes.length + 1),
+      // 	// charCount: getNodeCharCount(newNodeData)
+      // }
       setNote(emptyNote);
     }
   }
