@@ -36,7 +36,7 @@
 //                 break;
 //         case 'DELETE':
 //             try {
-//                 const deletedNode = await Node.deleteOne({_id: id})
+//                 const deletedNode = await Node.deleteOne({id: id})
 //                 if (!deletedNode) {
 //                     return res.status(400).json({ sucess: false})
 //                 }

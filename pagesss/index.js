@@ -90,7 +90,7 @@ export default async function Home({ nodesString }) {
 		<StyledHome id="Home">
 			<ul>
 				{nodes.map(node => (
-					<li key={node._id}>[{node._id}]: {node.title} {node.content}</li>
+					<li key={node.id}>[{node.id}]: {node.title} {node.content}</li>
 				))}
 			</ul>
 			<div className="force-graph">

@@ -3,10 +3,11 @@ import { v4 as uuidv4 } from 'uuid';
 const NodeSchema = new mongoose.Schema({
   _id: {
     type: String,
+    default : uuidv4(),
   },
   id: {
-    type: String,
-    default : uuidv4(),
+    type: Number,
+    // default : uuidv4(),
     unique: true,
     required: true
   },
