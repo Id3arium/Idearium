@@ -16,11 +16,29 @@ export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
 
 // export const nodeByIDAtom = atom(
-// 	(get, set, nodeID) => get(nodesAtom).find(node => node.id== nodeID),
-// 	(get, set, nodeID) => {
-// 		let node = get(nodesAtom).find(node => node.id == nodeID)
-// 	}
-// )    					
+	// 	(get, set, nodeID) => get(nodesAtom).find(node => node.id== nodeID),
+	// 	(get, set, nodeID) => {
+		// 		let node = get(nodesAtom).find(node => node.id == nodeID)
+		// 	}
+		// )    					
+export const moveToNextTimelineNodeAtom = atom(null, (get, set) => {
+	let nodeIDsTimeline = get(nodeIDsTimelineAtom)
+	let maxIdx = nodeIDsTimeline.length - 1
+	let newCurrentTimelineIndex = _.min([maxIdx, get(currentTimelineIndexAtom) + 1])
+	let newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
+	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
+	set(currentNodeAtom, newCurrentNode)
+})
+
+export const moveToPrevTimelineNodeAtom = atom(null, (get, set) => {
+	const nodeIDsTimeline = get(nodeIDsTimelineAtom)
+	const newCurrentTimelineIndex = _.max([0, get(currentTimelineIndexAtom) - 1])
+	const newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
+	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
+	set(currentNodeAtom, newCurrentNode)
+})
+
+
 
 export const addNodeAtom = atom(null, (get, set, newNode) => {
 	let nodes = get(nodesAtom)
@@ -37,7 +55,7 @@ export const addNodeAtom = atom(null, (get, set, newNode) => {
 	nodes.forEach(node => { node.frequency *= newFreqRatio })
 	
 	set(nodesAtom, [...nodes, newNode])
-	set(currentTimelineIndexAtom, get(currentTimelineIndexAtom) + 1 )
+	set(currentTimelineIndexAtom, get(currentTimelineIndexAtom) + 1)
 	set(currentNodeAtom, newNode)
 })
 
@@ -70,14 +88,7 @@ export const weightedRandomNodeAtom = atom((get) => {
 })
 
 export const onPrevNodeAtom = atom(null, (get, set) => {
-	const nodeIDsTimeline = get(nodeIDsTimelineAtom)
-	const currentTimelineIndex = get(currentTimelineIndexAtom)
-	const newCurrentTimelineIndex = currentTimelineIndex == 0 ? 0 : currentTimelineIndex - 1
-	
-	const newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
-	
-	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
-	set(currentNodeAtom, newCurrentNode)
+	set(moveToPrevTimelineNodeAtom)
 })
 
 export const onNextNodeAtom = atom(null, (get, set) => {

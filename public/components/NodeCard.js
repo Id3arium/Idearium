@@ -8,8 +8,9 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useStore, useSetAtom } from 'jotai';
-import { nodesAtom, currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, onPrevNodeAtom,
-    onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom
+import {
+    nodesAtom, currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom,
+    onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom
 } from '@/public/atoms.js';
 
 const isHoveredAtom = atom(false)
