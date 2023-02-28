@@ -11,7 +11,7 @@ import _ from 'lodash';
 
 export const nodesAtom = atom([])
 export const currentNodeAtom = atom(null)
-export const currentTimelineIndexAtom = atom(-1)
+export const currentTimelineIndexAtom = atom(0)
 export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
   
