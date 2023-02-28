@@ -8,7 +8,7 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useStore, useSetAtom } from 'jotai';
-import { currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, onPrevNodeAtom,
+import { nodesAtom, currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, onPrevNodeAtom,
     onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom
 } from '@/public/atoms.js';
 
@@ -19,6 +19,7 @@ export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
     
+    const nodes = useAtomValue(nodesAtom)
     const currentNode = useAtomValue(currentNodeAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
@@ -29,15 +30,11 @@ export default function NodeCard(props) {
 
     useEffect( () => {
         console.log("NodeCard currentNode", currentNode?.id, "duration in seconds", props.duration)
-    }, [currentNode])
+    }, [currentNode, nodes, isHovered, frontSideVisible])
     
-    useEffect(() => {
-        console.log("NodeCard timeline", currentTimelineIndex+1, "/", nodeIDsTimelineLength)
-    }, [currentTimelineIndex, nodeIDsTimelineLength])
-
-    useEffect(() => {
-    //   console.log("NodeCard", "isHovered", isHovered, "frontSideVisible", frontSideVisible)
-    }, [isHovered, frontSideVisible])
+    // useEffect(() => {
+    //     console.log("NodeCard timeline", currentTimelineIndex+1, "/", nodeIDsTimelineLength)
+    // }, [currentTimelineIndex, nodeIDsTimelineLength ])
 
     const animation = useAnimationControls()
     let initialStyles = { 

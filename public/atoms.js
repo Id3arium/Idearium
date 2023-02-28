@@ -24,6 +24,7 @@ export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).
 export const addNodeAtom = atom(null, (get, set, newNode) => {
 	let nodes = get(nodesAtom)
 	// let newNode = {
+	//  _id: uuidv4(),
 	// 	id: nodes.length,
 	// 	title: newNodeData.title,
 	// 	content: newNodeData.content,
