@@ -12,7 +12,7 @@ export default function NodeCardsArea(nodesFromServer) {
 
 	const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
     const weightedRandomNode = useAtomValue(weightedRandomNodeAtom)
-	const wordsPerMinute = 200
+	const wordsPerMinute = 50
 	useEffect( () => {
 		setCurrentNode(!currentNode ? weightedRandomNode : currentNode)
 		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
