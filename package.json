@@ -27,6 +27,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-force-graph": "^1.41.17",
+    "react-hotkeys-hook": "^4.3.7",
     "styled-components": "^5.3.6",
     "zustand": "^4.1.5"
   },
