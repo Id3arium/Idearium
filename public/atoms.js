@@ -3,15 +3,53 @@ import { atom, useAtomValue, createStore } from 'jotai';
 import _ from 'lodash';
 
 export const nodesAtom = atom([])
+export const deletedNodesAtom = atom([])
 export const currentNodeAtom = atom(null)
 export const currentTimelineIndexAtom = atom(0)
 export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
   
-export const addToNodeIDsTimelineAtom = atom(null, (get, set, newNodeID) => { 
-	set(nodeIDsTimelineAtom, [...get(nodeIDsTimelineAtom), newNodeID])
+export const addToNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => { 
+	set(nodeIDsTimelineAtom, [...get(nodeIDsTimelineAtom), nodeID])
 	set(moveToNextTimelineNodeAtom)
 })
+
+// export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
+// 	let nodeIDsTimeline = get(nodeIDsTimelineAtom)
+// 	const nodeIndex = nodes.findIndex(node => node.id == nodeID) 
+// 	nodes.splice(nodeIndex, 1)
+// 	//for each id in timeline:
+// 		//if 
+// 			//if i is < curr idx:
+			
+// 	for (let i = 0; i < nodeIDsTimeline.length; i++) {
+// 		const nodeID = array[i];
+		
+// 	}
+	
+// 	nodeIDsTimeline.filter(x => x !== nodeID)
+// 	set(nodeIDsTimelineAtom, nodeIDsTimeline.filter(x => x !== nodeID) )
+// 	set(moveToPrevTimelineNodeAtom)
+// })
+
+export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
+	const nodeIDsTimeline = get(nodeIDsTimelineAtom);
+	const currentIndex = get(currentTimelineIndexAtom);
+	const removedIndexes = [];
+	for (let i = nodeIDsTimeline.length - 1; i >= 0; i--) {
+		if (nodeIDsTimeline[i] === nodeID) {
+			removedIndexes.push(i);
+		}
+	}
+	if (removedIndexes.length > 0) {
+	  	const newTimeline = nodeIDsTimeline.filter((nodeID, index) => !removedIndexes.includes(index))
+	  	const newCurrentIndex = removedIndexes.includes(currentIndex)
+			? Math.max(...removedIndexes.filter((i) => i < currentIndex))
+			: currentIndex;
+		set(nodeIDsTimelineAtom, newTimeline);
+		set(currentTimelineIndexAtom, newCurrentIndex);
+	}
+  });
 
 export const addNodeAtom = atom(null, (get, set, newNode) => {
 	let nodes = get(nodesAtom)
@@ -92,8 +130,6 @@ export const increaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
 })
 
 function getUpdatedFrequencies(nodes, nodeID, numerator) { 
-	console.log("getUpdatedNodeFrequencies nodes", nodes)
-
 	const numNodes = nodes.length
 	const freqModifier = numerator / (numNodes * numNodes)
 	const nodeIndex = nodes.findIndex(node => node.id == nodeID) 
