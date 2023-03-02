@@ -32,23 +32,29 @@ export const addToNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
 // 	set(moveToPrevTimelineNodeAtom)
 // })
 
-export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
+export const removeFromNodeIDsTimelineAtom = atom(null, (get, set) => (nodeID) => {
 	const nodeIDsTimeline = get(nodeIDsTimelineAtom);
-	const currentIndex = get(currentTimelineIndexAtom);
 	const removedIndexes = [];
 	for (let i = nodeIDsTimeline.length - 1; i >= 0; i--) {
 		if (nodeIDsTimeline[i] === nodeID) {
 			removedIndexes.push(i);
 		}
 	}
-	if (removedIndexes.length > 0) {
-	  	const newTimeline = nodeIDsTimeline.filter((nodeID, index) => !removedIndexes.includes(index))
-	  	const newCurrentIndex = removedIndexes.includes(currentIndex)
-			? Math.max(...removedIndexes.filter((i) => i < currentIndex))
-			: currentIndex;
-		set(nodeIDsTimelineAtom, newTimeline);
-		set(currentTimelineIndexAtom, newCurrentIndex);
+	if (removedIndexes.length > 0) { return }
+	
+	let currentIndex = get(currentTimelineIndexAtom);
+	const nodeIDsRemovedBeforeCurrent = removedIndexes.filter((i) => i < currentIndex).length;
+	if (nodeIDsRemovedBeforeCurrent > 0) {
+		currentIndex -= nodeIDsRemovedBeforeCurrent;
+	} else if (removedIndexes.includes(currentIndex)) {
+		currentIndex = Math.max(...removedIndexes.filter((i) => i < currentIndex));
 	}
+	// const newTimeline = nodeIDsTimeline.filter((nodeID, index) => !removedIndexes.includes(index))
+	// const newCurrentIndex = removedIndexes.includes(currentIndex)
+	// 	? Math.max(...removedIndexes.filter((i) => i < currentIndex))
+	// 	: currentIndex;
+	set(nodeIDsTimelineAtom, newTimeline);
+	set(currentTimelineIndexAtom, newCurrentIndex);
   });
 
 export const addNodeAtom = atom(null, (get, set, newNode) => {
