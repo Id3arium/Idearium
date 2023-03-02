@@ -4,11 +4,22 @@ import _ from 'lodash';
 
 export const nodesAtom = atom([])
 export const deletedNodesAtom = atom([])
-export const currentNodeAtom = atom(null)
-export const currentTimelineIndexAtom = atom(0)
+// export const currentNodeAtom = atom(null)
+export const currentTimelineIndexAtom = atom(-1)
 export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
-  
+
+export const getNodeAtTimelineIndex = atom((get) => (idx) => { get(nodesAtom).find(node => node.id === get(nodeIDsTimelineAtom)[idx]) })
+
+export const currentNodeAtom = atom((get) => {
+	const nodeIDsTimeline = get(nodeIDsTimelineAtom)
+	if (nodeIDsTimeline.length > 0) {
+		return get(getNodeAtTimelineIndex)(get(currentTimelineIndexAtom))
+	}
+	// return get(weightedRandomNodeAtom)
+	return null
+})
+
 export const addToNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => { 
 	set(nodeIDsTimelineAtom, [...get(nodeIDsTimelineAtom), nodeID])
 	set(moveToNextTimelineNodeAtom)
@@ -32,30 +43,32 @@ export const addToNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
 // 	set(moveToPrevTimelineNodeAtom)
 // })
 
-export const removeFromNodeIDsTimelineAtom = atom(null, (get, set) => (nodeID) => {
+export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
 	const nodeIDsTimeline = get(nodeIDsTimelineAtom);
+	const currentIndex = get(currentTimelineIndexAtom);
+	console.log("removing nodeID", nodeID+1, "nodeIDsTimeline", nodeIDsTimeline, "currentIndex", currentIndex)
 	const removedIndexes = [];
 	for (let i = nodeIDsTimeline.length - 1; i >= 0; i--) {
 		if (nodeIDsTimeline[i] === nodeID) {
 			removedIndexes.push(i);
 		}
 	}
-	if (removedIndexes.length > 0) { return }
+	if (removedIndexes.length == 0) { return }
 	
-	let currentIndex = get(currentTimelineIndexAtom);
-	const nodeIDsRemovedBeforeCurrent = removedIndexes.filter((i) => i < currentIndex).length;
+	let newCurrentIndex = currentIndex;
+	const nodeIDsRemovedBeforeCurrent = removedIndexes.filter((i) => i < currentIndex).length
 	if (nodeIDsRemovedBeforeCurrent > 0) {
-		currentIndex -= nodeIDsRemovedBeforeCurrent;
+		newCurrentIndex -= nodeIDsRemovedBeforeCurrent
 	} else if (removedIndexes.includes(currentIndex)) {
-		currentIndex = Math.max(...removedIndexes.filter((i) => i < currentIndex));
+		newCurrentIndex = Math.max(...removedIndexes.filter((i) => i < currentIndex))
+		// set(moveToPrevTimelineNodeAtom)
 	}
-	// const newTimeline = nodeIDsTimeline.filter((nodeID, index) => !removedIndexes.includes(index))
-	// const newCurrentIndex = removedIndexes.includes(currentIndex)
-	// 	? Math.max(...removedIndexes.filter((i) => i < currentIndex))
-	// 	: currentIndex;
-	set(nodeIDsTimelineAtom, newTimeline);
-	set(currentTimelineIndexAtom, newCurrentIndex);
-  });
+	const newTimeline = nodeIDsTimeline.filter((nodeID, index) => !removedIndexes.includes(index))
+	console.log("removing nodeID", nodeID+1, "newTimeline", newTimeline, "newCurrentIndex", newCurrentIndex)
+	set(nodeIDsTimelineAtom, newTimeline)
+	set(currentTimelineIndexAtom, _.clamp(newCurrentIndex, 0, nodeIDsTimeline.length - 1))
+
+  })
 
 export const addNodeAtom = atom(null, (get, set, newNode) => {
 	let nodes = get(nodesAtom)
@@ -83,7 +96,7 @@ export const moveToNextTimelineNodeAtom = atom(null, (get, set) => {
 	let newCurrentTimelineIndex = _.min([maxIdx, get(currentTimelineIndexAtom) + 1])
 	let newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
-	set(currentNodeAtom, newCurrentNode)
+	// set(currentNodeAtom, newCurrentNode)
 })
 
 export const moveToPrevTimelineNodeAtom = atom(null, (get, set) => {
@@ -91,7 +104,7 @@ export const moveToPrevTimelineNodeAtom = atom(null, (get, set) => {
 	const newCurrentTimelineIndex = _.max([0, get(currentTimelineIndexAtom) - 1])
 	const newCurrentNode = get(nodesAtom).find(node => node.id === nodeIDsTimeline[newCurrentTimelineIndex])
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
-	set(currentNodeAtom, newCurrentNode)
+	// set(currentNodeAtom, newCurrentNode)
 })
 
 export const weightedRandomNodeAtom = atom((get) => {
@@ -99,7 +112,6 @@ export const weightedRandomNodeAtom = atom((get) => {
 	let randNum = Math.random(); // range of [0,1)
 	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
 	for (let i = 0; i < nodes.length; i++) {
-		if (nodes[i].id === get(currentNodeAtom)?.id) { continue; }
 		//likelyhood of randNum being inside the range is = to the nodes appearance frequency
 		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + nodes[i].frequency)
 		if (isRandNumInNodeRange) {
@@ -119,6 +131,9 @@ export const onNextNodeAtom = atom(null, (get, set) => {
 	let isAtEndOfList = get(currentTimelineIndexAtom) === get(nodeIDsTimelineAtom).length - 1
 	if (isAtEndOfList) {
 		let newCurrentNode = get(weightedRandomNodeAtom)
+		// while (newCurrentNode.id == current) { 
+
+		// }
 		set(addToNodeIDsTimelineAtom, newCurrentNode?.id)
 	} else {
 		set(moveToNextTimelineNodeAtom)
