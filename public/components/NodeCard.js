@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -7,11 +7,10 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
-import { atom, useAtom, useAtomValue, useStore, useSetAtom } from 'jotai';
-import {
-    nodesAtom, currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom,
-    onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom
-} from '@/public/atoms.js';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { nodesAtom, currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, removeFromNodeIDsTimelineAtom } from '@/public/atoms.js';
+import { onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom } from '@/public/atoms.js';
+import { useHotkeys } from "react-hotkeys-hook";
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
@@ -28,9 +27,15 @@ export default function NodeCard(props) {
     const onNextNodeCard = useSetAtom(onNextNodeAtom)
     const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
     const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
+    const removeFromNodeIDsTimeline = useSetAtom(removeFromNodeIDsTimelineAtom)
+
+    useHotkeys('ctrl+d', (e) => {
+        e.preventDefault()
+        removeFromNodeIDsTimeline(currentNode.id);
+    })
 
     useEffect( () => {
-        console.log("NodeCard currentNode", currentNode?.id, "duration in seconds", props.duration)
+        // console.log("NodeCard currentNode", currentNode?.id, "duration in seconds", props.duration)
     }, [currentNode, nodes, isHovered, frontSideVisible])
     
     // useEffect(() => {
@@ -56,8 +61,6 @@ export default function NodeCard(props) {
             setFrontSideVisible(!frontSideVisible)
         }
     }
-
-    // const deleteNodeCard = () => props.onDelete(currentNode.id)
 
     function restartCardAnimation(){
         animation.stop()
@@ -131,7 +134,7 @@ export default function NodeCard(props) {
     </div>
 
     return (
-        <StyledNodeCard id="node-card" $isHovered={isHovered}
+        <StyledNodeCard id="node-card" $isHovered={isHovered} tabIndex='-1'
             onClick={handleClick}  
             onMouseEnter={()=>{setIsHovered(true)}} 
             onMouseLeave={()=>{setIsHovered(false)}}
