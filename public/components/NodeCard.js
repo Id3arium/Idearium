@@ -31,12 +31,13 @@ export default function NodeCard(props) {
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
-        removeFromNodeIDsTimeline(currentNode.id);
+        console.log("ctrl+d",currentNode.id)
+        removeFromNodeIDsTimeline(currentNode.id)
     })
 
     useEffect( () => {
         // console.log("NodeCard currentNode", currentNode?.id, "duration in seconds", props.duration)
-    }, [currentNode, nodes, isHovered, frontSideVisible])
+    }, [currentNode, nodes, isHovered, frontSideVisible, currentTimelineIndex])
     
     // useEffect(() => {
     //     console.log("NodeCard timeline", currentTimelineIndex+1, "/", nodeIDsTimelineLength)
