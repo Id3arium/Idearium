@@ -8,8 +8,8 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { currentNodeAtom, currentTimelineIndexAtom, nodeIDsTimelineLengthAtom, removeFromNodeIDsTimelineAtom, weightedRandomNodeAtom } from '@/public/atoms.js';
-import { onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom, addToNodeIDsTimelineAtom } from '@/public/atoms.js';
+import { currentNodeAtom, currentTimelineIndexAtom, nodeIDsTimelineLengthAtom, removeFromNodeIDsTimelineAtom } from '@/public/atoms.js';
+import { nodesAtom, onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom } from '@/public/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
 
 const isHoveredAtom = atom(false)
@@ -19,23 +19,23 @@ export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
     
+    const nodes = useAtomValue(nodesAtom)
     const currentNode = useAtomValue(currentNodeAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
 
-    const onPrevNodeCard = useSetAtom(onPrevNodeAtom)
     const onNextNodeCard = useSetAtom(onNextNodeAtom)
-    const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
+    const onPrevNodeCard = useSetAtom(onPrevNodeAtom)
     const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
+    const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
     const removeFromNodeIDsTimeline = useSetAtom(removeFromNodeIDsTimelineAtom)
 
     useEffect( () => {
-        console.log("NodeCard currentNode", currentNode?.id, "duration in seconds", props.duration)
-    }, [currentNode, isHovered, frontSideVisible, currentTimelineIndex])
+        console.log("NodeCard nodeID", currentNode?.id, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
+    }, [nodes, currentNode, isHovered, frontSideVisible, currentTimelineIndex])
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
-        console.log("ctrl+d",currentNode.id)
         removeFromNodeIDsTimeline(currentNode.id)
     })
 
