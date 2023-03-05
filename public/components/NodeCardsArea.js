@@ -2,22 +2,31 @@
 import React, {useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
-import {atom, useAtom, useSetAtom, useAtomValue, createStore} from 'jotai';
+import {useSetAtom, useAtomValue} from 'jotai';
 import {useHydrateAtoms} from 'jotai/utils';
 // import { ForceGraph3D } from "react-force-graph";
 import {nodesAtom, currentNodeAtom, weightedRandomNodeAtom, addToNodeIDsTimelineAtom} from '@/public/atoms.js';
+import {nodeIDsTimelineLengthAtom} from '@/public/atoms.js';
 
 export default function NodeCardsArea(nodesFromServer) {
 	useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]])
 
-	const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
-    const weightedRandomNode = useAtomValue(weightedRandomNodeAtom)
-    const addToNodeIDsTimeline = useSetAtom(addToNodeIDsTimelineAtom)
 	const wordsPerMinute = 50
+
+	const currentNode = useAtomValue(currentNodeAtom)
+    const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
+    const weightedRandomNode = useAtomValue(weightedRandomNodeAtom)
+
+    const addToNodeIDsTimeline = useSetAtom(addToNodeIDsTimelineAtom)
+
 	useEffect( () => {
-		addToNodeIDsTimeline(weightedRandomNode.id)
-		// console.log("rerendering NodeCardsArea", "nodesList", nodesList)
-	}, [])
+        if(nodeIDsTimelineLength == 0){
+            // console.log("NodeCardsArea new randomNode");
+            console.log("NodeCardsArea nodeIDsTimelineLength2",nodeIDsTimelineLength);
+            addToNodeIDsTimeline(weightedRandomNode?.id)
+        }
+    }, [])
+    
 
     function getCurrentNodeCardDuration(wordsPerMinute) { 
         if (currentNode == null) { return 0 }
@@ -27,7 +36,7 @@ export default function NodeCardsArea(nodesFromServer) {
 
         const averageWordLength = 5.1
         let readingTimeScaler = wordLength / averageWordLength
-        const readingSpeedInSeconds = readingTimeScaler * (wordCount / (wordsPerMinute/60)) 
+        const readingSpeedInSeconds = readingTimeScaler * (wordCount / (wordsPerMinute / 60)) 
         return readingSpeedInSeconds
     }
 
