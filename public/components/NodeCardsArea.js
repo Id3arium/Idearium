@@ -1,8 +1,7 @@
 'use client';
-import React, {useEffect} from "react";
 import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
-import {useSetAtom, useAtomValue} from 'jotai';
+import {useAtomValue} from 'jotai';
 import {useHydrateAtoms} from 'jotai/utils';
 // import { ForceGraph3D } from "react-force-graph";
 import {nodesAtom, currentNodeAtom} from '@/public/atoms.js';
@@ -22,7 +21,7 @@ export default function NodeCardsArea(nodesFromServer) {
         const averageWordLength = 5.1
         let readingTimeScaler = wordLength / averageWordLength
         const readingSpeedInSeconds = readingTimeScaler * (wordCount / (wordsPerMinute / 60)) 
-        return readingSpeedInSeconds
+        return _.round(readingSpeedInSeconds, 2)
     }
 
 	return (
