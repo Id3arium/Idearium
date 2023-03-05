@@ -26,10 +26,34 @@ export const addToNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
 export const addNodeAtom = atom(null, (get, set, newNode) => {
 	let nodes = get(nodesAtom)
 	let newFreqRatio = nodes.length / (nodes.length + 1)
-	nodes.forEach(node => { node.frequency *= newFreqRatio })
-	
+	console.log("newFreqRatio = ", nodes.length, "/", (nodes.length + 1), "=", newFreqRatio)
+	nodes.forEach((node, i) => {
+		node.frequency *= newFreqRatio
+		console.log("node", node.id, "freq", node.frequency,)
+	})
+	console.log("addNewNodeAtom newNode:", addNodeAtom)
 	set(nodesAtom, [...nodes, newNode])
 	set(addToNodeIDsTimelineAtom, newNode.id)
+})
+
+export const removeNodeAtom = atom(null, (get, set, nodeID) => {
+	let nodes = get(nodesAtom)
+	const nodeIndex = nodes.findIndex(node => node.id == nodeID)
+	if (nodes.length == 0 || nodeIndex == -1) { return }
+	
+	nodes.splice(nodeIndex, 1)
+
+	if (nodes.length == 1) {
+		nodes[0].frequency = 1
+	} else {
+		const newFreqRatio = (nodes.length + 1) / (nodes.length)
+		nodes.forEach((node, i) => {
+			node.frequency *= newFreqRatio
+		})
+	}
+	set(nodesAtom, nodes)
+	set(removeFromNodeIDsTimelineAtom, nodeID)
+
 })
 
 export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
@@ -56,24 +80,16 @@ export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
 	}
 
 	function getRemovedIndexes() {
+		let removedIndexes = []
 		for (let i = nodeIDsTimeline.length - 1; i >= 0; i--) {
-			removedIndexes.push(i);
 			if (nodeIDsTimeline[i] === nodeID) {
+				removedIndexes.push(i);
 			}
 		}
+		return removedIndexes
 	}
 })
 
-export const removeNodeAtom = atom(null, (get, set, nodeID) => {
-	let nodes = get(nodesAtom)
-	const nodeIndex = nodes.findIndex(node => node.id == nodeID) 
-	nodes.splice(nodeIndex, 1)
-
-	const newFreqRatio = nodes.length / (nodes.length - 1)
-	nodes.forEach(node => { node.frequency *= newFreqRatio })
-	set(nodesAtom, nodes)
-	set(removeFromNodeIDsTimelineAtom, nodeID)
-})
 
 export const onNextNodeAtom = atom(null, (get, set) => {
 	const isAtEndOfList = get(currentTimelineIndexAtom) === get(nodeIDsTimelineAtom).length - 1

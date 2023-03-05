@@ -8,12 +8,13 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { currentNodeAtom, currentTimelineIndexAtom, nodeIDsTimelineLengthAtom, removeFromNodeIDsTimelineAtom } from '@/public/atoms.js';
+import { currentNodeAtom, currentTimelineIndexAtom, nodeIDsTimelineLengthAtom, removeNodeAtom } from '@/public/atoms.js';
 import { nodesAtom, onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom } from '@/public/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
+
 
 export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
@@ -28,7 +29,7 @@ export default function NodeCard(props) {
     const onPrevNodeCard = useSetAtom(onPrevNodeAtom)
     const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
     const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
-    const removeFromNodeIDsTimeline = useSetAtom(removeFromNodeIDsTimelineAtom)
+    const removeNode = useSetAtom(removeNodeAtom)
 
     useEffect( () => {
         console.log("NodeCard nodeID", currentNode?.id, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
@@ -36,7 +37,7 @@ export default function NodeCard(props) {
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
-        removeFromNodeIDsTimeline(currentNode.id)
+        removeNode(currentNode.id)
     })
 
     const animation = useAnimationControls()
@@ -123,7 +124,7 @@ export default function NodeCard(props) {
             <h1> Node #{currentNode?.id + 1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
             <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
             <p className="frequency">
-                {(currentNode?.frequency * 100).toFixed(1)}% Likely to appear
+                {(currentNode?.frequency * 100).toFixed(2)}% Likely to appear
             </p>
         </StyledCardSide>
     </div>
@@ -155,80 +156,80 @@ const StyledTimerBar = styled(motion.div)`
 `
 
 const StyledCardSide = styled.div`
-  opacity: ${props => props.$isVisible ? "1": ".15"};
-  filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
-  transform: ${props => props.$isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
-  padding: 10px 0px;
-  grid-area: 1/1;
-  pointer-events: none;
+    opacity: ${props => props.$isVisible ? "1": ".15"};
+    filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
+    transform: ${props => props.$isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
+    padding: 10px 0px;
+    grid-area: 1/1;
+    pointer-events: none;
 `
 
 const StyledNodeCard = styled.div`
-  background: #00219708;
-  border-radius: 5px;
-  box-shadow: 0px 0px 4px #CCC;
-  padding: 20px 30px 30px;
-  width: 525px;
-  margin: 4px;
-  position: relative;
-  color: #EEE;
-  backdrop-filter: ${props => props.$isHovered ? "blur(7px)" : "blur(13px)"};
-  background-color: #222222C0;
-  overflow: visible;
+    background: #00219708;
+    border-radius: 5px;
+    box-shadow: 0px 0px 4px #CCC;
+    padding: 20px 30px 30px;
+    width: 525px;
+    margin: 4px;
+    position: relative;
+    color: #EEE;
+    backdrop-filter: ${props => props.$isHovered ? "blur(7px)" : "blur(13px)"};
+    background-color: #222222C0;
+    overflow: visible;
 
-  :hover{
-    background-color: #22222230;
-  }
+    :hover{
+        background-color: #22222230;
+    }
 
-  .card-controls{
-    display: none;
-  }
+    .card-controls{
+        display: none;
+    }
 
-  :hover > .card-controls {
-    display: block;
-  }
+    :hover > .card-controls {
+        display: block;
+    }
 
-  .outlined:hover {
-    outline: 1px solid #ffffff80;
-  }
-  
-  .card-content{
-    display: grid;
-    align-items:center;
-    pointer-events: none;
-    height: auto;
-  }
+    .outlined:hover {
+        outline: 1px solid #ffffff80;
+    }
+    
+    .card-content{
+        display: grid;
+        align-items:center;
+        pointer-events: none;
+        height: auto;
+    }
 
-  .nav-btn {
-	color: white;
-    position: absolute;
-    z-index: 1;
-  }
+    .nav-btn {
+        color: white;
+        position: absolute;
+        z-index: 1;
+    }
 
-  h1 {
-    text-align: center;
-    font-size: 1.2em;
-    margin: 0px 15px 20px;
-  }
+    h1 {
+        text-align: center;
+        font-size: 1.2em;
+        margin: 0px 15px 20px;
+    }
 
-  p {
-    margin: auto;
-    font-size: 1.2em;
-  }
+    p {
+        margin: auto;
+        font-size: 1.2em;
+    }
 
-  .frequency {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -8px;
-    font-size: .8em;
-  }
-  
-  .left { left: 15px; }
+    .frequency {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -8px;
+        font-size: .8em;
+    }
+    
+    .left { left: 15px; }
 
-  .right { right: 15px; }
+    .right { right: 15px; }
 
-  .top { top: 20px; }
+    .top { top: 20px; }
 
-  .bottom { bottom: 15px; }
+    .bottom { bottom: 15px; }
 `;
