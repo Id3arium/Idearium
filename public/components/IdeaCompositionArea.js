@@ -7,7 +7,7 @@ import _ from "lodash";
 import { v4 as uuidv4 } from 'uuid';
 import styled from "@emotion/styled";
 import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
-import { nodesAtom, addNewNodeAtom } from '@/public/atoms.js';
+import { nodesAtom, addNodeAtom } from '@/public/atoms.js';
 
 const noteAtom = atom({ title: "", content: "", inspiration: "" })
 const isExpandedAtom = atom(false)
@@ -15,7 +15,7 @@ const isExpandedAtom = atom(false)
 function IdeaCompositionArea() {
     const [note, setNote] = useAtom(noteAtom);
     const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom);
-    const addNewNode = useSetAtom(addNewNodeAtom);
+    const addNode = useSetAtom(addNodeAtom);
     const nodes = useAtomValue(nodesAtom);
     
     function onInputChanged(e) {
@@ -28,6 +28,7 @@ function IdeaCompositionArea() {
             };
         });
     }
+
     function onAddButtonClicked(e) {
         e.preventDefault();
         let emptyNote = { title: "", content: "", inspiration: "" };
@@ -41,8 +42,9 @@ function IdeaCompositionArea() {
             	inspiration: note.inspiration,
             	frequency: 1 / (nodes.length + 1),
             }
-            addNewNode(newNode)
+            addNode(newNode)
             setNote(emptyNote)
+            setIsExpanded(false)
         }
     }
 
@@ -50,9 +52,8 @@ function IdeaCompositionArea() {
         <StyledCreateArea 
             id="create-area"
             onFocus={()=>setIsExpanded(true)}
-            onBlur={()=>setIsExpanded(false)}
         >
-            <form className="create-note">
+            <form className="create-note" onFocus={()=>setIsExpanded(true)}>
                 {isExpanded && 
                     <input
                         name="title"
@@ -78,9 +79,9 @@ function IdeaCompositionArea() {
                     />
                 }
                 <Zoom in={isExpanded}>
-                <Fab onClick={(e)=>{onAddButtonClicked(e)}}>
-                    <AddIcon />
-                </Fab>
+                    <Fab onClick={(e)=>{onAddButtonClicked(e)}}>
+                        <AddIcon />
+                    </Fab>
                 </Zoom>
             </form>
         </StyledCreateArea>
@@ -89,7 +90,7 @@ function IdeaCompositionArea() {
 
 let StyledCreateArea = styled.div`
     width: 400px;
-    height: 300px;
+    height: 400px;
     margin: 30px 20px;
     position: absolute;
     left: 0;
@@ -97,7 +98,7 @@ let StyledCreateArea = styled.div`
     form.create-note {
         position: relative;
         backdrop-filter: blur(7px);
-        background: #00000000;
+        background: transparent;
         padding: 10px;
         border-radius: 7px;
         box-shadow: 0px 0px 4px #CCC;
@@ -109,7 +110,7 @@ let StyledCreateArea = styled.div`
         width: 100%;
         height: 30px;
         border: none;
-        background: #00000000;
+        background: transparent;
         padding: 4px;
         outline: none;
         font-size: 1.2em;
