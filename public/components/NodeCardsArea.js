@@ -5,28 +5,13 @@ import NodeCard from "./NodeCard.js";
 import {useSetAtom, useAtomValue} from 'jotai';
 import {useHydrateAtoms} from 'jotai/utils';
 // import { ForceGraph3D } from "react-force-graph";
-import {nodesAtom, currentNodeAtom, weightedRandomNodeAtom, addToNodeIDsTimelineAtom} from '@/public/atoms.js';
-import {nodeIDsTimelineLengthAtom} from '@/public/atoms.js';
+import {nodesAtom, currentNodeAtom} from '@/public/atoms.js';
 
 export default function NodeCardsArea(nodesFromServer) {
 	useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]])
 
 	const wordsPerMinute = 50
-
 	const currentNode = useAtomValue(currentNodeAtom)
-    const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
-    const weightedRandomNode = useAtomValue(weightedRandomNodeAtom)
-
-    const addToNodeIDsTimeline = useSetAtom(addToNodeIDsTimelineAtom)
-
-	useEffect( () => {
-        if(nodeIDsTimelineLength == 0){
-            // console.log("NodeCardsArea new randomNode");
-            console.log("NodeCardsArea nodeIDsTimelineLength2",nodeIDsTimelineLength);
-            addToNodeIDsTimeline(weightedRandomNode?.id)
-        }
-    }, [])
-    
 
     function getCurrentNodeCardDuration(wordsPerMinute) { 
         if (currentNode == null) { return 0 }

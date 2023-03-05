@@ -8,8 +8,8 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { nodesAtom, currentNodeAtom, nodeIDsTimelineLengthAtom, currentTimelineIndexAtom, removeFromNodeIDsTimelineAtom } from '@/public/atoms.js';
-import { onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom } from '@/public/atoms.js';
+import { currentNodeAtom, currentTimelineIndexAtom, nodeIDsTimelineLengthAtom, removeFromNodeIDsTimelineAtom, weightedRandomNodeAtom } from '@/public/atoms.js';
+import { onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom, addToNodeIDsTimelineAtom } from '@/public/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
 
 const isHoveredAtom = atom(false)
@@ -19,29 +19,25 @@ export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
     
-    const nodes = useAtomValue(nodesAtom)
     const currentNode = useAtomValue(currentNodeAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
+
     const onPrevNodeCard = useSetAtom(onPrevNodeAtom)
     const onNextNodeCard = useSetAtom(onNextNodeAtom)
     const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
     const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
     const removeFromNodeIDsTimeline = useSetAtom(removeFromNodeIDsTimelineAtom)
 
+    useEffect( () => {
+        console.log("NodeCard currentNode", currentNode?.id, "duration in seconds", props.duration)
+    }, [currentNode, isHovered, frontSideVisible, currentTimelineIndex])
+
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
         console.log("ctrl+d",currentNode.id)
         removeFromNodeIDsTimeline(currentNode.id)
     })
-
-    useEffect( () => {
-        // console.log("NodeCard currentNode", currentNode?.id, "duration in seconds", props.duration)
-    }, [currentNode, nodes, isHovered, frontSideVisible, currentTimelineIndex])
-    
-    // useEffect(() => {
-    //     console.log("NodeCard timeline", currentTimelineIndex+1, "/", nodeIDsTimelineLength)
-    // }, [currentTimelineIndex, nodeIDsTimelineLength ])
 
     const animation = useAnimationControls()
     let initialStyles = { 
@@ -58,9 +54,7 @@ export default function NodeCard(props) {
     }
 
     function handleClick(e){ 
-        if (e.target.id === "node-card"){
-            setFrontSideVisible(!frontSideVisible)
-        }
+        if (e.target.id === "node-card"){ setFrontSideVisible(!frontSideVisible) }
     }
 
     function restartCardAnimation(){
@@ -90,18 +84,18 @@ export default function NodeCard(props) {
         <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
             animate={animation} 
             initial={initialStyles}
-            onAnimationComplete={animateNextCard}
+            onAnimationComplete={() => {animateNextCard()}}
         />
 
     let CardControls =
     <div className="card-controls" >
         <IconButton className="nav-btn top left outlined" 
-            onClick={animatePrevCard}
+            onClick={() => {animatePrevCard()}}
         >
             <KeyboardArrowLeftIcon  />
         </IconButton>
         <IconButton className="nav-btn top right outlined" 
-            onClick={animateNextCard}
+                onClick={() => {animateNextCard()}}
         >
             <KeyboardArrowRightIcon disabled={true}/>
         </IconButton>
@@ -136,9 +130,9 @@ export default function NodeCard(props) {
 
     return (
         <StyledNodeCard id="node-card" $isHovered={isHovered} tabIndex='-1'
-            onClick={handleClick}  
-            onMouseEnter={()=>{setIsHovered(true)}} 
-            onMouseLeave={()=>{setIsHovered(false)}}
+            onClick={(e) => { handleClick(e) }}  
+            onMouseEnter={()=>{ setIsHovered(true) }} 
+            onMouseLeave={()=>{ setIsHovered(false) }}
         >
             {TimerBar}
             {CardControls}
