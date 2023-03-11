@@ -35,6 +35,7 @@
     "zustand": "^4.1.5"
   },
   "devDependencies": {
-    "gh-pages": "^4.0.0"
+    "gh-pages": "^4.0.0",
+    "prisma": "^4.11.0"
   }
 }
