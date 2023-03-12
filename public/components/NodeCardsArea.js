@@ -8,8 +8,8 @@ import _ from "lodash";
 import {nodesAtom, currentNodeAtom} from '@/public/atoms.js';
 
 export default function NodeCardsArea(nodesFromServer) {
+	console.log("NodeCardsArea nodesFromServer",nodesFromServer)
 	useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]])
-
 	const wordsPerMinute = 50
 	const currentNode = useAtomValue(currentNodeAtom)
 
