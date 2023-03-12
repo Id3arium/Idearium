@@ -32,12 +32,12 @@ export default function NodeCard(props) {
     const removeNode = useSetAtom(removeNodeAtom)
 
     useEffect( () => {
-        console.log("NodeCard nodeID", currentNode?.id, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
+        console.log("NodeCard nodeID", currentNode?.idx, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
     }, [nodes, currentNode, isHovered, frontSideVisible, currentTimelineIndex])
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
-        removeNode(currentNode.id)
+        removeNode(currentNode.idx)
     })
 
     const animation = useAnimationControls()
@@ -102,12 +102,12 @@ export default function NodeCard(props) {
         </IconButton>
         {!frontSideVisible && <div>
             <IconButton className="nav-btn bottom left outlined" 
-                onClick={() => {decreaseNodeFrquency(currentNode.id)}}
+                onClick={() => {decreaseNodeFrquency(currentNode.idx)}}
             >
                 <ArrowDropDownIcon />
             </IconButton>
             <IconButton className="nav-btn bottom right outlined" 
-                onClick={() => {increaseNodeFrquency(currentNode.id)}}
+                onClick={() => {increaseNodeFrquency(currentNode.idx)}}
             >
                 <ArrowDropUpIcon />
             </IconButton>
@@ -121,7 +121,7 @@ export default function NodeCard(props) {
             <p> {currentNode?.content} </p> 
         </StyledCardSide>
         <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
-            <h1> Node #{currentNode?.id + 1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
+            <h1> Node #{currentNode?.idx + 1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
             <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
             <p className="frequency">
                 {(currentNode?.frequency * 100).toFixed(2)}% Likely to appear

@@ -9,7 +9,7 @@ export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
 
 export const getNodeAtTimelineIndex = atom((get) => (idx) => {
-	return get(nodesAtom).find(node => node.id === get(nodeIDsTimelineAtom)[idx])
+	return get(nodesAtom).find(node => node.idx === get(nodeIDsTimelineAtom)[idx])
 })
 
 export const currentNodeAtom = atom((get) => {
@@ -29,16 +29,16 @@ export const addNodeAtom = atom(null, (get, set, newNode) => {
 	console.log("newFreqRatio = ", nodes.length, "/", (nodes.length + 1), "=", newFreqRatio)
 	nodes.forEach((node, i) => {
 		node.frequency *= newFreqRatio
-		console.log("node", node.id, "freq", node.frequency,)
+		console.log("node", node.idx, "freq", node.frequency,)
 	})
 	console.log("addNewNodeAtom newNode:", addNodeAtom)
 	set(nodesAtom, [...nodes, newNode])
-	set(addToNodeIDsTimelineAtom, newNode.id)
+	set(addToNodeIDsTimelineAtom, newNode.idx)
 })
 
 export const removeNodeAtom = atom(null, (get, set, nodeID) => {
 	let nodes = get(nodesAtom)
-	const nodeIndex = nodes.findIndex(node => node.id == nodeID)
+	const nodeIndex = nodes.findIndex(node => node.idx == nodeID)
 	if (nodes.length == 0 || nodeIndex == -1) { return }
 	
 	nodes.splice(nodeIndex, 1)
@@ -94,7 +94,7 @@ export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
 export const onNextNodeAtom = atom(null, (get, set) => {
 	const isAtEndOfList = get(currentTimelineIndexAtom) === get(nodeIDsTimelineAtom).length - 1
 	if (isAtEndOfList) {
-		set(addToNodeIDsTimelineAtom, get(weightedRandomNodeAtom).id)
+		set(addToNodeIDsTimelineAtom, get(weightedRandomNodeAtom).idx)
 	} else {
 		set(moveToNextTimelineNodeAtom)
 	}
@@ -119,7 +119,7 @@ export const weightedRandomNodeAtom = atom((get) => {
 	let randNode = getWeightedRandomNode(nodes)
 	if ( get(currentTimelineIndexAtom) == -1 ) { return randNode }
 
-	while (randNode.id == get(currentNodeAtom).id){
+	while (randNode.idx == get(currentNodeAtom).idx){
 		randNode = getWeightedRandomNode(nodes)
 	}
 	return randNode
@@ -138,7 +138,7 @@ export const decreaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
 function getUpdatedFrequencies(nodes, nodeID, numerator) { 
 	const numNodes = nodes.length
 	const freqModifier = numerator / (numNodes * numNodes)
-	const nodeIndex = nodes.findIndex(node => node.id == nodeID) 
+	const nodeIndex = nodes.findIndex(node => node.idx == nodeID) 
 
 	const newFrequency = nodes[nodeIndex].frequency + numNodes * freqModifier
 	let tempNodes = [...nodes]
