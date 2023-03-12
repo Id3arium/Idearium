@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.2",
+    "@prisma/client": "^4.11.0",
     "3d-force-graph": "^1.70.19",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
