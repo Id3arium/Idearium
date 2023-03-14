@@ -29,6 +29,22 @@ function IdeaCompositionArea() {
         });
     }
 
+    // const addNodeToDB = async (nodeData) => {
+    function addNodeToDB(nodeData) {
+        // const res = await fetch('/api/index', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify(nodeData),
+        // });
+        // const newData = await res.json();
+        // if (newData) {
+            addNode(newNode)
+        // }
+    };
+
+    // async function onAddButtonClicked(e) {
     function onAddButtonClicked(e) {
         e.preventDefault();
         let emptyNote = { title: "", content: "", inspiration: "" };
@@ -38,11 +54,12 @@ function IdeaCompositionArea() {
                 id: uuidv4(),
             	idx: nodes.length,
             	title: note.title,
-            	content: note.content,
+            	content: note.title && !note.content ? note.title : note.content,
             	inspiration: note.inspiration,
             	frequency: 1 / (nodes.length + 1),
                 ranking: nodes.length + 1
             }
+            // addNodeToDB(newNode)
             addNode(newNode)
             setNote(emptyNote)
             setIsExpanded(false)
