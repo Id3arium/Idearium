@@ -20,7 +20,7 @@ function IdeaCompositionArea() {
     
     function onInputChanged(e) {
         const { name, value } = e.target;
-        console.log("onInputChanged", note)
+        // console.log("onInputChanged", note)
         setNote((prevNote) => {
             return {
                 ...prevNote,
@@ -35,12 +35,13 @@ function IdeaCompositionArea() {
         console.log("e",e)
         if (!_.isEqual(note, emptyNote)) {
             let newNode = {
-                _id: uuidv4(),
-            	id: nodes.length,
+                id: uuidv4(),
+            	idx: nodes.length,
             	title: note.title,
             	content: note.content,
             	inspiration: note.inspiration,
             	frequency: 1 / (nodes.length + 1),
+                ranking: nodes.length + 1
             }
             addNode(newNode)
             setNote(emptyNote)
