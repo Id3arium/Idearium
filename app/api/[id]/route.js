@@ -13,7 +13,7 @@ export async function GET(request, { params }) {
 }
 
 export async function POST(request, { params }) {
-    console.log("POST","request",request,"params",params)
+    console.log("app/api/[id]/route.js POST","request",request,"params",params)
     return NextResponse.json({ message: `hello ${params.id}!` })
 }
 

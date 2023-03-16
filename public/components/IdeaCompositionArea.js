@@ -29,19 +29,20 @@ function IdeaCompositionArea() {
         });
     }
 
-    // const addNodeToDB = async (nodeData) => {
-    function addNodeToDB(nodeData) {
-        // const res = await fetch('/api/index', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify(nodeData),
-        // });
-        // const newData = await res.json();
-        // if (newData) {
+    const addNodeToDB = async (newNode) => {
+    // function addNodeToDB(nodeData) {
+        const res = await fetch('/api/index', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ data: newNode }),
+        });
+        const newData = await res.json();
+        console.log("newData.message",newData.message);
+        if (newData) {
             addNode(newNode)
-        // }
+        }
     };
 
     // async function onAddButtonClicked(e) {
@@ -59,8 +60,8 @@ function IdeaCompositionArea() {
             	frequency: 1 / (nodes.length + 1),
                 ranking: nodes.length + 1
             }
-            // addNodeToDB(newNode)
-            addNode(newNode)
+            addNodeToDB(newNode)
+            // addNode(newNode)
             setNote(emptyNote)
             setIsExpanded(false)
         }
