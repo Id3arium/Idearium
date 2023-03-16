@@ -116,7 +116,10 @@ export const moveToPrevTimelineNodeAtom = atom(null, (get, set) => {
 
 export const weightedRandomNodeAtom = atom((get) => {
 	const nodes = get(nodesAtom)
-	if (nodes.length < 2 ) { console.log("cant choose a random node"); return null }
+	if (nodes.length < 2) {
+        console.log("cant choose a random node");
+        return nodes.length === 1 ? nodes[0] : null;
+    }
 	
 	let randNode = getWeightedRandomNode(nodes)
 	if ( get(currentTimelineIndexAtom) == -1 ) { return randNode }
