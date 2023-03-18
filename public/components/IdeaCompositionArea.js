@@ -31,15 +31,18 @@ function IdeaCompositionArea() {
 
     const addNodeToDB = async (newNode) => {
     // function addNodeToDB(nodeData) {
-        const res = await fetch('/api/index', {
+        const node = JSON.stringify(newNode)
+        const res = await fetch(`/api/${node}`, {
+        // const res = await fetch(`/api/index`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ data: newNode }),
+          body: node,
         });
         const newData = await res.json();
-        console.log("newData.message",newData.message);
+        console.log("newData",newData);
+        console.log("newData.message",newData.node);
         if (newData) {
             addNode(newNode)
         }
@@ -49,16 +52,13 @@ function IdeaCompositionArea() {
     function onAddButtonClicked(e) {
         e.preventDefault();
         let emptyNote = { title: "", content: "", inspiration: "" };
-        console.log("e",e)
         if (!_.isEqual(note, emptyNote)) {
             let newNode = {
-                id: uuidv4(),
-            	idx: nodes.length,
             	title: note.title,
             	content: note.title && !note.content ? note.title : note.content,
             	inspiration: note.inspiration,
-            	frequency: 1 / (nodes.length + 1),
-                ranking: nodes.length + 1
+            	// frequency: 1 / (nodes.length + 1),
+                // ranking: nodes.length + 1
             }
             addNodeToDB(newNode)
             // addNode(newNode)

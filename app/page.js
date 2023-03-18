@@ -11,11 +11,11 @@ export default async function Home() {
 	async function getNodesFromDB(){
 		try {
 			const { nodes, error } = await getNodes()
-			console.log("Home got nodes:", nodes)
+			// console.log("Home got nodes:", nodes)
 			if (error) throw new Error(error)
 			return nodes
 		} catch (error) {
-			console.log("Home got error:", error)
+			console.log("Home error trying to get nodes:", error)
 			return []
 		}
 	}
