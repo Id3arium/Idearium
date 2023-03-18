@@ -20,7 +20,6 @@ function IdeaCompositionArea() {
     
     function onInputChanged(e) {
         const { name, value } = e.target;
-        // console.log("onInputChanged", note)
         setNote((prevNote) => {
             return {
                 ...prevNote,
@@ -29,39 +28,51 @@ function IdeaCompositionArea() {
         });
     }
 
-    const addNodeToDB = async (newNode) => {
-    // function addNodeToDB(nodeData) {
-        const node = JSON.stringify(newNode)
-        const res = await fetch(`/api/${node}`, {
-        // const res = await fetch(`/api/index`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: node,
+    function escapeSpecialChars(str) {
+        return str.replace(/\\n/g, "\\n").replace(/\\'/g, "\\'").replace(/\\"/g, '\\"').replace(/\\&/g, "\\&")
+            .replace(/\\r/g, "\\r").replace(/\\t/g, "\\t").replace(/\\b/g, "\\b").replace(/\\f/g, "\\f");
+    }
+
+    const createNodeInDB = async (noteData) => {
+        const node = JSON.stringify(noteData)
+        const res = await fetch(`/api/${escapeSpecialChars(node)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: node,
         });
         const newData = await res.json();
-        console.log("newData",newData);
-        console.log("newData.message",newData.node);
-        if (newData) {
-            addNode(newNode)
+        console.log("newData.node", newData.node);
+        if (newData.node) {
+            let newNode = {
+                id: newData.node.id,
+                idx: newData.node.idx,
+                created: newData.node.created,
+                lasModified: newData.node.lasModified,
+                title: newData.node.title,
+                content: newData.node.content,
+                inspiration: newData.node.inspiration,
+                ranking: newData.node.ranking,
+            }
+            console.log("newNode", newNode);
+            return newNode
         }
-    };
+        else return null
+    }
 
     // async function onAddButtonClicked(e) {
     function onAddButtonClicked(e) {
         e.preventDefault();
         let emptyNote = { title: "", content: "", inspiration: "" };
         if (!_.isEqual(note, emptyNote)) {
-            let newNode = {
+            let noteData = {
             	title: note.title,
             	content: note.title && !note.content ? note.title : note.content,
             	inspiration: note.inspiration,
-            	// frequency: 1 / (nodes.length + 1),
-                // ranking: nodes.length + 1
             }
-            addNodeToDB(newNode)
-            // addNode(newNode)
+            let newNode = createNodeInDB(noteData)
+            addNode(newNode)
             setNote(emptyNote)
             setIsExpanded(false)
         }

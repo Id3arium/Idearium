@@ -33,7 +33,11 @@ export default function NodeCard(props) {
 
     useEffect( () => {
         console.log("NodeCard nodeID", currentNode?.idx, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
-    }, [nodes, currentNode, isHovered, frontSideVisible, currentTimelineIndex])
+    }, [currentNode, isHovered, frontSideVisible, currentTimelineIndex])
+    
+    useEffect(() => {
+        console.log("NodeCard nodes", nodes)
+    }, [nodes])
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()

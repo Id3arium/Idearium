@@ -24,6 +24,8 @@ export const addToNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
 })
 
 export const addNodeAtom = atom(null, (get, set, newNode) => {
+	if (newNode == null) { return; }
+	console.log("addNodeAtom new node:",newNode)
 	let nodes = get(nodesAtom)
 	let newFreqRatio = nodes.length / (nodes.length + 1)
 	console.log("newFreqRatio = ", nodes.length, "/", (nodes.length + 1), "=", newFreqRatio)
@@ -122,8 +124,9 @@ export const weightedRandomNodeAtom = atom((get) => {
     }
 	
 	let randNode = getWeightedRandomNode(nodes)
-	if ( get(currentTimelineIndexAtom) == -1 ) { return randNode }
 
+	if ( get(currentTimelineIndexAtom) == -1 ) { return randNode }
+	console.log("weightedRandomNodeAtom", )
 	while (randNode.idx == get(currentNodeAtom).idx){
 		randNode = getWeightedRandomNode(nodes)
 	}
