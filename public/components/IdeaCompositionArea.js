@@ -28,14 +28,9 @@ function IdeaCompositionArea() {
         });
     }
 
-    function escapeSpecialChars(str) {
-        return str.replace(/\\n/g, "\\n").replace(/\\'/g, "\\'").replace(/\\"/g, '\\"').replace(/\\&/g, "\\&")
-            .replace(/\\r/g, "\\r").replace(/\\t/g, "\\t").replace(/\\b/g, "\\b").replace(/\\f/g, "\\f");
-    }
-
     const createNodeInDB = async (noteData) => {
         const node = JSON.stringify(noteData)
-        const res = await fetch(`/api/${escapeSpecialChars(node)}`, {
+        const res = await fetch(`/api/index`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

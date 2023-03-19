@@ -21,9 +21,8 @@ export async function GET(request, { params }) {
 
 export async function POST(request, { params }) {
     console.log("app/api/[node]/route.js POST", "params", params)
-    console.log("app/api/[node]/route.js POST", "request.json", request.json())
+    const data = await request.json()
     try {
-        const data = JSON.parse(params.node)
         console.log("POST creating node with data", data)
         const { node, error } = await createNode(data)
         
@@ -37,10 +36,11 @@ export async function POST(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
+    console.log("PUT data", data)
     try {
         const data = JSON.parse(params.id)
         console.log("PUT data", data)
-        const { node, error } = await deleteNode(data)
+        const { node, error } = await updateNode(data)
         
         if (error) {
             throw new Error(error)
