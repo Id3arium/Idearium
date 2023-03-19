@@ -35,13 +35,33 @@ export default function NodeCard(props) {
         console.log("NodeCard nodeID", currentNode?.idx, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
     }, [currentNode, isHovered, frontSideVisible, currentTimelineIndex])
     
+    async function removeNodeInDB() {
+        const res = await fetch('/api/index', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const data = await res.json();
+        console.log('removeNodeInDB nodes from database', data)
+
+        return data.node;
+    }
+    async function getNodesInDB() { 
+        const res = await fetch('api/index', {
+            method: 'GET',
+            headers: { 'content-type':'aplication/json'},
+        })
+        const data = await res.json()
+        console.log('fetchNodesInDB nodes from database', data)
+        return data
+    }
     useEffect(() => {
-        console.log("NodeCard nodes", nodes)
+        
     }, [nodes])
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
-        removeNode(currentNode.idx)
+        const removedNode = removeNodeInDB(currentNode.id)
+        removeNode(removedNode.idx)
     })
 
     const animation = useAnimationControls()

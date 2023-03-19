@@ -1,31 +1,20 @@
 import { NextResponse } from "next/server" 
 import { getNodes, createNode, deleteNode } from "@/lib/prisma/nodes"
 
-// export async function POST(request, { params }) {
-//     console.log("app/api/[id]/route.js POST","request",request,"params",params)
-//     return NextResponse.json({ message: `hello ${params.id}!` })
-// }
-
-export async function GET(request, { params }) {
+export async function GET(request) {
     try {
-        console.log("GET params", params)
         const {nodes, error} = await getNodes()
         if (error) { throw new Error(error) }
-        
-        console.log("GET got nodes:", nodes)
         return NextResponse.json({nodes})
     } catch (error) {
         return NextResponse.json({error: error.message})
     }
 }
 
-export async function POST(request, { params }) {
-    console.log("app/api/[node]/route.js POST", "params", params)
+export async function POST(request) {
     const data = await request.json()
     try {
-        console.log("POST creating node with data", data)
         const { node, error } = await createNode(data)
-        
         if (error) {
             throw new Error(error)
         }
@@ -36,10 +25,9 @@ export async function POST(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-    console.log("PUT data", data)
     try {
-        const data = JSON.parse(params.id)
-        console.log("PUT data", data)
+        const data = await request.json()
+        console.log("PUT updating node with id", data)
         const { node, error } = await updateNode(data)
         
         if (error) {
@@ -53,10 +41,9 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
     try {
-        const data = JSON.parse(params.id)
-        console.log("DELETE data", data)
+        const data = await request.json()
+        console.log("DELETE removing node with id", data)
         const { node, error } = await deleteNode(data)
-        
         if (error) {
             throw new Error(error)
         }

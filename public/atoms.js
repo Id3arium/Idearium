@@ -38,9 +38,10 @@ export const addNodeAtom = atom(null, (get, set, newNode) => {
 	set(addToNodeIDsTimelineAtom, newNode.idx)
 })
 
-export const removeNodeAtom = atom(null, (get, set, nodeID) => {
+export const removeNodeAtom = atom(null, (get, set, nodeIdx) => {
+	if (nodeIdx == null) { return }
 	let nodes = get(nodesAtom)
-	const nodeIndex = nodes.findIndex(node => node.idx == nodeID)
+	const nodeIndex = nodes.findIndex(node => node.idx == nodeIdx)
 	if (nodes.length == 0 || nodeIndex == -1) { return }
 	
 	nodes.splice(nodeIndex, 1)
@@ -54,7 +55,7 @@ export const removeNodeAtom = atom(null, (get, set, nodeID) => {
 		})
 	}
 	set(nodesAtom, nodes)
-	set(removeFromNodeIDsTimelineAtom, nodeID)
+	set(removeFromNodeIDsTimelineAtom, nodeIdx)
 
 })
 
@@ -143,10 +144,10 @@ export const decreaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
 	set(nodesAtom, getUpdatedFrequencies(get(nodesAtom), nodeID, numerator))
 })
 
-function getUpdatedFrequencies(nodes, nodeID, numerator) { 
+function getUpdatedFrequencies(nodes, nodeIdx, numerator) { 
 	const numNodes = nodes.length
 	const freqModifier = numerator / (numNodes * numNodes)
-	const nodeIndex = nodes.findIndex(node => node.idx == nodeID) 
+	const nodeIndex = nodes.findIndex(node => node.idx == nodeIdx) 
 
 	const newFrequency = nodes[nodeIndex].frequency + numNodes * freqModifier
 	let tempNodes = [...nodes]
