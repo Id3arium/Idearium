@@ -25,11 +25,10 @@ export async function POST(request) {
 }
 
 export async function PUT(request, { params }) {
+    const data = await request.json()
+    console.log("PUT updating node with id", data)
+    const { node, error } = await updateNode(data)
     try {
-        const data = await request.json()
-        console.log("PUT updating node with id", data)
-        const { node, error } = await updateNode(data)
-        
         if (error) {
             throw new Error(error)
         }
@@ -40,9 +39,9 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
+    const data = await request.text()
+    console.log("DELETE removing node with", typeof data, " id", data)
     try {
-        const data = await request.json()
-        console.log("DELETE removing node with id", data)
         const { node, error } = await deleteNode(data)
         if (error) {
             throw new Error(error)
@@ -51,5 +50,4 @@ export async function DELETE(request, { params }) {
     } catch (error) {
         return NextResponse.json({error: error.message})
     }
-
 }

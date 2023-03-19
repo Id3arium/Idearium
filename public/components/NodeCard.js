@@ -19,7 +19,7 @@ const frontSideVisibleAtom = atom(true)
 export default function NodeCard(props) {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
-    
+
     const nodes = useAtomValue(nodesAtom)
     const currentNode = useAtomValue(currentNodeAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
@@ -31,46 +31,50 @@ export default function NodeCard(props) {
     const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
     const removeNode = useSetAtom(removeNodeAtom)
 
-    useEffect( () => {
+    useEffect(() => {
         console.log("NodeCard nodeID", currentNode?.idx, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
     }, [currentNode, isHovered, frontSideVisible, currentTimelineIndex])
-    
-    async function removeNodeInDB() {
-        const res = await fetch('/api/index', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        const data = await res.json();
-        console.log('removeNodeInDB nodes from database', data)
 
-        return data.node;
-    }
-    async function getNodesInDB() { 
+    
+    async function getNodesInDB() {
         const res = await fetch('api/index', {
             method: 'GET',
-            headers: { 'content-type':'aplication/json'},
+            headers: { 'content-type': 'aplication/json' },
         })
         const data = await res.json()
-        console.log('fetchNodesInDB nodes from database', data)
+        console.log('NodeCard.getNodesInDB nodes from database', data)
         return data
     }
     useEffect(() => {
-        
+
     }, [nodes])
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
+
+        async function removeNodeInDB(nodeID) {
+            const res = await fetch('/api/index', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'text/plain' },
+                body: nodeID,
+            });
+            const data = await res.json();
+            console.log('NodeCard.removeNodeInDB nodes from database', data)
+    
+            return data.node;
+        }
+
         const removedNode = removeNodeInDB(currentNode.id)
         removeNode(removedNode.idx)
     })
 
     const animation = useAnimationControls()
-    let initialStyles = { 
-        opacity: .125, 
+    let initialStyles = {
+        opacity: .125,
         width: "525px",
     }
     let targetStyles = {
-        opacity: .15, 
+        opacity: .15,
         width: "0px",
         transition: {
             duration: props.duration,
@@ -78,86 +82,86 @@ export default function NodeCard(props) {
         }
     }
 
-    function handleClick(e){ 
-        if (e.target.id === "node-card"){ setFrontSideVisible(!frontSideVisible) }
+    function handleClick(e) {
+        if (e.target.id === "node-card") { setFrontSideVisible(!frontSideVisible) }
     }
 
-    function restartCardAnimation(){
+    function restartCardAnimation() {
         animation.stop()
         animation.set(initialStyles)
         animation.start(targetStyles)
     }
-    function animateNextCard(){
+    function animateNextCard() {
         onNextNodeCard()
         restartCardAnimation()
     }
-    function animatePrevCard(){
+    function animatePrevCard() {
         onPrevNodeCard()
         restartCardAnimation()
     }
 
-    useEffect(()=>{
-        if (!frontSideVisible || isHovered){
+    useEffect(() => {
+        if (!frontSideVisible || isHovered) {
             animation.stop()
         } else {
             animation.start(targetStyles)
         }
-    },[frontSideVisible, isHovered, props.duration])
-    
+    }, [frontSideVisible, isHovered, props.duration])
+
 
     let TimerBar =
         <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
-            animate={animation} 
+            animate={animation}
             initial={initialStyles}
-            onAnimationComplete={() => {animateNextCard()}}
+            onAnimationComplete={() => { animateNextCard() }}
         />
 
     let CardControls =
-    <div className="card-controls" >
-        <IconButton className="nav-btn top left outlined" 
-            onClick={() => {animatePrevCard()}}
-        >
-            <KeyboardArrowLeftIcon  />
-        </IconButton>
-        <IconButton className="nav-btn top right outlined" 
-                onClick={() => {animateNextCard()}}
-        >
-            <KeyboardArrowRightIcon disabled={true}/>
-        </IconButton>
-        {!frontSideVisible && <div>
-            <IconButton className="nav-btn bottom left outlined" 
-                onClick={() => {decreaseNodeFrquency(currentNode.idx)}}
+        <div className="card-controls" >
+            <IconButton className="nav-btn top left outlined"
+                onClick={() => { animatePrevCard() }}
             >
-                <ArrowDropDownIcon />
+                <KeyboardArrowLeftIcon />
             </IconButton>
-            <IconButton className="nav-btn bottom right outlined" 
-                onClick={() => {increaseNodeFrquency(currentNode.idx)}}
+            <IconButton className="nav-btn top right outlined"
+                onClick={() => { animateNextCard() }}
             >
-                <ArrowDropUpIcon />
+                <KeyboardArrowRightIcon disabled={true} />
             </IconButton>
-        </div>}
-    </div>
+            {!frontSideVisible && <div>
+                <IconButton className="nav-btn bottom left outlined"
+                    onClick={() => { decreaseNodeFrquency(currentNode.idx) }}
+                >
+                    <ArrowDropDownIcon />
+                </IconButton>
+                <IconButton className="nav-btn bottom right outlined"
+                    onClick={() => { increaseNodeFrquency(currentNode.idx) }}
+                >
+                    <ArrowDropUpIcon />
+                </IconButton>
+            </div>}
+        </div>
 
     let CardContent =
-    <div className="card-content" >
-        <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
-            {currentNode?.title && <h1 >{currentNode?.title} </h1>}
-            <p> {currentNode?.content} </p> 
-        </StyledCardSide>
-        <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
-            <h1> Node #{currentNode?.idx + 1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
-            <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
-            <p className="frequency">
-                {(currentNode?.frequency * 100).toFixed(2)}% Likely to appear
-            </p>
-        </StyledCardSide>
-    </div>
+        <div className="card-content" >
+            <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
+                {currentNode?.title && <h1 >{currentNode?.title} </h1>}
+                <p> {currentNode?.content} </p>
+            </StyledCardSide>
+            <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
+                <h1> Node #{currentNode?.idx + 1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
+                <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
+                <p className="frequency">
+                    {(currentNode?.frequency * 100).toFixed(2)}% Likely to appear
+                </p>
+            </StyledCardSide>
+        </div>
 
     return (
         <StyledNodeCard id="node-card" $isHovered={isHovered} tabIndex='-1'
-            onClick={(e) => { handleClick(e) }}  
-            onMouseEnter={()=>{ setIsHovered(true) }} 
-            onMouseLeave={()=>{ setIsHovered(false) }}
+            onClick={(e) => { handleClick(e) }}
+            onMouseEnter={() => { setIsHovered(true) }}
+            onMouseLeave={() => { setIsHovered(false) }}
         >
             {TimerBar}
             {CardControls}
@@ -172,7 +176,7 @@ const StyledTimerBar = styled(motion.div)`
     transform: translate(-50%, 0);
     border-radius: 2px;
     bottom: .5px;
-    filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
+    filter: ${props => props.$isVisible ? "none" : (props.$isHovered ? "blur(3px)" : "blur(9px)")};
     pointer-events: none;
     height: 3px;
     margin: 0 auto;
@@ -180,9 +184,9 @@ const StyledTimerBar = styled(motion.div)`
 `
 
 const StyledCardSide = styled.div`
-    opacity: ${props => props.$isVisible ? "1": ".15"};
-    filter: ${props => props.$isVisible ? "none": (props.$isHovered ? "blur(3px)" : "blur(9px)") };
-    transform: ${props => props.$isVisible ? "scale(1, 1)": "scale(-1, 1)"};;
+    opacity: ${props => props.$isVisible ? "1" : ".15"};
+    filter: ${props => props.$isVisible ? "none" : (props.$isHovered ? "blur(3px)" : "blur(9px)")};
+    transform: ${props => props.$isVisible ? "scale(1, 1)" : "scale(-1, 1)"};;
     padding: 10px 0px;
     grid-area: 1/1;
     pointer-events: none;
