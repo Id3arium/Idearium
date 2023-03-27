@@ -29,16 +29,12 @@ function IdeaCompositionArea() {
     }
 
     const createNodeInDB = async (noteData) => {
-        const node = JSON.stringify(noteData)
         const res = await fetch(`/api/index`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: node,
+            headers: { 'Content-Type': 'application/json',},
+            body: JSON.stringify(noteData),
         });
         const newData = await res.json();
-        console.log("newData.node", newData.node);
         if (newData.node) {
             let newNode = {
                 id: newData.node.id,
@@ -63,7 +59,7 @@ function IdeaCompositionArea() {
         if (!_.isEqual(note, emptyNote)) {
             let noteData = {
             	title: note.title,
-            	content: note.title && !note.content ? note.title : note.content,
+            	content: note.content,
             	inspiration: note.inspiration,
             }
             let newNode = createNodeInDB(noteData)
