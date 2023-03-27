@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
   experimental: {
     // Required:
@@ -14,5 +14,14 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  exportPathMap: async function (
+    defaultPathMap,
+    { dev, dir, outDir, distDir, buildId }
+  ) {
+    return {
+      '/': { page: '/' },
+      '/nodes': { page: '/nodes' },
+      // Add more pages here if needed
+    };
+  },
 }
-module.exports = nextConfig
