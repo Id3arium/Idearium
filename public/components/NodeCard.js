@@ -64,8 +64,7 @@ export default function NodeCard(props) {
             return data.node;
         }
 
-        const removedNode = removeNodeInDB(currentNode.id)
-        removeNode(removedNode.idx)
+        removeNodeInDB(currentNode.id).then(removedNode => { removeNode(removedNode.idx) })
     })
 
     const animation = useAnimationControls()
