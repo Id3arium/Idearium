@@ -127,7 +127,6 @@ export const weightedRandomNodeAtom = atom((get) => {
 	let randNode = getWeightedRandomNode(nodes)
 
 	if ( get(currentTimelineIndexAtom) == -1 ) { return randNode }
-	console.log("weightedRandomNodeAtom", )
 	while (randNode.idx == get(currentNodeAtom).idx){
 		randNode = getWeightedRandomNode(nodes)
 	}
@@ -163,14 +162,18 @@ function getWeightedRandomNode(nodes) {
 	if (nodes.length == 0) { console.log("getWeightedRandomNode expected non-empty list of nodes") } 
 	const randNum = Math.random(); // range of [0,1)
 	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
+	nodes.forEach( node => console.log(node) )
 	for (let i = 0; i < nodes.length; i++) {
 		//likelyhood of randNum being inside the range is = to the nodes appearance frequency
 		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + nodes[i].frequency)
 		if (isRandNumInNodeRange) {
+			console.log("getWeightedRandomNode randNum", randNum, "frequencySigma", frequencySigma, "id", nodes[i].id)
 			return nodes[i]
 		} else {
 			frequencySigma += nodes[i].frequency
 		}
 	}
+	console.log("getWeightedRandomNode returnning last node")
+	return nodes[nodes.length - 1];
 }
 
