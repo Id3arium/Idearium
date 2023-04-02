@@ -1,11 +1,22 @@
 import { NextResponse } from "next/server" 
-import { getNodes, createNode, deleteNode } from "@/lib/prisma/nodes"
+import { getNodes, createNode, deleteNode, getNextRandomNode } from "@/lib/prisma/nodes"
 
 export async function GET(request) {
+    // const data = await request.json()
+    // console.log("GET data:", data)
+    console.log("GET request.headers:", request.headers)
+    console.log("GET request.headers X-Next-Random-Node", request.headers.get("X-Next-Random-Node"))
     try {
-        const {nodes, error} = await getNodes()
-        if (error) { throw new Error(error) }
-        return NextResponse.json({nodes})
+        if (request.headers.get("X-Next-Random-Node")) {
+            const currNodeID = request.headers.get("X-Current-Node-ID");
+            const {node, error} = await getNextRandomNode(currNodeID)
+            if (error) { throw new Error(error) }
+            return NextResponse.json({node})
+        } else { 
+            const {nodes, error} = await getNodes()
+            if (error) { throw new Error(error) }
+            return NextResponse.json({nodes})
+        }
     } catch (error) {
         return NextResponse.json({error: error.message})
     }
