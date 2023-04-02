@@ -36,17 +36,35 @@ export default function NodeCard(props) {
     }, [currentNode, isHovered, frontSideVisible, currentTimelineIndex])
 
     
-    async function getNodesInDB() {
+    async function fetchNodes() {
         const res = await fetch('api/index', {
             method: 'GET',
             headers: { 'content-type': 'aplication/json' },
         })
         const data = await res.json()
-        console.log('NodeCard.getNodesInDB nodes from database', data)
+        console.log('NodeCard.fetchNodes nodes from database', data)
         return data
-    }
-    useEffect(() => {
+    } 
 
+    async function fetchNextRandomNode(currNode) {
+        const res = await fetch('api/index', {
+            method: 'GET',
+            headers: { 
+                'content-type': 'aplication/json',
+                "X-Next-Random-Node": "true",
+                "X-Current-Node-ID": currNode ? currNode.id : null,
+            },
+            // body: JSON.stringify({ nextRandomNode: true, currentNode: currNode }),
+        })
+        const data = await res.json()
+        console.log('NodeCard.fetchNextRandomNode nodes from database', data)
+        if(data.node){
+            console.log('NodeCard.fetchNextRandomNode nodes from database', data.node)
+            return data.node
+        }
+    }
+
+    useEffect(() => {
     }, [nodes])
 
     useHotkeys('ctrl+d', (e) => {
@@ -90,11 +108,12 @@ export default function NodeCard(props) {
         animation.set(initialStyles)
         animation.start(targetStyles)
     }
-    function animateNextCard() {
-        onNextNodeCard()
+    function onNextCardCliked() {
+        let nextRandNode = fetchNextRandomNode(currentNode)
+        onNextNodeCard(nextRandNode.idx)
         restartCardAnimation()
     }
-    function animatePrevCard() {
+    function onPrevCardClicked() {
         onPrevNodeCard()
         restartCardAnimation()
     }
@@ -112,18 +131,18 @@ export default function NodeCard(props) {
         <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
             animate={animation}
             initial={initialStyles}
-            onAnimationComplete={() => { animateNextCard() }}
+            onAnimationComplete={() => { onNextCardCliked() }}
         />
 
     let CardControls =
         <div className="card-controls" >
             <IconButton className="nav-btn top left outlined"
-                onClick={() => { animatePrevCard() }}
+                onClick={() => { onPrevCardClicked() }}
             >
                 <KeyboardArrowLeftIcon />
             </IconButton>
             <IconButton className="nav-btn top right outlined"
-                onClick={() => { animateNextCard() }}
+                onClick={() => { onNextCardCliked() }}
             >
                 <KeyboardArrowRightIcon disabled={true} />
             </IconButton>
