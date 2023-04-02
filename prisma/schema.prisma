@@ -22,13 +22,14 @@ model User {
 }
 
 model Node {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  idx          Int?
-  created      DateTime @default(now())
-  lastModified DateTime @default(now())
-  title        String?
-  content      String
-  inspiration  String?
-  frequency    Float
-  ranking      Int?
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  idx            Int?
+  created        DateTime @default(now())
+  lastModified   DateTime @default(now())
+  title          String?
+  content        String
+  inspiration    String?
+  frequencySigma Float?
+  frequency      Float?
+  ranking        Int?
 }
