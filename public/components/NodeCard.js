@@ -39,7 +39,7 @@ export default function NodeCard(props) {
     async function fetchNodes() {
         const res = await fetch('api/index', {
             method: 'GET',
-            headers: { 'content-type': 'aplication/json' },
+            headers: { 'content-type': 'application/json' },
         })
         const data = await res.json()
         console.log('NodeCard.fetchNodes nodes from database', data)
@@ -47,21 +47,27 @@ export default function NodeCard(props) {
     } 
 
     async function fetchNextRandomNode(currNode) {
-        const res = await fetch('api/index', {
+        const queryParams = new URLSearchParams({
+            "next-random-node": true,
+            "curr-node-id": currNode ? currNode.id : null,
+        });
+        const url = `/api/index?${queryParams.toString()}`
+        console.log('NodeCard.fetchNextRandomNode making request with url', url)
+        const res = await fetch(url, {
             method: 'GET',
             headers: { 
-                'content-type': 'aplication/json',
-                "X-Next-Random-Node": "true",
-                "X-Current-Node-ID": currNode ? currNode.id : null,
+                'content-type': 'application/json',
             },
-            // body: JSON.stringify({ nextRandomNode: true, currentNode: currNode }),
         })
+        
         const data = await res.json()
-        console.log('NodeCard.fetchNextRandomNode nodes from database', data)
+        console.log('NodeCard.fetchNextRandomNode data response:', data)
         if(data.node){
             console.log('NodeCard.fetchNextRandomNode nodes from database', data.node)
             return data.node
         }
+        console.log('NodeCard.fetchNextRandomNode returning null')
+        return null
     }
 
     useEffect(() => {
@@ -110,8 +116,11 @@ export default function NodeCard(props) {
     }
     function onNextCardCliked() {
         let nextRandNode = fetchNextRandomNode(currentNode)
-        onNextNodeCard(nextRandNode.idx)
-        restartCardAnimation()
+        console.log('NodeCard.onNextCardCliked nextRandNode', nextRandNode)
+        if (nextRandNode != undefined){
+            onNextNodeCard(nextRandNode.idx)
+            restartCardAnimation()
+        }
     }
     function onPrevCardClicked() {
         onPrevNodeCard()
