@@ -39,8 +39,8 @@ function IdeaCompositionArea() {
             let newNode = {
                 id: newData.node.id,
                 idx: newData.node.idx,
-                created: newData.node.created,
-                lasModified: newData.node.lasModified,
+                created: new Date(newData.node.created).toISOString(),
+                lastModified: new Date(newData.node.lastModified).toISOString(),
                 title: newData.node.title,
                 content: newData.node.content,
                 inspiration: newData.node.inspiration,
