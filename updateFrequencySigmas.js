@@ -1,5 +1,6 @@
-// const { prisma } = require('./lib/prisma');
-const prisma = require('./lib/prisma').prisma;
+const { prisma } = require('./lib/prisma');
+// const prisma = require('./lib/prisma').prisma;
+
 
 async function updateFrequencySigma() {
   const nodes = await prisma.node.findMany({ orderBy: { idx: 'asc' } });
@@ -10,6 +11,7 @@ async function updateFrequencySigma() {
       where: { id: node.id },
       data: {
         frequencySigma: node.frequencySigma === null ? 0 : frequencySigma,
+        frequencySigmaPlusFrequency: frequencySigma + node.frequency,
       },
     });
     frequencySigma += node.frequency;

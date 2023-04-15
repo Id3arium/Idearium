@@ -31,9 +31,9 @@ export async function GET(request) {
     const searchParams = request.nextUrl.searchParams
     const nextRandomNode = searchParams.get('next-random-node') === 'true';
     const currNodeId = searchParams.get('curr-node-id');
-    console.log('GET request currNodeId', currNodeId);
-    console.log('GET request nextRandomNode', nextRandomNode);
-    console.log('GET request searchParams', searchParams);
+    // console.log('GET request currNodeId', currNodeId);
+    // console.log('GET request nextRandomNode', nextRandomNode);
+    // console.log('GET request searchParams', searchParams);
   
     try {
       if (nextRandomNode) {
