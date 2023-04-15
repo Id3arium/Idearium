@@ -95,6 +95,7 @@ export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
 
 
 export const onNextNodeAtom = atom(null, (get, set, nextNode) => {
+	// if (nextNode == null) { return; }
 	const isAtEndOfList = get(currentTimelineIndexAtom) === get(nodeIDsTimelineAtom).length - 1
 	if (isAtEndOfList) {
 		set(addToNodeIDsTimelineAtom, nextNode.idx)

@@ -37,11 +37,11 @@ export async function GET(request) {
   
     try {
       if (nextRandomNode) {
-  
         const { node, error } = await getNextRandomNode(currNodeId);
         if (error) {
           throw new Error(error);
         }
+        console.log('GET getNextRandomNode node:', node)
         return NextResponse.json({ node });
       } else {
         const { nodes, error } = await getNodes();

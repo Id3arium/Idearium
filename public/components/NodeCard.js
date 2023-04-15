@@ -52,21 +52,21 @@ export default function NodeCard(props) {
             "curr-node-id": currNode ? currNode.id : null,
         });
         const url = `/api/index?${queryParams.toString()}`
-        console.log('NodeCard.fetchNextRandomNode making request with url', url)
         const res = await fetch(url, {
             method: 'GET',
             headers: { 
                 'content-type': 'application/json',
             },
         })
-        
-        const data = await res.json()
-        console.log('NodeCard.fetchNextRandomNode data response:', data)
-        if(data.node){
-            console.log('NodeCard.fetchNextRandomNode nodes from database', data.node)
-            return data.node
+        const randNodeData = await res.json()
+        if(randNodeData.node){
+            // let randNode = {
+            //     ...(randNodeData.node),
+            //     created: new Date(randNodeData.node.created).toISOString(),
+            //     lastModified: new Date(randNodeData.node.lastModified).toISOString(),
+            // }
+            return randNodeData.node
         }
-        console.log('NodeCard.fetchNextRandomNode returning null')
         return null
     }
 
@@ -88,7 +88,7 @@ export default function NodeCard(props) {
             return data.node;
         }
 
-        removeNodeInDB(currentNode.id).then(removedNode => { removeNode(removedNode.idx) })
+        removeNodeInDB(currentNode.id).then( removedNode => { removeNode(removedNode.idx) })
     })
 
     const animation = useAnimationControls()
@@ -114,14 +114,17 @@ export default function NodeCard(props) {
         animation.set(initialStyles)
         animation.start(targetStyles)
     }
-    function onNextCardCliked() {
-        let nextRandNode = fetchNextRandomNode(currentNode)
-        console.log('NodeCard.onNextCardCliked nextRandNode', nextRandNode)
-        if (nextRandNode != undefined){
-            onNextNodeCard(nextRandNode.idx)
+
+    async function onNextCardCliked() {
+        let randNode = await fetchNextRandomNode(currentNode) 
+        console.log('NodeCard.onNextCardCliked nextRandNode', randNode)
+        console.log('NodeCard.onNextCardCliked nextRandNode.idx', randNode.idx)
+        if (randNode != null){
+            onNextNodeCard(randNode.idx)
             restartCardAnimation()
         }
     }
+
     function onPrevCardClicked() {
         onPrevNodeCard()
         restartCardAnimation()
@@ -140,18 +143,18 @@ export default function NodeCard(props) {
         <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
             animate={animation}
             initial={initialStyles}
-            onAnimationComplete={() => { onNextCardCliked() }}
+            onAnimationComplete={async() => { await onNextCardCliked() }}
         />
 
     let CardControls =
         <div className="card-controls" >
             <IconButton className="nav-btn top left outlined"
-                onClick={() => { onPrevCardClicked() }}
+                onClick={ () => { onPrevCardClicked() }}
             >
                 <KeyboardArrowLeftIcon />
             </IconButton>
             <IconButton className="nav-btn top right outlined"
-                onClick={() => { onNextCardCliked() }}
+                onClick={async() => { await onNextCardCliked() }}
             >
                 <KeyboardArrowRightIcon disabled={true} />
             </IconButton>
