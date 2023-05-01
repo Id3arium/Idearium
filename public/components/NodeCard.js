@@ -17,11 +17,12 @@ const frontSideVisibleAtom = atom(true)
 
 
 export default function NodeCard(props) {
+    const wordsPerMinute = 50
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
+    const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
 
     const nodes = useAtomValue(nodesAtom)
-    const currentNode = useAtomValue(currentNodeAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
 
@@ -65,14 +66,14 @@ export default function NodeCard(props) {
             //     created: new Date(randNodeData.node.created).toISOString(),
             //     lastModified: new Date(randNodeData.node.lastModified).toISOString(),
             // }
+            console.log('NodeCard.fetfetchNextRandomNode() randNodeData.node', randNodeData.node)
+            setCurrentNode(randNodeData.node)
             return randNodeData.node
         }
         return null
     }
 
-    useEffect(() => {
-    }, [nodes])
-
+    
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
 
@@ -91,6 +92,19 @@ export default function NodeCard(props) {
         removeNodeInDB(currentNode.id).then( removedNode => { removeNode(removedNode.idx) })
     })
 
+    function getCurrentNodeCardDuration(wordsPerMinute = 60) { 
+        let minTime = 3
+        if (currentNode == null) { return 0 }
+        const wordCount = currentNode.title.split(' ').length + currentNode.content.split(' ').length
+        const nonSpaceCharCount = currentNode.title.length + currentNode.content.length - (wordCount - 1)
+        const wordCharCount = nonSpaceCharCount / wordCount
+
+        const averageWordCharCount = 5.1
+        let readingTimeScaler = wordCharCount / averageWordCharCount
+        const readingSpeedInSeconds = readingTimeScaler * (wordCount / (wordsPerMinute / 60)) 
+        return _.round(Math.max(readingSpeedInSeconds, minTime), 2)
+    }
+
     const animation = useAnimationControls()
     let initialStyles = {
         opacity: .125,
@@ -100,7 +114,7 @@ export default function NodeCard(props) {
         opacity: .15,
         width: "0px",
         transition: {
-            duration: props.duration,
+            duration: getCurrentNodeCardDuration(wordsPerMinute),
             ease: "linear"
         }
     }

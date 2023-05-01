@@ -3,20 +3,23 @@ import { atom, useAtomValue, createStore } from 'jotai';
 import _ from 'lodash';
 export const nodesAtom = atom([])
 export const deletedNodesAtom = atom([])
-// export const currentNodeAtom = atom(null)
+export const currentNodeAtom = atom(null)
 export const currentTimelineIndexAtom = atom(-1)
 export const nodeIDsTimelineAtom = atom([])
 export const nodeIDsTimelineLengthAtom = atom((get) => get(nodeIDsTimelineAtom).length)
 
 export const getNodeAtTimelineIndex = atom((get) => (idx) => {
-	return get(nodesAtom).find(node => node.idx === get(nodeIDsTimelineAtom)[idx])
+	let nodes = get(nodesAtom)
+	if (!nodes) {return}
+	console.log("getNodeAtTimelineIndex nodes:", nodes)
+	return nodes.find(node => node.idx === get(nodeIDsTimelineAtom)[idx])
 })
 
-export const currentNodeAtom = atom((get) => {
-	const currentTimelineIndex = get(currentTimelineIndexAtom)
-	if (currentTimelineIndex == -1) { console.log("currentNodeAtom empty timeline"); return null }
-	return get(getNodeAtTimelineIndex)(currentTimelineIndex)
-})
+// export const currentNodeAtom = atom((get) => {
+// 	const currentTimelineIndex = get(currentTimelineIndexAtom)
+// 	if (currentTimelineIndex == -1) { console.log("currentNodeAtom empty timeline"); return null }
+// 	return get(getNodeAtTimelineIndex)(currentTimelineIndex)
+// })
 
 export const addToNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => { 
 	set(nodeIDsTimelineAtom, [...get(nodeIDsTimelineAtom), nodeID])
@@ -93,9 +96,8 @@ export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
 	}
 })
 
-
 export const onNextNodeAtom = atom(null, (get, set, nextNode) => {
-	// if (nextNode == null) { return; }
+	console.log('atoms.onNextNodeAtom nextNode',nextNode)
 	const isAtEndOfList = get(currentTimelineIndexAtom) === get(nodeIDsTimelineAtom).length - 1
 	if (isAtEndOfList) {
 		set(addToNodeIDsTimelineAtom, nextNode.idx)
