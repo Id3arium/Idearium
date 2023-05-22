@@ -1,3 +1,4 @@
+
 import dynamic from 'next/dynamic';
 import styles from "./page.module.css";
 import React from 'react'
@@ -6,7 +7,7 @@ import IdeaCompositionArea from '@/public/components/IdeaCompositionArea.js';
 import { getNodes, createNode } from '@lib/prisma/nodes.js'
 import mongoose from 'mongoose';
 // import { Node } from '../models/Node.js';
-import ForceGraph3D from 'react-force-graph-3d';
+// import ForceGraph3D from 'react-force-graph-3d';
 
 export default async function Home() {
 	async function getNodesFromDB(){

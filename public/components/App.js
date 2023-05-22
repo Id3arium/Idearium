@@ -66,9 +66,9 @@ function App() {
 				
 	return (
 		<StyledApp id="App">
-			<div className="force-graph">
+			{/* <div className="force-graph">
 				<ForceGraph3D graphData={gData()}/>
-			</div>
+			</div> */}
 			<div>
 				{/* <IdeaCompositionArea onAdd={addNode} /> */}
 				<NodeCardsArea/>

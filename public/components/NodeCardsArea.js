@@ -4,30 +4,14 @@ import NodeCard from "./NodeCard.js";
 import { useAtomValue } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import _ from "lodash";
-// import { ForceGraph3D } from "react-force-graph";
-// import ForceGraph3D from 'react-force-graph-3d';
 import { nodesAtom, currentNodeAtom } from "@/public/atoms.js";
 import { useEffect } from "react";
-
-// const ForceGraph3D = dynamic(() => import("react-force-graph-3d"), {
-// 	ssr: false
-// });
+import ForceGraph3D from "@/public/components/ForceGraph3DWrapper.js";
 
 export default function NodeCardsArea(nodesFromServer) {
   useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]]);
 
   const currentNode = useAtomValue(currentNodeAtom);
-
-  // const N = 300;
-  // const gData = {
-  //   nodes: [...Array(N).keys()].map((i) => ({ id: i })),
-  //   links: [...Array(N).keys()]
-  //     .filter((id) => id)
-  //     .map((id) => ({
-  //       source: id,
-  //       target: Math.round(Math.random() * (id - 1)),
-  //     })),
-  // };
 
   useEffect(() => {
     if (currentNode == null) {
@@ -46,6 +30,7 @@ export default function NodeCardsArea(nodesFromServer) {
 		// 	return sprite;
         // */}
       <NodeCard />
+      <ForceGraph3D />
     </StyledNodeCardsArea>
   );
 }
