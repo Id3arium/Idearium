@@ -3,8 +3,6 @@ import React, { useCallback, useRef } from "react";
 import ForceGraph3D, { ForceGraphMethods } from "react-force-graph-3d";
 import styled from 'styled-components'
 
-
-
 export default function ForceGraph_3D() {
     let ref = useRef();
 
@@ -54,6 +52,6 @@ export default function ForceGraph_3D() {
 let DivForceGraph3D = styled.div `
     border: 2px solid #888;
     margin: 0px auto;
-    width: 1600px;
+    width: 1040px;
     height: 300px;
 `

@@ -52,7 +52,6 @@ function IdeaCompositionArea() {
         else return null
     }
 
-    // async function onAddButtonClicked(e) {
     function onAddButtonClicked(e) {
         e.preventDefault();
         let emptyNote = { title: "", content: "", inspiration: "" };
