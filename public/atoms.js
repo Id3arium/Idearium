@@ -59,7 +59,6 @@ export const removeNodeAtom = atom(null, (get, set, nodeIdx) => {
 	}
 	set(nodesAtom, nodes)
 	set(removeFromNodeIDsTimelineAtom, nodeIdx)
-
 })
 
 export const removeFromNodeIDsTimelineAtom = atom(null, (get, set, nodeID) => {
