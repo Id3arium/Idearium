@@ -1,13 +1,10 @@
 /** @type {import('next').NextConfig} */
 
+const withTM = require('next-transpile-modules')(['three-render-objects']);
 
-// export const reactStrictMode = true;
-// export const experimental = {
-//   appDir: true
-// };
-module.exports = {
+module.exports = withTM({
   reactStrictMode: true,
   experimental: {
     appDir: true,
   },
-}
+});
