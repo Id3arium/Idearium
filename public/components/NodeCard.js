@@ -61,14 +61,30 @@ export default function NodeCard(props) {
         })
         const randNodeData = await res.json()
         if(randNodeData.node){
-            // let randNode = {
-            //     ...(randNodeData.node),
-            //     created: new Date(randNodeData.node.created).toISOString(),
-            //     lastModified: new Date(randNodeData.node.lastModified).toISOString(),
-            // }
-            console.log('NodeCard.fetfetchNextRandomNode() randNodeData.node', randNodeData.node)
+            // console.log('NodeCard.fetfetchNextRandomNode() randNodeData.node', randNodeData.node)
             setCurrentNode(randNodeData.node)
             return randNodeData.node
+        }
+        return null
+    }
+
+    async function fetchNodeById(nodeID) {
+        const queryParams = new URLSearchParams({
+            "get-node-by-id": true,
+            "node-id": nodeID,
+        });
+        const url = `/api/index?${queryParams.toString()}`
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: { 
+                'content-type': 'application/json',
+            },
+        })
+        const nodeData = await res.json()
+        if(nodeData.node){
+            console.log('NodeCard.fetchNode() node', nodeData.node)
+            setCurrentNode(nodeData.node)
+            return nodeData.node
         }
         return null
     }
@@ -76,7 +92,6 @@ export default function NodeCard(props) {
     
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
-
         async function removeNodeInDB(nodeID) {
             const res = await fetch('/api/index', {
                 method: 'DELETE',
@@ -85,10 +100,8 @@ export default function NodeCard(props) {
             });
             const data = await res.json();
             console.log('NodeCard.removeNodeInDB nodes from database', data)
-    
             return data.node;
         }
-
         removeNodeInDB(currentNode.id).then( removedNode => { removeNode(removedNode.idx) })
     })
 

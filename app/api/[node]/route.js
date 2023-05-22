@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { useSearchParams } from 'next/navigation';
 import { parse } from 'url';
 import qs from 'qs';
-import { getNodes, createNode, deleteNode, getNextRandomNode } from "@/lib/prisma/nodes"
+import { getNodes, createNode, deleteNode, getNextRandomNode, getNodeByID } from "@/lib/prisma/nodes"
 
 // export async function GET(request, { params }) {
 //     // const data = await request.json()
@@ -27,33 +27,49 @@ import { getNodes, createNode, deleteNode, getNextRandomNode } from "@/lib/prism
 // }
 
 export async function GET(request) {
-    
     const searchParams = request.nextUrl.searchParams
-    const nextRandomNode = searchParams.get('next-random-node') === 'true';
+    
+    const hasNextRandomNodeParam = searchParams.get('next-random-node') === 'true';
     const currNodeId = searchParams.get('curr-node-id');
-    // console.log('GET request currNodeId', currNodeId);
-    // console.log('GET request nextRandomNode', nextRandomNode);
-    // console.log('GET request searchParams', searchParams);
+
+    const hasGetNodeByIdParam = searchParams.get('get-node-by-id') === 'true';
+    const nodeId = searchParams.get('node-id');
   
     try {
-      if (nextRandomNode) {
-        const { node, error } = await getNextRandomNode(currNodeId);
-        if (error) {
-          throw new Error(error);
-        }
-        console.log('GET getNextRandomNode node:', node)
-        return NextResponse.json({ node });
+      if (hasNextRandomNodeParam) {
+        return await doGetNextRandomNode(currNodeId);
+      } else if (hasGetNodeByIdParam){
+        return await doGetNodeByID(nodeId);
       } else {
-        const { nodes, error } = await getNodes();
-        if (error) {
-          throw new Error(error);
-        }
-        return NextResponse.json({ nodes });
+        return await doGetNodes();
       }
     } catch (error) {
       return NextResponse.json({ error: error.message });
     }
-  }
+
+    async function doGetNodes() {
+      const { nodes, error } = await getNodes();
+      if (error) {
+        throw new Error(error);
+      }
+      return NextResponse.json({ nodes });
+    }
+    async function doGetNodeByID(nodeId) {
+      const { node, error } = await getNodeByID(nodeId);
+      if (error) {
+        throw new Error(error);
+      }
+      return NextResponse.json({ node });
+    }
+    async function doGetNextRandomNode(currNodeId) {
+      const { node, error } = await getNextRandomNode(currNodeId);
+      if (error) {
+        throw new Error(error);
+      }
+      console.log('GET getNextRandomNode node:', node);
+      return NextResponse.json({ node });
+    }
+}
 
 export async function POST(request) {
     const data = await request.json()
