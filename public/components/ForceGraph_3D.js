@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useRef, useEffect } from "react";
+import React, { useCallback, useRef, useEffect, useState } from "react";
 import ForceGraph3D, { ForceGraphMethods } from "react-force-graph-3d";
 import styled from 'styled-components'
 
@@ -36,12 +36,13 @@ export default function ForceGraph_3D() {
     );
   
     useEffect(() => {
-        let distanceFromCenter = 1500
-        graphRef.current.cameraPosition({ z: distanceFromCenter });
+        let distanceFromCenter = 1450
+        // graphRef.current.cameraPosition({ z: distanceFromCenter });
     
         // Camera orbit
         let angle = 0;
-        const rotationSpeed = 0.001; 
+        const rotationSpeed = 0.0005; 
+        // const rotationSpeed = .01; 
         const rotationInterval = setInterval(() => {
             graphRef.current.cameraPosition({
             x: distanceFromCenter * Math.sin(angle),
