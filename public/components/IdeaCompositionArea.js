@@ -4,10 +4,10 @@ import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 import Zoom from "@mui/material/Zoom";
 import _ from "lodash";
-import { v4 as uuidv4 } from 'uuid';
 import styled from "@emotion/styled";
 import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { nodesAtom, addNodeAtom } from '@/public/atoms.js';
+import PositionedComponent from "@/components/PositionedComponent.js";
 
 const noteAtom = atom({ title: "", content: "", inspiration: "" })
 const isExpandedAtom = atom(false)
@@ -17,7 +17,7 @@ function IdeaCompositionArea() {
     const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom);
     const addNode = useSetAtom(addNodeAtom);
     const nodes = useAtomValue(nodesAtom);
-    
+
     function onInputChanged(e) {
         const { name, value } = e.target;
         setNote((prevNote) => {
@@ -31,7 +31,7 @@ function IdeaCompositionArea() {
     const createNodeInDB = async (noteData) => {
         const res = await fetch(`/api/index`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json',},
+            headers: { 'Content-Type': 'application/json', },
             body: JSON.stringify(noteData),
         });
         const newData = await res.json();
@@ -57,9 +57,9 @@ function IdeaCompositionArea() {
         let emptyNote = { title: "", content: "", inspiration: "" };
         if (!_.isEqual(note, emptyNote)) {
             let noteData = {
-            	title: note.title,
-            	content: note.content,
-            	inspiration: note.inspiration,
+                title: note.title,
+                content: note.content,
+                inspiration: note.inspiration,
             }
             let newNode = createNodeInDB(noteData)
             addNode(newNode)
@@ -68,52 +68,48 @@ function IdeaCompositionArea() {
         }
     }
 
+    const ideaForm = <form className="create-note" onFocus={() => setIsExpanded(true)}>
+        {isExpanded &&
+            <input
+                name="title"
+                placeholder="Title"
+                value={note.title}
+                onChange={(e) => { onInputChanged(e); }} />}
+        <textarea
+            name="content"
+            placeholder={isExpanded ? "Content" : "Compose an Idea..."}
+            rows={isExpanded ? "4" : "1"}
+            value={note.content}
+            onChange={(e) => { onInputChanged(e); }} />
+        {isExpanded &&
+            <input
+                name="inspiration"
+                placeholder={"Inspiration"}
+                rows={1}
+                value={note.inspiration}
+                onChange={(e) => { onInputChanged(e); }} />}
+        <Zoom in={isExpanded}>
+            <Fab onClick={(e) => { onAddButtonClicked(e); }}>
+                <AddIcon />
+            </Fab>
+        </Zoom>
+    </form>;
     return (
-        <StyledCreateArea 
-            id="create-area"
-            onFocus={()=>setIsExpanded(true)}
-        >
-            <form className="create-note" onFocus={()=>setIsExpanded(true)}>
-                {isExpanded && 
-                    <input
-                        name="title"
-                        placeholder="Title"
-                        value={note.title}
-                        onChange={(e)=>{onInputChanged(e)}}
-                    />
-                }
-                <textarea
-                    name="content"
-                    placeholder={isExpanded ? "Content" : "Compose an Idea..." }
-                    rows={isExpanded ? "4" : "1"}
-                    value={note.content}
-                    onChange={(e)=>{onInputChanged(e)}}
-                />
-                {isExpanded &&
-                    <input
-                        name="inspiration"
-                        placeholder={"Inspiration" }
-                        rows={1}
-                        value={note.inspiration}
-                        onChange={(e)=>{onInputChanged(e)}}
-                    />
-                }
-                <Zoom in={isExpanded}>
-                    <Fab onClick={(e)=>{onAddButtonClicked(e)}}>
-                        <AddIcon />
-                    </Fab>
-                </Zoom>
-            </form>
-        </StyledCreateArea>
+        <PositionedComponent id="positioned-component" position="top-left">
+            <StyledCreateArea
+                id="create-area"
+                onFocus={() => setIsExpanded(true)}
+            >
+                {ideaForm}
+            </StyledCreateArea>
+        </PositionedComponent>
+
     );
 }
 
 let StyledCreateArea = styled.div`
     width: 400px;
-    height: 400px;
-    margin: 30px 20px;
-    position: absolute;
-    left: 0;
+    margin: 20px;
 
     form.create-note {
         position: relative;
