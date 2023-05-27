@@ -11,6 +11,7 @@ import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { currentNodeAtom, currentTimelineIndexAtom, nodeIDsTimelineLengthAtom, removeNodeAtom } from '@/public/atoms.js';
 import { nodesAtom, onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom } from '@/public/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
+import PositionedComponent from "./PositionedComponent";
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
@@ -36,7 +37,7 @@ export default function NodeCard(props) {
         console.log("NodeCard nodeID", currentNode?.idx, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
     }, [currentNode, isHovered, frontSideVisible, currentTimelineIndex])
 
-    
+
     async function fetchNodes() {
         const res = await fetch('api/index', {
             method: 'GET',
@@ -45,7 +46,7 @@ export default function NodeCard(props) {
         const data = await res.json()
         console.log('NodeCard.fetchNodes nodes from database', data)
         return data
-    } 
+    }
 
     async function fetchNextRandomNode(currNode) {
         const queryParams = new URLSearchParams({
@@ -55,12 +56,12 @@ export default function NodeCard(props) {
         const url = `/api/index?${queryParams.toString()}`
         const res = await fetch(url, {
             method: 'GET',
-            headers: { 
+            headers: {
                 'content-type': 'application/json',
             },
         })
         const randNodeData = await res.json()
-        if(randNodeData.node){
+        if (randNodeData.node) {
             // console.log('NodeCard.fetfetchNextRandomNode() randNodeData.node', randNodeData.node)
             setCurrentNode(randNodeData.node)
             return randNodeData.node
@@ -76,12 +77,12 @@ export default function NodeCard(props) {
         const url = `/api/index?${queryParams.toString()}`
         const res = await fetch(url, {
             method: 'GET',
-            headers: { 
+            headers: {
                 'content-type': 'application/json',
             },
         })
         const nodeData = await res.json()
-        if(nodeData.node){
+        if (nodeData.node) {
             console.log('NodeCard.fetchNode() node', nodeData.node)
             setCurrentNode(nodeData.node)
             return nodeData.node
@@ -89,7 +90,7 @@ export default function NodeCard(props) {
         return null
     }
 
-    
+
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
         async function removeNodeInDB(nodeID) {
@@ -102,10 +103,10 @@ export default function NodeCard(props) {
             console.log('NodeCard.removeNodeInDB nodes from database', data)
             return data.node;
         }
-        removeNodeInDB(currentNode.id).then( removedNode => { removeNode(removedNode.idx) })
+        removeNodeInDB(currentNode.id).then(removedNode => { removeNode(removedNode.idx) })
     })
 
-    function getCurrentNodeCardDuration(wordsPerMinute = 60) { 
+    function getCurrentNodeCardDuration(wordsPerMinute = 60) {
         let minTime = 3
         if (currentNode == null) { return 0 }
         const wordCount = currentNode.title.split(' ').length + currentNode.content.split(' ').length
@@ -114,7 +115,7 @@ export default function NodeCard(props) {
 
         const averageWordCharCount = 5.1
         let readingTimeScaler = wordCharCount / averageWordCharCount
-        const readingSpeedInSeconds = readingTimeScaler * (wordCount / (wordsPerMinute / 60)) 
+        const readingSpeedInSeconds = readingTimeScaler * (wordCount / (wordsPerMinute / 60))
         return _.round(Math.max(readingSpeedInSeconds, minTime), 2)
     }
 
@@ -143,10 +144,10 @@ export default function NodeCard(props) {
     }
 
     async function onNextCardCliked() {
-        let randNode = await fetchNextRandomNode(currentNode) 
+        let randNode = await fetchNextRandomNode(currentNode)
         console.log('NodeCard.onNextCardCliked nextRandNode', randNode)
         console.log('NodeCard.onNextCardCliked nextRandNode.idx', randNode.idx)
-        if (randNode != null){
+        if (randNode != null) {
             onNextNodeCard(randNode.idx)
             restartCardAnimation()
         }
@@ -170,18 +171,18 @@ export default function NodeCard(props) {
         <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
             animate={animation}
             initial={initialStyles}
-            onAnimationComplete={async() => { await onNextCardCliked() }}
+            onAnimationComplete={async () => { await onNextCardCliked() }}
         />
 
     let CardControls =
         <div className="card-controls" >
             <IconButton className="nav-btn top left outlined"
-                onClick={ () => { onPrevCardClicked() }}
+                onClick={() => { onPrevCardClicked() }}
             >
                 <KeyboardArrowLeftIcon />
             </IconButton>
             <IconButton className="nav-btn top right outlined"
-                onClick={async() => { await onNextCardCliked() }}
+                onClick={async () => { await onNextCardCliked() }}
             >
                 <KeyboardArrowRightIcon disabled={true} />
             </IconButton>
@@ -215,15 +216,18 @@ export default function NodeCard(props) {
         </div>
 
     return (
-        <StyledNodeCard id="node-card" $isHovered={isHovered} tabIndex='-1'
-            onClick={(e) => { handleClick(e) }}
-            onMouseEnter={() => { setIsHovered(true) }}
-            onMouseLeave={() => { setIsHovered(false) }}
-        >
-            {TimerBar}
-            {CardControls}
-            {CardContent}
-        </StyledNodeCard>
+        <PositionedComponent id="positioned-component" position="middle-center">
+            <StyledNodeCard id="node-card" $isHovered={isHovered} tabIndex='-1'
+                onClick={(e) => { handleClick(e) }}
+                onMouseEnter={() => { setIsHovered(true) }}
+                onMouseLeave={() => { setIsHovered(false) }}
+            >
+                {TimerBar}
+                {CardControls}
+                {CardContent}
+            </StyledNodeCard>
+        </PositionedComponent>
+
     );
 }
 
@@ -258,8 +262,8 @@ const StyledNodeCard = styled.div`
     margin: 4px;
     position: relative;
     color: #EEE;
-    backdrop-filter: ${props => props.$isHovered ? "blur(7px)" : "blur(13px)"};
-    background-color: #222222C0;
+    backdrop-filter: ${props => props.$isHovered ? "blur(4px)" : "blur(15px)"};
+    background-color: #22222260;
     overflow: visible;
 
     :hover{
