@@ -107,7 +107,7 @@ export default function NodeCard(props) {
     })
 
     function getCurrentNodeCardDuration(wordsPerMinute = 60) {
-        let minTime = 3
+        let minTime = 1
         if (currentNode == null) { return 0 }
         const wordCount = currentNode.title.split(' ').length + currentNode.content.split(' ').length
         const nonSpaceCharCount = currentNode.title.length + currentNode.content.length - (wordCount - 1)
@@ -116,6 +116,7 @@ export default function NodeCard(props) {
         const averageWordCharCount = 5.1
         let readingTimeScaler = wordCharCount / averageWordCharCount
         const readingSpeedInSeconds = readingTimeScaler * (wordCount / (wordsPerMinute / 60))
+        console.log("getCurrentNodeCardDuration readingSpeedInSeconds", readingSpeedInSeconds )
         return _.round(Math.max(readingSpeedInSeconds, minTime), 2)
     }
 
