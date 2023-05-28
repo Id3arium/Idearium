@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import styles from "./page.module.css";
 import React from 'react'
 import NodeCardsArea from '@/public/components/NodeCardsArea.js';
+import NodeTimeline from '@/public/components/NodeTimeline.js';
 import IdeaCompositionArea from '@/public/components/IdeaCompositionArea.js';
 import { getNodes, createNode } from '@lib/prisma/nodes.js'
 
@@ -28,6 +29,7 @@ export default async function Home() {
 				<NodeCardsArea 
 					nodes={nodesFromServer}
 				/>
+				{/* <NodeTimeline /> */}
 			</div>
 		</main>
 	);
