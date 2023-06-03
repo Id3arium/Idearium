@@ -25,10 +25,10 @@ type LinkObject = object & {
 type Coords = { x: number; y: number; z: number; }
 
 export default function ForceGraph_3D() {
-   let containerRef = useRef<ForceGraphMethods>();
-   let graphRef = useRef<ForceGraphMethods>();
-   let isRotatingRef = useRef<boolean>(true);
-   let angleRef = useRef<number>(0);
+   const containerRef = useRef<HTMLDivElement>(null);
+   const graphRef = useRef<ForceGraphMethods>();
+   const isRotatingRef = useRef<boolean>(true);
+   const angleRef = useRef<number>(0);
    const rotationSpeed = 0.001;
    const N = 30;
    const initalCamPos = { x: 0, y: 0, z: 300 }
@@ -45,6 +45,33 @@ export default function ForceGraph_3D() {
 
    useEffect(() => {
       startRotationAnimation()
+
+      const container = containerRef.current;
+      const handleMouseDown = (e: MouseEvent) => {
+         console.log("handleMouseDown", e.x, e.y)
+         isRotatingRef.current = false;
+      };
+      const handleMouseUp = (e: MouseEvent) => {
+         console.log("handleMouseUp", e.x, e.y)
+         isRotatingRef.current = true;
+      };
+      const handleWheel = (e: WheelEvent) => {
+         console.log("handleWheel", e.x, e.y)
+         isRotatingRef.current = false;
+         setTimeout(() => {
+            isRotatingRef.current = true;
+         }, 500);
+      };
+
+      container.addEventListener('mousedown', handleMouseDown);
+      container.addEventListener('mouseup', handleMouseUp);
+      container.addEventListener('wheel', handleWheel);
+
+      return () => {
+         container.removeEventListener('mousedown', handleMouseDown);
+         container.removeEventListener('mouseup', handleMouseUp);
+         container.removeEventListener('wheel', handleWheel);
+      };
    }, []);
 
    function startRotationAnimation(): () => any {
@@ -121,26 +148,29 @@ export default function ForceGraph_3D() {
    }
 
    return (
-      <DivForceGraph3D>
-         <ForceGraph3D
-            ref={graphRef}
-            graphData={data}
-            enableNodeDrag = {false}
-            // onEngineStop={() => { toggleRotationAnimation(rotationAanimationInterval, true) }}
-            nodeLabel="id"
-            linkWidth={10}
-            nodeRelSize={3}
-            nodeAutoColorBy="group"
-            onNodeClick={(node, event) => handleNodeClick(node) }
-            onNodeRightClick ={(node, event) => handle(event) }
-            onNodeDrag ={(node, event) => handle(event) }
-            onNodeDragEnd ={(node, event) => handle(event) }
-            // onNodeHover ={(node, event) => handle(event) }
+      <DivForceGraph3D >
+         <div ref={containerRef}>
+            <ForceGraph3D
+               ref={graphRef}
+               graphData={data}
+               enableNodeDrag={false}
+               // onEngineStop={() => { toggleRotationAnimation(rotationAanimationInterval, true) }}
+               nodeLabel="id"
+               linkWidth={3}
+               nodeRelSize={3}
+               nodeAutoColorBy="group"
+               onNodeClick={(node, event) => handleNodeClick(node)}
+               onNodeRightClick={(node, event) => handle(event)}
+               onNodeDrag={(node, event) => handle(event)}
+               onNodeDragEnd={(node, event) => handle(event)}
+               onNodeHover={(node, event) => handle(event)}
 
-            onLinkClick={(link, event) => handle(event) }
-            onLinkRightClick={(link, event) => handle(event) }
-            // onLinkHover={(link, event) =>  handle(event) }
-         />
+               onLinkClick={(link, event) => handle(event)}
+               onLinkRightClick={(link, event) => handle(event)}
+               onLinkHover={(link, event) => handle(event)}
+            />
+         </div>
+
       </DivForceGraph3D>
    );
 }
