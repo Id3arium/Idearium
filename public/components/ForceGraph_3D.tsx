@@ -29,9 +29,10 @@ export default function ForceGraph_3D() {
    const graphRef = useRef<ForceGraphMethods>();
    const isRotatingRef = useRef<boolean>(true);
    const angleRef = useRef<number>(0);
+
+   const camPosRef = useRef<Coords | undefined>({ x: 0, y: 0, z: 300 });
    const rotationSpeed = 0.001;
    const N = 30;
-   const initalCamPos = { x: 0, y: 0, z: 300 }
 
    const data: { nodes: NodeObject[], links: LinkObject[] } = {
       nodes: Array.from(Array(N).keys()).map((i) => ({ id: i })),
@@ -45,45 +46,18 @@ export default function ForceGraph_3D() {
 
    useEffect(() => {
       startRotationAnimation()
-
-      const container = containerRef.current;
-      const handleMouseDown = (e: MouseEvent) => {
-         console.log("handleMouseDown", e.x, e.y)
-         isRotatingRef.current = false;
-      };
-      const handleMouseUp = (e: MouseEvent) => {
-         console.log("handleMouseUp", e.x, e.y)
-         isRotatingRef.current = true;
-      };
-      const handleWheel = (e: WheelEvent) => {
-         console.log("handleWheel", e.x, e.y)
-         isRotatingRef.current = false;
-         setTimeout(() => {
-            isRotatingRef.current = true;
-         }, 500);
-      };
-
-      container.addEventListener('mousedown', handleMouseDown);
-      container.addEventListener('mouseup', handleMouseUp);
-      container.addEventListener('wheel', handleWheel);
-
-      return () => {
-         container.removeEventListener('mousedown', handleMouseDown);
-         container.removeEventListener('mouseup', handleMouseUp);
-         container.removeEventListener('wheel', handleWheel);
-      };
    }, []);
 
-   function startRotationAnimation(): () => any {
+   const startRotationAnimation = (): () => any => {
       let distanceFromCenter = 500
       console.log("isRotating", isRotatingRef.current)
 
       const rotationInterval = setInterval(() => {
          if (isRotatingRef.current) {
-            graphRef.current.cameraPosition({
-               x: distanceFromCenter * Math.sin(angleRef.current),
-               z: distanceFromCenter * Math.cos(angleRef.current),
-            });
+            camPosRef.current.x = distanceFromCenter * Math.sin(angleRef.current)
+            camPosRef.current.z = distanceFromCenter * Math.cos(angleRef.current)
+
+            graphRef.current.cameraPosition(camPosRef.current);
             angleRef.current -= rotationSpeed;
          }
 
@@ -104,7 +78,7 @@ export default function ForceGraph_3D() {
       isRotatingRef.current = false
       setTimeout(() => {
          isRotatingRef.current = true
-      }, 500);
+      }, 1000);
    }
 
    function moveCamToCoords(coords: Coords) {
@@ -114,7 +88,7 @@ export default function ForceGraph_3D() {
       const distRatio = 1 + distanceAfterAnimation / Math.hypot(coords.x, coords.y, coords.z);
 
       let oldCamPos = getCamPos();
-      let newCamPos = {
+      camPosRef.current = {
          x: coords.x * distRatio,
          y: coords.y * distRatio,
          z: coords.z * distRatio
@@ -123,21 +97,37 @@ export default function ForceGraph_3D() {
       const distanceBeforeAnimation = calculateDistance(oldCamPos, coords);
       const duration = Math.sqrt(distanceBeforeAnimation / animationSpeed); //in miliseconds
       if (graphRef.current) {
-         console.log("cameraPos", oldCamPos, "newCamPos", newCamPos, "dist", distanceBeforeAnimation, "duration", duration);
-         graphRef.current.cameraPosition(newCamPos, { x: 0, y: 0, z: 0 }, duration);
+         console.log("cameraPos", oldCamPos, "newCamPos", camPosRef.current, "dist", distanceBeforeAnimation, "duration", duration);
+         graphRef.current.cameraPosition(camPosRef.current, { x: 0, y: 0, z: 0 }, duration);
       }
       setTimeout(() => {
          isRotatingRef.current = true
-      }, 500);
+      }, 1000);
    }
 
-   function getCamPos(): Coords {
+   const handleMouseDown = (e:  React.MouseEvent<HTMLDivElement>) => {
+      console.log("handleMouseDown", e.pageX, e.pageY)
+      isRotatingRef.current = false;
+   };
+   const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+      console.log("handleMouseUp", e.pageX, e.pageY)
+      isRotatingRef.current = true;
+   };
+   const handleMouseWheel = (e:React.WheelEvent<HTMLDivElement>) => {
+      console.log("handleWheel", e.pageX, e.pageY)
+      isRotatingRef.current = false;
+      setTimeout(() => {
+         isRotatingRef.current = true;
+      }, 100);
+   };
+
+   const getCamPos = () => {
       var camera = graphRef.current.camera();
+
       camera.updateMatrixWorld();
-      var newView = new Vector3();
-      newView.copy(camera.position);
-      let camPos = camera.localToWorld(newView);
-      return { x: camPos.x / 3, y: camPos.y / 3, z: camPos.z / 2 };
+      let camPos = new Vector3();
+      camera.getWorldPosition(camPos);
+      return camPos;
    }
 
    function calculateDistance(pos1: Coords, pos2: Coords) {
@@ -147,14 +137,36 @@ export default function ForceGraph_3D() {
       return Math.sqrt(dx * dx + dy * dy + dz * dz);
    }
 
+   function updateCamPos(): void {
+      let camPos = getCamPos()
+      if (!areCoordsEqual(camPosRef.current, camPos)){
+         console.log("updateCamPos camPosRef.current", camPosRef.current, "camPos", camPos )
+         camPosRef.current = camPos
+      }
+      
+   }
+   function areCoordsEqual(coord1: Coords, coord2: Coords): boolean {
+      const epsilon = .1
+      return (
+        Math.abs(coord1.x - coord2.x) < epsilon &&
+        Math.abs(coord1.y - coord2.y) < epsilon &&
+        Math.abs(coord1.z - coord2.z) < epsilon
+      );
+    }
+
    return (
       <DivForceGraph3D >
-         <div ref={containerRef}>
+         <div
+            onMouseDown={(e) => handleMouseDown(e)}
+            onMouseUp={(e) => handleMouseUp(e)}
+            onWheel={(e) => handleMouseWheel(e)}
+         >
             <ForceGraph3D
                ref={graphRef}
                graphData={data}
                enableNodeDrag={false}
                // onEngineStop={() => { toggleRotationAnimation(rotationAanimationInterval, true) }}
+               onEngineTick={() => updateCamPos() }
                nodeLabel="id"
                linkWidth={3}
                nodeRelSize={3}
@@ -170,7 +182,6 @@ export default function ForceGraph_3D() {
                onLinkHover={(link, event) => handle(event)}
             />
          </div>
-
       </DivForceGraph3D>
    );
 }
