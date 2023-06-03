@@ -29,8 +29,8 @@ export default function ForceGraph_3D() {
    let isRotatingRef = useRef<boolean>(true);
    let angleRef = useRef<number>(0);
    const rotationSpeed = 0.001;
-   const N = 300;
-   const initalCamPos = { x: 0, y: 0, z: 500 }
+   const N = 30;
+   const initalCamPos = { x: 0, y: 0, z: 300 }
 
    const data: { nodes: NodeObject[], links: LinkObject[] } = {
       nodes: Array.from(Array(N).keys()).map((i) => ({ id: i })),
@@ -43,29 +43,11 @@ export default function ForceGraph_3D() {
    };
 
    useEffect(() => {
-      let distanceFromCenter = 1500
-      // graphRef.current.cameraPosition({ z: distanceFromCenter });
-      console.log("isRotating", isRotatingRef.current)
-      // Camera orbit
-      let angle = 0;
-
-      const rotationInterval = setInterval(() => {
-         if (isRotatingRef.current) {
-            graphRef.current.cameraPosition({
-               x: distanceFromCenter * Math.sin(angle),
-               z: distanceFromCenter * Math.cos(angle),
-            });
-            angle -= rotationSpeed;
-         }
-
-      }, 10);
-      return () => {
-         clearInterval(rotationInterval); // Clear the interval when the component is unmounted
-      };
+      startRotationAnimation()
    }, []);
-   const startRotationAnimation = (animationInterval: string | number | NodeJS.Timeout): () => any => {
-      console.log("startRotationAnimation", "animationInterval:", animationInterval)
-      let distanceFromCenter = 1500
+
+   const startRotationAnimation = (): () => any => {
+      let distanceFromCenter = 500
       // graphRef.current.cameraPosition({ z: distanceFromCenter });
       console.log("isRotating", isRotatingRef.current)
       // Camera orbit
@@ -86,18 +68,18 @@ export default function ForceGraph_3D() {
       };
    };
 
-   const stopRotationAnimation = (animationInterval: string | number | NodeJS.Timeout) => {
-      console.log("stopRotationAnimation", "animationInterval:", animationInterval)
-      clearInterval(animationInterval);
-   };
+   // const stopRotationAnimation = (animationInterval: string | number | NodeJS.Timeout) => {
+   //    console.log("stopRotationAnimation", "animationInterval:", animationInterval)
+   //    clearInterval(animationInterval);
+   // };
 
-   const setRotationAnimation = (animationInterval: string | number | NodeJS.Timeout, shouldStart: boolean) => {
-      if (shouldStart) {
-         startRotationAnimation(animationInterval);
-      } else {
-         stopRotationAnimation(animationInterval);
-      }
-   };
+   // const setRotationAnimation = (animationInterval: string | number | NodeJS.Timeout, shouldStart: boolean) => {
+   //    if (shouldStart) {
+   //       startRotationAnimation(animationInterval);
+   //    } else {
+   //       stopRotationAnimation(animationInterval);
+   //    }
+   // };
 
    const handleNodeClick = useCallback(
       (node: NodeObject) => {
@@ -110,7 +92,7 @@ export default function ForceGraph_3D() {
       isRotatingRef.current = false
       setTimeout(() => {
          isRotatingRef.current = true
-      }, 1500);
+      }, 500);
    }
 
    function moveCamToCoords(coords: Coords) {
@@ -137,7 +119,7 @@ export default function ForceGraph_3D() {
          // let camPos = getCamPos()
          // camPos.z = initalCamPos.z
          // graphRef.current.cameraPosition(camPos, { x: 0, y: 0, z: 0 }, duration);
-      }, 2000);
+      }, 500);
    }
 
    function getCamPos(): Coords {
@@ -156,8 +138,6 @@ export default function ForceGraph_3D() {
       return Math.sqrt(dx * dx + dy * dy + dz * dz);
    }
 
-   
-
    return (
       <DivForceGraph3D>
          <ForceGraph3D
@@ -166,6 +146,8 @@ export default function ForceGraph_3D() {
             enableNodeDrag = {false}
             // onEngineStop={() => { toggleRotationAnimation(rotationAanimationInterval, true) }}
             nodeLabel="id"
+            linkWidth={10}
+            nodeRelSize={3}
             nodeAutoColorBy="group"
             onNodeClick={(node, event) => handleNodeClick(node) }
             onNodeRightClick ={(node, event) => handle(event) }
