@@ -35,7 +35,7 @@ export default function NodeCard(props) {
 
     useEffect(() => {
         console.log("NodeCard nodeID", currentNode?.idx, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
-    }, [currentNode, isHovered, frontSideVisible, currentTimelineIndex])
+    }, [currentNode, currentTimelineIndex])
 
 
     async function fetchNodes() {
@@ -116,7 +116,7 @@ export default function NodeCard(props) {
         const averageWordCharCount = 5.1
         let readingTimeScaler = wordCharCount / averageWordCharCount
         const readingSpeedInSeconds = readingTimeScaler * (wordCount / (wordsPerMinute / 60))
-        console.log("getCurrentNodeCardDuration readingSpeedInSeconds", readingSpeedInSeconds )
+        // console.log("getCurrentNodeCardDuration readingSpeedInSeconds", readingSpeedInSeconds )
         return _.round(Math.max(readingSpeedInSeconds, minTime), 2)
     }
 
