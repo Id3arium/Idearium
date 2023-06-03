@@ -25,6 +25,7 @@ type LinkObject = object & {
 type Coords = { x: number; y: number; z: number; }
 
 export default function ForceGraph_3D() {
+   let containerRef = useRef<ForceGraphMethods>();
    let graphRef = useRef<ForceGraphMethods>();
    let isRotatingRef = useRef<boolean>(true);
    let angleRef = useRef<number>(0);
@@ -46,20 +47,17 @@ export default function ForceGraph_3D() {
       startRotationAnimation()
    }, []);
 
-   const startRotationAnimation = (): () => any => {
+   function startRotationAnimation(): () => any {
       let distanceFromCenter = 500
-      // graphRef.current.cameraPosition({ z: distanceFromCenter });
       console.log("isRotating", isRotatingRef.current)
-      // Camera orbit
-      let angle = 0;
 
       const rotationInterval = setInterval(() => {
          if (isRotatingRef.current) {
             graphRef.current.cameraPosition({
-               x: distanceFromCenter * Math.sin(angle),
-               z: distanceFromCenter * Math.cos(angle),
+               x: distanceFromCenter * Math.sin(angleRef.current),
+               z: distanceFromCenter * Math.cos(angleRef.current),
             });
-            angle -= rotationSpeed;
+            angleRef.current -= rotationSpeed;
          }
 
       }, 10);
@@ -67,19 +65,6 @@ export default function ForceGraph_3D() {
          clearInterval(rotationInterval); // Clear the interval when the component is unmounted
       };
    };
-
-   // const stopRotationAnimation = (animationInterval: string | number | NodeJS.Timeout) => {
-   //    console.log("stopRotationAnimation", "animationInterval:", animationInterval)
-   //    clearInterval(animationInterval);
-   // };
-
-   // const setRotationAnimation = (animationInterval: string | number | NodeJS.Timeout, shouldStart: boolean) => {
-   //    if (shouldStart) {
-   //       startRotationAnimation(animationInterval);
-   //    } else {
-   //       stopRotationAnimation(animationInterval);
-   //    }
-   // };
 
    const handleNodeClick = useCallback(
       (node: NodeObject) => {
@@ -116,9 +101,6 @@ export default function ForceGraph_3D() {
       }
       setTimeout(() => {
          isRotatingRef.current = true
-         // let camPos = getCamPos()
-         // camPos.z = initalCamPos.z
-         // graphRef.current.cameraPosition(camPos, { x: 0, y: 0, z: 0 }, duration);
       }, 500);
    }
 
