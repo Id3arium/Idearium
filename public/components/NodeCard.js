@@ -8,7 +8,7 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { currentNodeAtom, currentTimelineIndexAtom, nodeIDsTimelineLengthAtom, removeNodeAtom } from '@/public/atoms.js';
+import { currentNodeAtom, currentTimelineIndexAtom, nodeTimelineLengthAtom, removeNodeAtom } from '@/public/atoms.js';
 import { nodesAtom, onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom } from '@/public/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
@@ -25,7 +25,7 @@ export default function NodeCard(props) {
 
     const nodes = useAtomValue(nodesAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
-    const nodeIDsTimelineLength = useAtomValue(nodeIDsTimelineLengthAtom)
+    const nodeIDsTimelineLength = useAtomValue(nodeTimelineLengthAtom)
 
     const onNextNodeCard = useSetAtom(onNextNodeAtom)
     const onPrevNodeCard = useSetAtom(onPrevNodeAtom)
@@ -63,7 +63,7 @@ export default function NodeCard(props) {
         const randNodeData = await res.json()
         if (randNodeData.node) {
             // console.log('NodeCard.fetfetchNextRandomNode() randNodeData.node', randNodeData.node)
-            setCurrentNode(randNodeData.node)
+            // setCurrentNode(randNodeData.node)
             return randNodeData.node
         }
         return null
@@ -84,7 +84,7 @@ export default function NodeCard(props) {
         const nodeData = await res.json()
         if (nodeData.node) {
             console.log('NodeCard.fetchNode() node', nodeData.node)
-            setCurrentNode(nodeData.node)
+            // setCurrentNode(nodeData.node)
             return nodeData.node
         }
         return null
@@ -149,7 +149,7 @@ export default function NodeCard(props) {
         console.log('NodeCard.onNextCardCliked nextRandNode', randNode)
         console.log('NodeCard.onNextCardCliked nextRandNode.idx', randNode.idx)
         if (randNode != null) {
-            onNextNodeCard(randNode.idx)
+            onNextNodeCard(randNode)
             restartCardAnimation()
         }
     }
