@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -18,19 +18,19 @@ const frontSideVisibleAtom = atom(true)
 
 export default function NodeCard(props) {
     const wordsPerMinute = 50
+    const [duration, setDuration] = useState(0);
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
-    const currentNode = useAtomValue(currentNodeAtom)
 
-    // const nodes = useAtomValue(nodesAtom)
+    const currentNode = useAtomValue(currentNodeAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(nodeTimelineLengthAtom)
 
     const onNextNodeCard = useSetAtom(onNextNodeAtom)
     const onPrevNodeCard = useSetAtom(onPrevNodeAtom)
-    const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
-    const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
     const removeNode = useSetAtom(removeNodeAtom)
+    // const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
+    // const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
 
     const hasFetchedFirstNode = useRef(false);
 
@@ -46,9 +46,18 @@ export default function NodeCard(props) {
     }, [])
 
     useEffect(() => {
-        console.log("NodeCard nodeID", currentNode?.idx, "duration:", getCurrentNodeCardDuration(), "timleine idx:", currentTimelineIndex)
-    }, [currentNode, currentTimelineIndex])
+        if (!frontSideVisible || isHovered) {
+            animation.stop()
+        } else {
+            animation.start(targetStyles)
+        }
+    }, [frontSideVisible, isHovered, duration])
 
+
+    useEffect(() => {
+        setDuration(getCurrentNodeCardDuration(wordsPerMinute));
+        console.log("NodeCard nodeID", currentNode?.idx, "duration:", duration, "timleine idx:", currentTimelineIndex)
+    }, [currentNode]);
 
     async function fetchNodes() {
         const res = await fetch('api/index', {
@@ -140,10 +149,12 @@ export default function NodeCard(props) {
         opacity: .15,
         width: "0px",
         transition: {
-            duration: getCurrentNodeCardDuration(wordsPerMinute),
+            duration: duration,
             ease: "linear"
         }
     }
+
+    useState
 
     function handleClick(e) {
         if (e.target.id === "node-card") { setFrontSideVisible(!frontSideVisible) }
@@ -167,14 +178,7 @@ export default function NodeCard(props) {
         restartCardAnimation()
     }
 
-    useEffect(() => {
-        if (!frontSideVisible || isHovered) {
-            animation.stop()
-        } else {
-            animation.start(targetStyles)
-        }
-    }, [frontSideVisible, isHovered, props.duration])
-
+   
 
     let TimerBar =
         <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
