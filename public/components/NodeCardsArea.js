@@ -8,14 +8,14 @@ import { nodesAtom, currentNodeAtom } from "@/public/atoms.js";
 import { useEffect } from "react";
 
 export default function NodeCardsArea(nodesFromServer) {
-    useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]]);
+    // useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]]);
 
-    const currentNode = useAtomValue(currentNodeAtom);
+    // const currentNode = useAtomValue(currentNodeAtom);
 
-    useEffect(() => {
-        if (currentNode == null) {
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (currentNode == null) {
+    //     }
+    // }, []);
 
     return (
         <StyledNodeCardsArea id="node-cards-area">

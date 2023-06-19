@@ -9,21 +9,20 @@ import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { currentNodeAtom, currentTimelineIndexAtom, nodeTimelineLengthAtom, removeNodeAtom } from '@/public/atoms.js';
-import { nodesAtom, onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom } from '@/public/atoms.js';
+import { onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom } from '@/public/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
 
-
 export default function NodeCard(props) {
     const wordsPerMinute = 50
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
-    const [currentNode, setCurrentNode] = useAtom(currentNodeAtom)
+    const currentNode = useAtomValue(currentNodeAtom)
 
-    const nodes = useAtomValue(nodesAtom)
+    // const nodes = useAtomValue(nodesAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(nodeTimelineLengthAtom)
 
@@ -33,8 +32,21 @@ export default function NodeCard(props) {
     const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
     const removeNode = useSetAtom(removeNodeAtom)
 
+    const hasFetchedFirstNode = useRef(false);
+
     useEffect(() => {
-        console.log("NodeCard nodeID", currentNode?.idx, "duration:", props.duration, "timleine idx:", currentTimelineIndex)
+        if (!hasFetchedFirstNode.current) {
+            fetchNextRandomNode(currentNode).then(randNode => {
+                if (randNode != null) {
+                    onNextNodeCard(randNode);
+                }
+            });
+            hasFetchedFirstNode.current = true;
+        }
+    }, [])
+
+    useEffect(() => {
+        console.log("NodeCard nodeID", currentNode?.idx, "duration:", getCurrentNodeCardDuration(), "timleine idx:", currentTimelineIndex)
     }, [currentNode, currentTimelineIndex])
 
 
@@ -62,8 +74,7 @@ export default function NodeCard(props) {
         })
         const randNodeData = await res.json()
         if (randNodeData.node) {
-            // console.log('NodeCard.fetfetchNextRandomNode() randNodeData.node', randNodeData.node)
-            // setCurrentNode(randNodeData.node)
+            console.log('NodeCard.fetfetchNextRandomNode() randNodeData.node', randNodeData.node)
             return randNodeData.node
         }
         return null
@@ -145,13 +156,10 @@ export default function NodeCard(props) {
     }
 
     async function onNextCardCliked() {
+        if (currentNode == null) { return }
         let randNode = await fetchNextRandomNode(currentNode)
-        console.log('NodeCard.onNextCardCliked nextRandNode', randNode)
-        console.log('NodeCard.onNextCardCliked nextRandNode.idx', randNode.idx)
-        if (randNode != null) {
-            onNextNodeCard(randNode)
-            restartCardAnimation()
-        }
+        onNextNodeCard(randNode)
+        restartCardAnimation()
     }
 
     function onPrevCardClicked() {
@@ -189,12 +197,12 @@ export default function NodeCard(props) {
             </IconButton>
             {!frontSideVisible && <div>
                 <IconButton className="nav-btn bottom left outlined"
-                    onClick={() => { decreaseNodeFrquency(currentNode.idx) }}
+                    onClick={() => { decreaseNodeFrquency(currentNode.id) }}
                 >
                     <ArrowDropDownIcon />
                 </IconButton>
                 <IconButton className="nav-btn bottom right outlined"
-                    onClick={() => { increaseNodeFrquency(currentNode.idx) }}
+                    onClick={() => { increaseNodeFrquency(currentNode.id) }}
                 >
                     <ArrowDropUpIcon />
                 </IconButton>

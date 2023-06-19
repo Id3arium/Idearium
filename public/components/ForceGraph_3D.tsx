@@ -96,7 +96,7 @@ export default function ForceGraph_3D() {
 
       const distanceBeforeAnimation = calculateDistance(oldCamPos, coords);
       const duration = Math.sqrt(distanceBeforeAnimation / animationSpeed); //in miliseconds
-      if (graphRef.current) {
+      if (graphRef.current != null) {
          console.log("cameraPos", oldCamPos, "newCamPos", camPosRef.current, "dist", distanceBeforeAnimation, "duration", duration);
          graphRef.current.cameraPosition(camPosRef.current, { x: 0, y: 0, z: 0 }, duration);
       }
@@ -105,7 +105,7 @@ export default function ForceGraph_3D() {
       }, 1000);
    }
 
-   const handleMouseDown = (e:  React.MouseEvent<HTMLDivElement>) => {
+   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
       console.log("handleMouseDown", e.pageX, e.pageY)
       isRotatingRef.current = false;
    };
@@ -113,7 +113,7 @@ export default function ForceGraph_3D() {
       console.log("handleMouseUp", e.pageX, e.pageY)
       isRotatingRef.current = true;
    };
-   const handleMouseWheel = (e:React.WheelEvent<HTMLDivElement>) => {
+   const handleMouseWheel = (e: React.WheelEvent<HTMLDivElement>) => {
       console.log("handleWheel", e.pageX, e.pageY)
       isRotatingRef.current = false;
       setTimeout(() => {
@@ -122,6 +122,8 @@ export default function ForceGraph_3D() {
    };
 
    const getCamPos = () => {
+      if (graphRef.current === null) { return { x: 0, y: 0, z: 0 }; }
+
       var camera = graphRef.current.camera();
 
       camera.updateMatrixWorld();
@@ -139,20 +141,20 @@ export default function ForceGraph_3D() {
 
    function updateCamPos(): void {
       let camPos = getCamPos()
-      if (!areCoordsEqual(camPosRef.current, camPos)){
-         console.log("updateCamPos camPosRef.current", camPosRef.current, "camPos", camPos )
+      if (!areCoordsEqual(camPosRef.current, camPos)) {
+         console.log("updateCamPos camPosRef.current", camPosRef.current, "camPos", camPos)
          camPosRef.current = camPos
       }
-      
+
    }
    function areCoordsEqual(coord1: Coords, coord2: Coords): boolean {
       const epsilon = .1
       return (
-        Math.abs(coord1.x - coord2.x) < epsilon &&
-        Math.abs(coord1.y - coord2.y) < epsilon &&
-        Math.abs(coord1.z - coord2.z) < epsilon
+         Math.abs(coord1.x - coord2.x) < epsilon &&
+         Math.abs(coord1.y - coord2.y) < epsilon &&
+         Math.abs(coord1.z - coord2.z) < epsilon
       );
-    }
+   }
 
    return (
       <DivForceGraph3D >
@@ -166,7 +168,7 @@ export default function ForceGraph_3D() {
                graphData={data}
                enableNodeDrag={false}
                // onEngineStop={() => { toggleRotationAnimation(rotationAanimationInterval, true) }}
-               onEngineTick={() => updateCamPos() }
+               onEngineTick={() => updateCamPos()}
                nodeLabel="id"
                linkWidth={3}
                nodeRelSize={3}

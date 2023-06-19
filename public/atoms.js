@@ -1,7 +1,7 @@
 "use client";
 import { atom, useAtomValue, createStore } from 'jotai';
 import _ from 'lodash';
-export const nodesAtom = atom([])
+// export const nodesAtom = atom([])
 export const deletedNodesAtom = atom([])
 export const currentTimelineIndexAtom = atom(-1)
 export const uniqueTimelineNodeIDsAtom = atom(new Set())
@@ -65,7 +65,7 @@ function getCurrentIndexAfterPruning(currentIndex, indexesToRemove) {
 
 
 export const onNextNodeAtom = atom(null, (get, set, nextNode) => {
-	console.log('atoms.onNextNodeAtom nextNode', nextNode)
+	console.log("onNextNodeAtom nextNode",nextNode )
 	const isAtEndOfList = get(currentTimelineIndexAtom) === get(nodeTimelineAtom).length - 1
 	if (isAtEndOfList) {
 		set(addToNodeTimelineAtom, nextNode)

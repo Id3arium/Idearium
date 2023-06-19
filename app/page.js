@@ -20,14 +20,14 @@ export default async function Home() {
 		}
 	}
 	
-	let nodesFromServer = await getNodesFromDB()
+	// let nodesFromServer = await getNodesFromDB()
 
 	return (
 		<main className={styles.main}>
 			<div id="Home">
 				<IdeaCompositionArea />
 				<NodeCardsArea 
-					nodes={nodesFromServer}
+					// nodes={nodesFromServer}
 				/>
 				{/* <NodeTimeline /> */}
 			</div>
