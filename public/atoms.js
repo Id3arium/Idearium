@@ -66,6 +66,7 @@ function getCurrentIndexAfterPruning(currentIndex, indexesToRemove) {
 
 export const onNextNodeAtom = atom(null, (get, set, nextNode) => {
 	console.log("onNextNodeAtom nextNode",nextNode )
+	if (nextNode === null) { return }
 	const isAtEndOfList = get(currentTimelineIndexAtom) === get(nodeTimelineAtom).length - 1
 	if (isAtEndOfList) {
 		set(addToNodeTimelineAtom, nextNode)

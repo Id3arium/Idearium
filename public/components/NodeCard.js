@@ -129,8 +129,8 @@ export default function NodeCard(props) {
     function getCurrentNodeCardDuration(wordsPerMinute = 60) {
         let minTime = 1
         if (currentNode == null) { return 0 }
-        const wordCount = currentNode.title.split(' ').length + currentNode.content.split(' ').length
-        const nonSpaceCharCount = currentNode.title.length + currentNode.content.length - (wordCount - 1)
+        const wordCount = currentNode?.title.split(' ').length + currentNode?.content.split(' ').length
+        const nonSpaceCharCount = currentNode?.title.length + currentNode?.content.length - (wordCount - 1)
         const wordCharCount = nonSpaceCharCount / wordCount
 
         const averageWordCharCount = 5.1
@@ -154,8 +154,6 @@ export default function NodeCard(props) {
         }
     }
 
-    useState
-
     function handleClick(e) {
         if (e.target.id === "node-card") { setFrontSideVisible(!frontSideVisible) }
     }
@@ -177,8 +175,6 @@ export default function NodeCard(props) {
         onPrevNodeCard()
         restartCardAnimation()
     }
-
-   
 
     let TimerBar =
         <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
