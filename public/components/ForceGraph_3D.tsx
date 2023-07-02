@@ -26,7 +26,7 @@ type Coords = { x: number; y: number; z: number; }
 
 export default function ForceGraph_3D() {
    const containerRef = useRef<HTMLDivElement>(null);
-   const graphRef = useRef<ForceGraphMethods>();
+   const graphRef = useRef<ForceGraphMethods>(null);
    const isRotatingRef = useRef<boolean>(true);
    const angleRef = useRef<number>(0);
 
@@ -122,7 +122,7 @@ export default function ForceGraph_3D() {
    };
 
    const getCamPos = () => {
-      if (graphRef.current === null) { return { x: 0, y: 0, z: 0 }; }
+      if (graphRef.current == null) { return { x: 0, y: 0, z: 0 }; }
 
       var camera = graphRef.current.camera();
 
