@@ -1,11 +1,11 @@
 'use client';
 import styled from "styled-components";
 import PositionedComponent from "@/components/PositionedComponent.js";
-import { nodeIDsTimelineAtom } from "@/public/atoms.js";
+import { nodeTimelineAtom } from "@/public/atoms.js";
 import { useAtom } from "jotai";
 
 export default function NodeTimeline() {
-    const timelineData = useAtom(nodeIDsTimelineAtom)
+    // const nodeTimeline = useAtom(nodeTimelineAtom)
 
     const TimelineNode = () => {
         const Node = styled.div`

@@ -6,7 +6,6 @@ import Zoom from "@mui/material/Zoom";
 import _ from "lodash";
 import styled from "@emotion/styled";
 import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
-import { addNodeAtom } from '@/public/atoms.js';
 import PositionedComponent from "@/components/PositionedComponent.js";
 
 const noteAtom = atom({ title: "", content: "", inspiration: "" })
@@ -62,7 +61,6 @@ function IdeaCompositionArea() {
                 inspiration: note.inspiration,
             }
             let newNode = createNodeInDB(noteData)
-            addNode(newNode)
             setNote(emptyNote)
             setIsExpanded(false)
         }
