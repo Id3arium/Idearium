@@ -5,7 +5,7 @@ import Fab from "@mui/material/Fab";
 import Zoom from "@mui/material/Zoom";
 import _ from "lodash";
 import styled from "@emotion/styled";
-import { atom, useAtom, useSetAtom, useAtomValue } from 'jotai';
+import { atom, useAtom} from 'jotai';
 import PositionedComponent from "@/components/PositionedComponent.js";
 
 const noteAtom = atom({ title: "", content: "", inspiration: "" })
@@ -14,8 +14,6 @@ const isExpandedAtom = atom(false)
 function IdeaCompositionArea() {
     const [note, setNote] = useAtom(noteAtom);
     const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom);
-    const addNode = useSetAtom(addNodeAtom);
-    // const nodes = useAtomValue(nodesAtom);
 
     function onInputChanged(e) {
         const { name, value } = e.target;

@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { currentNodeAtom, currentTimelineIndexAtom, nodeTimelineLengthAtom } from '@/public/atoms.js';
-import { onPrevNodeAtom, onNextNodeAtom, decreaseNodeFrquencyAtom, increaseNodeFrquencyAtom } from '@/public/atoms.js';
+import { onPrevNodeAtom, onNextNodeAtom} from '@/public/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
 
@@ -28,8 +28,6 @@ export default function NodeCard(props) {
 
     const onNextNodeCard = useSetAtom(onNextNodeAtom)
     const onPrevNodeCard = useSetAtom(onPrevNodeAtom)
-    // const increaseNodeFrquency = useSetAtom(increaseNodeFrquencyAtom)
-    // const decreaseNodeFrquency = useSetAtom(decreaseNodeFrquencyAtom)
 
     const hasFetchedFirstNode = useRef(false);
 
