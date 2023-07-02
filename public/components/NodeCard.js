@@ -16,7 +16,7 @@ import PositionedComponent from "./PositionedComponent";
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
 
-export default function NodeCard(props) {
+export default function NodeCard() {
     const wordsPerMinute = 50
     const [duration, setDuration] = useState(0);
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)

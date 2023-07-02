@@ -3,7 +3,7 @@ import styled from "styled-components";
 import NodeCard from "./NodeCard.js";
 import _ from "lodash";
 
-export default function NodeCardsArea(nodesFromServer) {
+export default function NodeCardsArea() {
     // useHydrateAtoms([[nodesAtom, nodesFromServer.nodes]]);
 
     // const currentNode = useAtomValue(currentNodeAtom);
