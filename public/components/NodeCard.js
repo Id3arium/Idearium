@@ -55,8 +55,9 @@ export default function NodeCard(props) {
 
 
     useEffect(() => {
-        setDuration(getCurrentNodeCardDuration(wordsPerMinute));
-        console.log("NodeCard nodeID", currentNode?.idx, "duration:", duration, "timleine idx:", currentTimelineIndex)
+        let currCardDuration = getCurrentNodeCardDuration(wordsPerMinute)
+        setDuration(currCardDuration);
+        console.log("NodeCard nodeID", currentNode?.id, "duration:", currCardDuration, "timleine idx:", currentTimelineIndex)
     }, [currentNode]);
 
     async function fetchNodes() {
