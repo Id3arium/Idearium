@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { motion, useAnimationControls } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { currentNodeAtom, currentTimelineIndexAtom, nodeTimelineLengthAtom } from '@/public/atoms.js';
-import { onPrevNodeAtom, onNextNodeAtom} from '@/public/atoms.js';
+import { onPrevNodeAtom, onNextNodeAtom } from '@/public/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
 
@@ -125,7 +125,7 @@ export default function NodeCard() {
     })
 
     function getCurrentNodeCardDuration(wordsPerMinute = 60) {
-        let minTime = 1
+        let minTime = 3
         if (currentNode == null) { return 0 }
         const wordCount = currentNode?.title.split(' ').length + currentNode?.content.split(' ').length
         const nonSpaceCharCount = currentNode?.title.length + currentNode?.content.length - (wordCount - 1)
@@ -211,10 +211,13 @@ export default function NodeCard() {
         <div className="card-content" >
             <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
                 {currentNode?.title && <h1 >{currentNode?.title} </h1>}
-                <p> {currentNode?.content} </p>
+                <p style={{ whiteSpace: "pre-line"}}>
+                    {currentNode?.content}
+                </p>
+
             </StyledCardSide>
             <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
-                <h1> Node #{currentNode?.idx + 1} [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
+                <h1> Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
                 <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
                 <p className="frequency">
                     {(currentNode?.frequency * 100).toFixed(2)}% Likely to appear
