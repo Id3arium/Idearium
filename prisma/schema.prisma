@@ -29,8 +29,8 @@ model Node {
   title                       String?
   content                     String
   inspiration                 String?
+  frequency                   Float?
   frequencySigma              Float?
   frequencySigmaPlusFrequency Float?
-  frequency                   Float?
   ranking                     Int?
 }
