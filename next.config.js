@@ -2,8 +2,4 @@
 
 module.exports = {
   reactStrictMode: true,
-  // output: 'export',
-  experimental: {
-    appDir: true,
-  },
 };
