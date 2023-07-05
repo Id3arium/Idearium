@@ -112,11 +112,16 @@ export default function NodeCard() {
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
         async function removeNodeInDB(nodeID) {
-            const res = await fetch('/api/index', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'text/plain' },
-                body: nodeID,
+            const queryParams = new URLSearchParams({
+                "node-id": nodeID,
             });
+            const url = `/api/index?${queryParams.toString()}`
+            const res = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'content-type': 'application/json',
+                },
+            })
             const data = await res.json();
             console.log('NodeCard.removeNodeInDB nodes from database', data)
             return data.node;

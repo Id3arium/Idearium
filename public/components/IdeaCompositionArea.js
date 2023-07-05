@@ -5,7 +5,7 @@ import Fab from "@mui/material/Fab";
 import Zoom from "@mui/material/Zoom";
 import _ from "lodash";
 import styled from "@emotion/styled";
-import { atom, useAtom} from 'jotai';
+import { atom, useAtom } from 'jotai';
 import PositionedComponent from "@/components/PositionedComponent.js";
 
 const noteAtom = atom({ title: "", content: "", inspiration: "" })
@@ -26,25 +26,23 @@ function IdeaCompositionArea() {
     }
 
     const createNodeInDB = async (noteData) => {
+        let nodeData = {
+            ...noteData,
+            idx: -1,
+            ranking: -1,
+            frequency: 0,
+            frequencySigma: 0,
+            frequencySigmaPlusFrequency: 0
+        }
         const res = await fetch(`/api/index`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', },
-            body: JSON.stringify(noteData),
+            body: JSON.stringify(nodeData),
         });
         const newData = await res.json();
         if (newData.node) {
-            let newNode = {
-                id: newData.node.id,
-                idx: newData.node.idx,
-                created: new Date(newData.node.created).toISOString(),
-                lastModified: new Date(newData.node.lastModified).toISOString(),
-                title: newData.node.title,
-                content: newData.node.content,
-                inspiration: newData.node.inspiration,
-                ranking: newData.node.ranking,
-            }
-            console.log("newNode", newNode);
-            return newNode
+            console.log("newNode", newData.node);
+            return newData.node
         }
         else return null
     }
