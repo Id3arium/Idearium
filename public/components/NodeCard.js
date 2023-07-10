@@ -12,6 +12,7 @@ import { currentNodeAtom, currentTimelineIndexAtom, nodeTimelineLengthAtom } fro
 import { onPrevNodeAtom, onNextNodeAtom } from '@/public/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
+import { FrequencyChange } from '@utils/constants.js';
 
 const isHoveredAtom = atom(false)
 const frontSideVisibleAtom = atom(true)
@@ -49,7 +50,6 @@ export default function NodeCard() {
             animation.start(targetStyles)
         }
     }, [frontSideVisible, isHovered, duration])
-
 
     useEffect(() => {
         let currCardDuration = getCurrentNodeCardDuration(wordsPerMinute)
@@ -108,24 +108,42 @@ export default function NodeCard() {
         return null
     }
 
+    async function removeNodeInDB(nodeID) {
+        const queryParams = new URLSearchParams({
+            "node-id": nodeID,
+        });
+        const url = `/api/index?${queryParams.toString()}`
+        const res = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json',
+            },
+        })
+        const data = await res.json();
+        console.log('NodeCard.removeNodeInDB nodes from database', data)
+        return data.node;
+    }
+
+
+
+    async function changeNodeFrequency(frequencyChange, nodeIdx) {
+        const request = {
+            "frequency-change": frequencyChange,
+            "node-idx": nodeIdx,
+        }
+        console.log('NodeCard.changeNodeFrequency request', request)
+        const res = await fetch(`/api/index`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(request),
+        });
+        const data = await res.json();
+        console.log('NodeCard.changeNodeFrequency node updated', data)
+        return data.node;
+    }
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
-        async function removeNodeInDB(nodeID) {
-            const queryParams = new URLSearchParams({
-                "node-id": nodeID,
-            });
-            const url = `/api/index?${queryParams.toString()}`
-            const res = await fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'content-type': 'application/json',
-                },
-            })
-            const data = await res.json();
-            console.log('NodeCard.removeNodeInDB nodes from database', data)
-            return data.node;
-        }
         removeNodeInDB(currentNode.id)
     })
 
@@ -200,12 +218,12 @@ export default function NodeCard() {
             </IconButton>
             {!frontSideVisible && <div>
                 <IconButton className="nav-btn bottom left outlined"
-                    onClick={() => { decreaseNodeFrquency(currentNode.id) }}
+                    onClick={() => { changeNodeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
                 >
                     <ArrowDropDownIcon />
                 </IconButton>
                 <IconButton className="nav-btn bottom right outlined"
-                    onClick={() => { increaseNodeFrquency(currentNode.id) }}
+                    onClick={() => { changeNodeFrequency(FrequencyChange.Increase, currentNode.idx) }}
                 >
                     <ArrowDropUpIcon />
                 </IconButton>
@@ -216,14 +234,14 @@ export default function NodeCard() {
         <div className="card-content" >
             <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
                 {currentNode?.title && <h1 >{currentNode?.title} </h1>}
-                <p style={{ whiteSpace: "pre-line"}}>
+                <p style={{ whiteSpace: "pre-line" }}>
                     {currentNode?.content}
                 </p>
 
             </StyledCardSide>
             <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
                 <h1> Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
-                <p> Inspiration: {currentNode?.inspiration}  </p><br></br>
+                <p> - {currentNode?.inspiration}  </p><br></br>
                 <p className="frequency">
                     {(currentNode?.frequency * 100).toFixed(2)}% Likely to appear
                 </p>

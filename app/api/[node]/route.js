@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { useSearchParams } from 'next/navigation';
 import { parse } from 'url';
 import qs from 'qs';
-import { getNodes, createNode, deleteNode, getNextRandomNode, getNodeByID } from "@/lib/prisma/nodes"
+import { getNodes, createNode, deleteNode, getNextRandomNode, getNodeByID, redistributeNodeFrequencies } from "@/lib/prisma/nodes"
 
 // export async function GET(request, { params }) {
 //     // const data = await request.json()
@@ -38,9 +38,11 @@ export async function GET(request) {
    try {
       if (hasNextRandomNodeParam) {
          return await doGetNextRandomNode(currNodeId);
-      } else if (hasGetNodeByIdParam) {
+      }
+      else if (hasGetNodeByIdParam) {
          return await doGetNodeByID(nodeId);
-      } else {
+      }
+      else {
          return await doGetNodes();
       }
    } catch (error) {
@@ -87,15 +89,28 @@ export async function POST(request) {
 
 export async function PUT(request, { params }) {
    const data = await request.json()
-   console.log("PUT updating node with id", data)
-   const { node, error } = await updateNode(data)
+   const searchParams = request.nextUrl.searchParams
+
+   const frequencyChange = data['frequency-change']
+   const nodeIdx = data['node-idx']
+   console.log("PUT", frequencyChange, nodeIdx)
+
    try {
-      if (error) {
-         throw new Error(error)
+      if (typeof frequencyChange !== "undefined") {
+         return await doPromise(redistributeNodeFrequencies(frequencyChange, nodeIdx))
       }
-      return NextResponse.json({ node })
+      else {
+         return await doPromise(updateNode(data))
+      }
    } catch (error) {
       return NextResponse.json({ error: error.message })
+   }
+   async function doPromise(promise) {
+      const { node, error } = await promise;
+      if (error) {
+         throw new Error(error);
+      }
+      return NextResponse.json({ node });
    }
 }
 
