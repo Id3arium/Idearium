@@ -6,6 +6,7 @@
       "@/*": ["./*"],
       "@/components/*": ["./public/components/*"],
       "@lib/*": ["./lib/*"],
+      "@utils/*": ["./lib/utils/*"],
     }
   }
 }
