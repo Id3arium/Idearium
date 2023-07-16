@@ -6,7 +6,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
-import { motion, useAnimationControls } from "framer-motion";
+import { motion, useAnimationControls, useAnimation } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { currentNodeAtom, currentTimelineIndexAtom, nodeTimelineLengthAtom } from '@/public/atoms.js';
 import { onPrevNodeAtom, onNextNodeAtom } from '@/public/atoms.js';
@@ -15,13 +15,15 @@ import PositionedComponent from "./PositionedComponent";
 import { FrequencyChange } from '@utils/constants.js';
 
 const isHoveredAtom = atom(false)
-const frontSideVisibleAtom = atom(true)
+const isFlippedToBackSideAtom = atom(false)
+const isFlippingToBackSideAtom = atom(false)
 
 export default function NodeCard() {
     const wordsPerMinute = 50
     const [duration, setDuration] = useState(0);
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
-    const [frontSideVisible, setFrontSideVisible] = useAtom(frontSideVisibleAtom)
+    const [isFlippedToBackSide, setIsFlippedToBackSideAtom] = useAtom(isFlippedToBackSideAtom)
+    const [isFlippingToBackSide, setIsFlippingToBackSide] = useAtom(isFlippingToBackSideAtom)
 
     const currentNode = useAtomValue(currentNodeAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
@@ -44,12 +46,12 @@ export default function NodeCard() {
     }, [])
 
     useEffect(() => {
-        if (!frontSideVisible || isHovered) {
-            animation.stop()
+        if (isFlippedToBackSide || isHovered) {
+            timerAnimation.stop()
         } else {
-            animation.start(targetStyles)
+            timerAnimation.start(targetStyles)
         }
-    }, [frontSideVisible, isHovered, duration])
+    }, [isFlippedToBackSide, isHovered, duration])
 
     useEffect(() => {
         let currCardDuration = getCurrentNodeCardDuration(wordsPerMinute)
@@ -124,8 +126,6 @@ export default function NodeCard() {
         return data.node;
     }
 
-
-
     async function changeNodeFrequency(frequencyChange, nodeIdx) {
         const request = {
             "frequency-change": frequencyChange,
@@ -161,13 +161,13 @@ export default function NodeCard() {
         return _.round(Math.max(readingSpeedInSeconds, minTime), 2)
     }
 
-    const animation = useAnimationControls()
+    const timerAnimation = useAnimationControls()
     let initialStyles = {
-        opacity: .125,
+        opacity: .15,
         width: "525px",
     }
     let targetStyles = {
-        opacity: .15,
+        opacity: .2,
         width: "0px",
         transition: {
             duration: duration,
@@ -175,31 +175,34 @@ export default function NodeCard() {
         }
     }
 
-    function handleClick(e) {
-        if (e.target.id === "node-card") { setFrontSideVisible(!frontSideVisible) }
-    }
+    // function handleClick(e) {
+    //     if (e.target.id === "node-card") { setIsFlipped(!isFlipped) }
+    // }
 
-    function restartCardAnimation() {
-        animation.stop()
-        animation.set(initialStyles)
-        animation.start(targetStyles)
+    function restartTimerAnimation() {
+        timerAnimation.stop()
+        timerAnimation.set(initialStyles)
+        timerAnimation.start(targetStyles)
     }
 
     async function onNextCardCliked() {
         if (currentNode == null) { return }
         let randNode = await fetchNextRandomNode(currentNode)
         onNextNodeCard(randNode)
-        restartCardAnimation()
+        restartTimerAnimation()
     }
 
+    const animate = useAnimation()
     function onPrevCardClicked() {
         onPrevNodeCard()
-        restartCardAnimation()
+        restartTimerAnimation()
     }
 
     let TimerBar =
-        <StyledTimerBar $isVisible={frontSideVisible} $isHovered={isHovered}
-            animate={animation}
+        <StyledTimerBar
+            $isVisible={!isFlippedToBackSide}
+            $isHovered={isHovered}
+            animate={timerAnimation}
             initial={initialStyles}
             onAnimationComplete={async () => { await onNextCardCliked() }}
         />
@@ -216,7 +219,7 @@ export default function NodeCard() {
             >
                 <KeyboardArrowRightIcon disabled={true} />
             </IconButton>
-            {!frontSideVisible && <div>
+            {isFlippedToBackSide && <div>
                 <IconButton className="nav-btn bottom left outlined"
                     onClick={() => { changeNodeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
                 >
@@ -232,14 +235,14 @@ export default function NodeCard() {
 
     let CardContent =
         <div className="card-content" >
-            <StyledCardSide id="front-side" $isVisible={frontSideVisible} $isHovered={isHovered}>
+            <StyledCardSide id="front-side" $isVisible={!isFlippedToBackSide} $isHovered={isHovered}>
                 {currentNode?.title && <h1 >{currentNode?.title} </h1>}
                 <p style={{ whiteSpace: "pre-line" }}>
                     {currentNode?.content}
                 </p>
 
             </StyledCardSide>
-            <StyledCardSide id="back-side" $isVisible={!frontSideVisible} $isHovered={isHovered}>
+            <StyledCardSide id="back-side" $isVisible={isFlippedToBackSide} $isHovered={isHovered}>
                 <h1> Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
                 <p> - {currentNode?.inspiration}  </p><br></br>
                 <p className="frequency">
@@ -248,12 +251,46 @@ export default function NodeCard() {
             </StyledCardSide>
         </div>
 
+    // const handleClick = () => {
+    //     setIsFlippingToBackSide(prev => !prev);
+    //     animate.start({
+    //         rotateY: isFlippingToBackSide ? 180 : 0,
+    //         transition: { duration: 0.5 }
+    //     })
+    // }
+    const halfRotationDuration = .175
+
+    const handleClick = () => {
+        animate.start({
+            rotateY: 90,
+            transition: { duration: halfRotationDuration },
+            ease: "easeInOut"
+        })
+            .then(() => {
+                setIsFlippedToBackSideAtom(!isFlippedToBackSide)
+                animate.start({
+                    rotateY: 0,
+                    transition: { duration: halfRotationDuration }
+                });
+            });
+
+    }
+
     return (
-        <PositionedComponent id="positioned-component" position="middle-center">
-            <StyledNodeCard id="node-card" $isHovered={isHovered} tabIndex='-1'
-                onClick={(e) => { handleClick(e) }}
+        <PositionedComponent
+            id="positioned-component"
+            position="middle-center">
+            <StyledNodeCard
+                id="node-card" $isHovered={isHovered} tabIndex='-1'
                 onMouseEnter={() => { setIsHovered(true) }}
                 onMouseLeave={() => { setIsHovered(false) }}
+                onClick={handleClick}
+                animate={animate}
+
+                transition={{
+                    duration: 2.5,
+                    ease: "easeInOut"
+                }}
             >
                 {TimerBar}
                 {CardControls}
@@ -281,12 +318,13 @@ const StyledCardSide = styled.div`
     opacity: ${props => props.$isVisible ? "1" : ".15"};
     filter: ${props => props.$isVisible ? "none" : (props.$isHovered ? "blur(3px)" : "blur(9px)")};
     transform: ${props => props.$isVisible ? "scale(1, 1)" : "scale(-1, 1)"};;
+    transform: ${props => props.$isVisible ? "scale(1, 1)" : "scale(-1, 1)"};;
     padding: 10px 0px;
     grid-area: 1/1;
     pointer-events: none;
 `
 
-const StyledNodeCard = styled.div`
+const StyledNodeCard = styled(motion.div)`
     background: #00219708;
     border-radius: 5px;
     box-shadow: 0px 0px 4px #CCC;
