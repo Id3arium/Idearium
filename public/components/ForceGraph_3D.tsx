@@ -32,7 +32,7 @@ export default function ForceGraph_3D() {
 
    const camPosRef = useRef<Coords | undefined>({ x: 0, y: 0, z: 300 });
    const rotationSpeed = 0.0001;
-   const N = 30;
+   const N = 300;
 
    const data: { nodes: NodeObject[], links: LinkObject[] } = {
       nodes: Array.from(Array(N).keys()).map((i) => ({ id: i })),
@@ -49,7 +49,7 @@ export default function ForceGraph_3D() {
    }, []);
 
    const startRotationAnimation = (): () => any => {
-      let distanceFromCenter = 500
+      let distanceFromCenter = 1000
       console.log("isRotating", isRotatingRef.current)
 
       const rotationInterval = setInterval(() => {
