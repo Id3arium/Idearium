@@ -15,15 +15,13 @@ import PositionedComponent from "./PositionedComponent";
 import { FrequencyChange } from '@utils/constants.js';
 
 const isHoveredAtom = atom(false)
-const isFlippedToBackSideAtom = atom(false)
-const isFlippingToBackSideAtom = atom(false)
+const isFlippedAtom = atom(false)
 
 export default function NodeCard() {
     const wordsPerMinute = 50
     const [duration, setDuration] = useState(0);
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
-    const [isFlippedToBackSide, setIsFlippedToBackSideAtom] = useAtom(isFlippedToBackSideAtom)
-    const [isFlippingToBackSide, setIsFlippingToBackSide] = useAtom(isFlippingToBackSideAtom)
+    const [isFlipped, setIsFlipped] = useAtom(isFlippedAtom)
 
     const currentNode = useAtomValue(currentNodeAtom)
     const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
@@ -46,12 +44,12 @@ export default function NodeCard() {
     }, [])
 
     useEffect(() => {
-        if (isFlippedToBackSide || isHovered) {
+        if (isFlipped || isHovered) {
             timerAnimation.stop()
         } else {
             timerAnimation.start(targetStyles)
         }
-    }, [isFlippedToBackSide, isHovered, duration])
+    }, [isFlipped, isHovered, duration])
 
     useEffect(() => {
         let currCardDuration = getCurrentNodeCardDuration(wordsPerMinute)
@@ -161,6 +159,26 @@ export default function NodeCard() {
         return _.round(Math.max(readingSpeedInSeconds, minTime), 2)
     }
 
+    const halfRotationDuration = .15
+    const rotationAnimation = useAnimation()
+
+    const handleClick = () => {
+        rotationAnimation.start({
+            rotateY: 90,
+            transition: { duration: halfRotationDuration },
+            ease: "easeOut"
+
+        }).then(() => {
+            setIsFlipped(!isFlipped)
+            rotationAnimation.start({
+                rotateY: 0,
+                transition: { duration: halfRotationDuration },
+                ease: "easeIn"
+            });
+        });
+    }
+
+
     const timerAnimation = useAnimationControls()
     let initialStyles = {
         opacity: .15,
@@ -175,10 +193,6 @@ export default function NodeCard() {
         }
     }
 
-    // function handleClick(e) {
-    //     if (e.target.id === "node-card") { setIsFlipped(!isFlipped) }
-    // }
-
     function restartTimerAnimation() {
         timerAnimation.stop()
         timerAnimation.set(initialStyles)
@@ -192,7 +206,6 @@ export default function NodeCard() {
         restartTimerAnimation()
     }
 
-    const animate = useAnimation()
     function onPrevCardClicked() {
         onPrevNodeCard()
         restartTimerAnimation()
@@ -200,7 +213,7 @@ export default function NodeCard() {
 
     let TimerBar =
         <StyledTimerBar
-            $isVisible={!isFlippedToBackSide}
+            $isVisible={!isFlipped}
             $isHovered={isHovered}
             animate={timerAnimation}
             initial={initialStyles}
@@ -219,7 +232,7 @@ export default function NodeCard() {
             >
                 <KeyboardArrowRightIcon disabled={true} />
             </IconButton>
-            {isFlippedToBackSide && <div>
+            {isFlipped && <div>
                 <IconButton className="nav-btn bottom left outlined"
                     onClick={() => { changeNodeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
                 >
@@ -235,14 +248,14 @@ export default function NodeCard() {
 
     let CardContent =
         <div className="card-content" >
-            <StyledCardSide id="front-side" $isVisible={!isFlippedToBackSide} $isHovered={isHovered}>
+            <StyledCardSide id="front-side" $isVisible={!isFlipped} $isHovered={isHovered}>
                 {currentNode?.title && <h1 >{currentNode?.title} </h1>}
                 <p style={{ whiteSpace: "pre-line" }}>
                     {currentNode?.content}
                 </p>
 
             </StyledCardSide>
-            <StyledCardSide id="back-side" $isVisible={isFlippedToBackSide} $isHovered={isHovered}>
+            <StyledCardSide id="back-side" $isVisible={isFlipped} $isHovered={isHovered}>
                 <h1> Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
                 <p> - {currentNode?.inspiration}  </p><br></br>
                 <p className="frequency">
@@ -251,30 +264,6 @@ export default function NodeCard() {
             </StyledCardSide>
         </div>
 
-    // const handleClick = () => {
-    //     setIsFlippingToBackSide(prev => !prev);
-    //     animate.start({
-    //         rotateY: isFlippingToBackSide ? 180 : 0,
-    //         transition: { duration: 0.5 }
-    //     })
-    // }
-    const halfRotationDuration = .175
-
-    const handleClick = () => {
-        animate.start({
-            rotateY: 90,
-            transition: { duration: halfRotationDuration },
-            ease: "easeInOut"
-        })
-            .then(() => {
-                setIsFlippedToBackSideAtom(!isFlippedToBackSide)
-                animate.start({
-                    rotateY: 0,
-                    transition: { duration: halfRotationDuration }
-                });
-            });
-
-    }
 
     return (
         <PositionedComponent
@@ -282,15 +271,10 @@ export default function NodeCard() {
             position="middle-center">
             <StyledNodeCard
                 id="node-card" $isHovered={isHovered} tabIndex='-1'
+                onClick={handleClick}
                 onMouseEnter={() => { setIsHovered(true) }}
                 onMouseLeave={() => { setIsHovered(false) }}
-                onClick={handleClick}
-                animate={animate}
-
-                transition={{
-                    duration: 2.5,
-                    ease: "easeInOut"
-                }}
+                animate={rotationAnimation}
             >
                 {TimerBar}
                 {CardControls}
