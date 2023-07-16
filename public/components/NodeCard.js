@@ -162,7 +162,8 @@ export default function NodeCard() {
     const halfRotationDuration = .15
     const rotationAnimation = useAnimation()
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        if (e.target.id !== "node-card") return;
         rotationAnimation.start({
             rotateY: 90,
             transition: { duration: halfRotationDuration },
@@ -271,7 +272,7 @@ export default function NodeCard() {
             position="middle-center">
             <StyledNodeCard
                 id="node-card" $isHovered={isHovered} tabIndex='-1'
-                onClick={handleClick}
+                onClick={ e => handleClick(e)}
                 onMouseEnter={() => { setIsHovered(true) }}
                 onMouseLeave={() => { setIsHovered(false) }}
                 animate={rotationAnimation}
