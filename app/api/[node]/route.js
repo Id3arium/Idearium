@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { useSearchParams } from 'next/navigation';
 import { parse } from 'url';
 import qs from 'qs';
-import { getNodes, createNode, deleteNode, getNextRandomNode, getNodeByID, redistributeNodeFrequencies } from "@/lib/prisma/nodes"
+import { getNodes, createNode, deleteNode, getNextRandomNode, getNodeByID, redistributeNodeFrequencies, resetNodeFrequencies } from "@/lib/prisma/nodes"
 
 // export async function GET(request, { params }) {
 //     // const data = await request.json()
@@ -91,6 +91,7 @@ export async function PUT(request, { params }) {
    const data = await request.json()
    const searchParams = request.nextUrl.searchParams
 
+   const resetFrequencies = data['reset-frequencies']
    const frequencyChange = data['frequency-change']
    const nodeIdx = data['node-idx']
    console.log("PUT", frequencyChange, nodeIdx)
@@ -99,7 +100,9 @@ export async function PUT(request, { params }) {
       if (typeof frequencyChange !== "undefined") {
          return await doPromise(redistributeNodeFrequencies(frequencyChange, nodeIdx))
       }
-      else {
+      else if (typeof resetFrequencies !== "undefined") {
+         return await doPromise(resetNodeFrequencies(data))
+      } else {
          return await doPromise(updateNode(data))
       }
    } catch (error) {

@@ -13,7 +13,7 @@ import { onPrevNodeAtom, onNextNodeAtom } from '@/public/atoms.js';
 import * as API from '@/utils/api.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
-import { FrequencyChange } from '@utils/constants.js';
+import { FrequencyChange } from '@/utils/constants.js';
 
 
 const isHoveredAtom = atom(false)
@@ -61,7 +61,12 @@ export default function NodeCard() {
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
-        removeNodeInDB(currentNode.id)
+        API.removeNodeInDB(currentNode.id)
+    })
+    
+    useHotkeys('ctrl+r', (e) => {
+        e.preventDefault()
+        API.resetNodeFrequencies()
     })
 
     function getCurrentNodeCardDuration(wordsPerMinute = 60) {
