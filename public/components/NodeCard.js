@@ -10,15 +10,17 @@ import { motion, useAnimationControls, useAnimation } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { currentNodeAtom, currentTimelineIndexAtom, nodeTimelineLengthAtom } from '@/public/atoms.js';
 import { onPrevNodeAtom, onNextNodeAtom } from '@/public/atoms.js';
+import * as API from '@/utils/api.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
 import { FrequencyChange } from '@utils/constants.js';
+
 
 const isHoveredAtom = atom(false)
 const isFlippedAtom = atom(false)
 
 export default function NodeCard() {
-    const wordsPerMinute = 50
+    const wordsPerMinute = 45
     const [duration, setDuration] = useState(0);
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [isFlipped, setIsFlipped] = useAtom(isFlippedAtom)
@@ -34,7 +36,7 @@ export default function NodeCard() {
 
     useEffect(() => {
         if (!hasFetchedFirstNode.current) {
-            fetchNextRandomNode(currentNode).then(randNode => {
+            API.fetchNextRandomNode(currentNode).then(randNode => {
                 if (randNode != null) {
                     onNextNodeCard(randNode);
                 }
@@ -57,89 +59,6 @@ export default function NodeCard() {
         console.log("NodeCard nodeID", currentNode?.id, "duration:", currCardDuration, "timleine idx:", currentTimelineIndex)
     }, [currentNode]);
 
-    async function fetchNodes() {
-        const res = await fetch('api/index', {
-            method: 'GET',
-            headers: { 'content-type': 'application/json' },
-        })
-        const data = await res.json()
-        console.log('NodeCard.fetchNodes nodes from database', data)
-        return data
-    }
-
-    async function fetchNextRandomNode(currNode) {
-        const queryParams = new URLSearchParams({
-            "next-random-node": true,
-            "curr-node-id": currNode ? currNode.id : null,
-        });
-        const url = `/api/index?${queryParams.toString()}`
-        const res = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json',
-            },
-        })
-        const randNodeData = await res.json()
-        if (randNodeData.node) {
-            console.log('NodeCard.fetfetchNextRandomNode() randNodeData.node', randNodeData.node)
-            return randNodeData.node
-        }
-        return null
-    }
-
-    async function fetchNodeById(nodeID) {
-        const queryParams = new URLSearchParams({
-            "get-node-by-id": true,
-            "node-id": nodeID,
-        });
-        const url = `/api/index?${queryParams.toString()}`
-        const res = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json',
-            },
-        })
-        const nodeData = await res.json()
-        if (nodeData.node) {
-            console.log('NodeCard.fetchNode() node', nodeData.node)
-            // setCurrentNode(nodeData.node)
-            return nodeData.node
-        }
-        return null
-    }
-
-    async function removeNodeInDB(nodeID) {
-        const queryParams = new URLSearchParams({
-            "node-id": nodeID,
-        });
-        const url = `/api/index?${queryParams.toString()}`
-        const res = await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'content-type': 'application/json',
-            },
-        })
-        const data = await res.json();
-        console.log('NodeCard.removeNodeInDB nodes from database', data)
-        return data.node;
-    }
-
-    async function changeNodeFrequency(frequencyChange, nodeIdx) {
-        const request = {
-            "frequency-change": frequencyChange,
-            "node-idx": nodeIdx,
-        }
-        console.log('NodeCard.changeNodeFrequency request', request)
-        const res = await fetch(`/api/index`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(request),
-        });
-        const data = await res.json();
-        console.log('NodeCard.changeNodeFrequency node updated', data)
-        return data.node;
-    }
-
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
         removeNodeInDB(currentNode.id)
@@ -154,16 +73,18 @@ export default function NodeCard() {
 
         const averageWordCharCount = 5.1
         let readingTimeScaler = wordCharCount / averageWordCharCount
-        const readingSpeedInSeconds = readingTimeScaler * (wordCount / (wordsPerMinute / 60))
+        const readingSpeedInMinutes = readingTimeScaler * wordCount * wordsPerMinute
+        const readingSpeedInSeconds = readingSpeedInMinutes / 60
         // console.log("getCurrentNodeCardDuration readingSpeedInSeconds", readingSpeedInSeconds )
         return _.round(Math.max(readingSpeedInSeconds, minTime), 2)
     }
 
-    const halfRotationDuration = .15
+    const halfRotationDuration = .125
     const rotationAnimation = useAnimation()
 
     const handleClick = (e) => {
         if (e.target.id !== "node-card") return;
+
         rotationAnimation.start({
             rotateY: 90,
             transition: { duration: halfRotationDuration },
@@ -202,7 +123,7 @@ export default function NodeCard() {
 
     async function onNextCardCliked() {
         if (currentNode == null) { return }
-        let randNode = await fetchNextRandomNode(currentNode)
+        let randNode = await API.fetchNextRandomNode(currentNode)
         onNextNodeCard(randNode)
         restartTimerAnimation()
     }
@@ -235,12 +156,12 @@ export default function NodeCard() {
             </IconButton>
             {isFlipped && <div>
                 <IconButton className="nav-btn bottom left outlined"
-                    onClick={() => { changeNodeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
+                    onClick={() => { API.changeNodeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
                 >
                     <ArrowDropDownIcon />
                 </IconButton>
                 <IconButton className="nav-btn bottom right outlined"
-                    onClick={() => { changeNodeFrequency(FrequencyChange.Increase, currentNode.idx) }}
+                    onClick={() => { API.changeNodeFrequency(FrequencyChange.Increase, currentNode.idx) }}
                 >
                     <ArrowDropUpIcon />
                 </IconButton>
@@ -359,7 +280,7 @@ const StyledNodeCard = styled(motion.div)`
 
     p {
         margin: auto;
-        font-size: 1.2em;
+        font-size: 1.15em;
     }
 
     .frequency {
@@ -370,11 +291,11 @@ const StyledNodeCard = styled(motion.div)`
         font-size: .8em;
     }
     
-    .left { left: 15px; }
+    .left { left: 10px; }
 
-    .right { right: 15px; }
+    .right { right: 10px; }
 
-    .top { top: 20px; }
+    .top { top: 10px; }
 
-    .bottom { bottom: 15px; }
+    .bottom { bottom: 10px; }
 `;
