@@ -5,8 +5,8 @@
     "paths": {
       "@/*": ["./*"],
       "@/components/*": ["./public/components/*"],
-      "@lib/*": ["./lib/*"],
-      "@utils/*": ["./lib/utils/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/utils/*": ["./lib/utils/*"],
     }
   }
 }

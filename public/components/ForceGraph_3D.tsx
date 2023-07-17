@@ -31,7 +31,7 @@ export default function ForceGraph_3D() {
    const angleRef = useRef<number>(0);
 
    const camPosRef = useRef<Coords | undefined>({ x: 0, y: 0, z: 300 });
-   const rotationSpeed = 0.00003;
+   const rotationSpeed = 0.00004;
    const N = 500;
 
    const data: { nodes: NodeObject[], links: LinkObject[] } = {
