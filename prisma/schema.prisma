@@ -30,7 +30,7 @@ model Node {
   content                     String
   inspiration                 String?
   frequency                   Float?
-  frequencySigma              Float?
-  frequencySigmaPlusFrequency Float?
   ranking                     Int?
+  // frequencySigma              Float?
+  // frequencySigmaPlusFrequency Float?
 }

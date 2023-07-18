@@ -31,8 +31,8 @@ function IdeaCompositionArea() {
             idx: -1,
             ranking: -1,
             frequency: 0,
-            frequencySigma: 0,
-            frequencySigmaPlusFrequency: 0
+            // frequencySigma: 0,
+            // frequencySigmaPlusFrequency: 0
         }
         const res = await fetch(`/api/index`, {
             method: 'POST',
