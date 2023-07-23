@@ -28,11 +28,12 @@ import { getNodes, createNode, deleteNode, getNextRandomNode, getNodeByID, redis
 
 async function doPromise(callback) {
    console.log('router.doPromise:', callback.name)
-   const { res, err } = await callback();
-   if (err) {
-      throw new Error(err);
-   }
-   return NextResponse.json({ res });
+   // const { res, err } = await callback();
+   // if (err) {
+   //    throw new Error(err);
+   // }
+   const res = await callback();
+   return NextResponse.json(res);
 }
 
 export async function GET(request, { params }) {
@@ -47,17 +48,15 @@ export async function GET(request, { params }) {
    try {
       if (hasNextRandomNodeParam) {
          console.log('route.GET, getNextRandomNode')
-         let nextResponse = await doPromise( () => getNextRandomNode(currNodeId) );
-         console.log('route.GET, getNextRandomNode response', nextResponse)
-         return nextResponse
+         return await doPromise(() => getNextRandomNode(currNodeId));
       }
       else if (hasGetNodeByIdParam) {
          console.log('route.GET, getNodeByID')
-         return await doPromise( () => getNodeByID(nodeId) );
+         return await doPromise(() => getNodeByID(nodeId));
       }
       else {
          console.log('route.GET, getNodes')
-         return await doPromise( () => getNodes() );
+         return await doPromise(() => getNodes());
       }
    } catch (error) {
       return NextResponse.json({ error: error.message });
@@ -90,7 +89,8 @@ export async function POST(request, { params }) {
 export async function PUT(request, { params }) {
    try {
       return await doPromise(updateNode(data))
-   } catch (error) {
+   }
+   catch (error) {
       return NextResponse.json({ error: error.message })
    }
 }
