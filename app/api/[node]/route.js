@@ -26,7 +26,16 @@ import { getNodes, createNode, deleteNode, getNextRandomNode, getNodeByID, redis
 //     }
 // }
 
-export async function GET(request) {
+async function doPromise(callback) {
+   console.log('router.doPromise:', callback.name)
+   const { res, err } = await callback();
+   if (err) {
+      throw new Error(err);
+   }
+   return NextResponse.json({ res });
+}
+
+export async function GET(request, { params }) {
    const searchParams = request.nextUrl.searchParams
 
    const hasNextRandomNodeParam = searchParams.get('next-random-node') === 'true';
@@ -37,64 +46,32 @@ export async function GET(request) {
 
    try {
       if (hasNextRandomNodeParam) {
-         return await doGetNextRandomNode(currNodeId);
+         console.log('route.GET, getNextRandomNode')
+         let nextResponse = await doPromise( () => getNextRandomNode(currNodeId) );
+         console.log('route.GET, getNextRandomNode response', nextResponse)
+         return nextResponse
       }
       else if (hasGetNodeByIdParam) {
-         return await doGetNodeByID(nodeId);
+         console.log('route.GET, getNodeByID')
+         return await doPromise( () => getNodeByID(nodeId) );
       }
       else {
-         return await doGetNodes();
+         console.log('route.GET, getNodes')
+         return await doPromise( () => getNodes() );
       }
    } catch (error) {
       return NextResponse.json({ error: error.message });
    }
-
-   async function doGetNodes() {
-      const { nodes, error } = await getNodes();
-      if (error) {
-         throw new Error(error);
-      }
-      return NextResponse.json({ nodes });
-   }
-
-   async function doGetNodeByID(nodeId) {
-      const { node, error } = await getNodeByID(nodeId);
-      if (error) {
-         throw new Error(error);
-      }
-      return NextResponse.json({ node });
-   }
-
-   async function doGetNextRandomNode(currNodeId) {
-      const { node, error } = await getNextRandomNode(currNodeId);
-      if (error) {
-         throw new Error(error);
-      }
-      return NextResponse.json({ node });
-   }
 }
 
-export async function POST(request) {
-   const data = await request.json()
-   try {
-      const { node, error } = await createNode(data)
-      if (error) {
-         throw new Error(error)
-      }
-      return NextResponse.json({ node })
-   } catch (error) {
-      return NextResponse.json({ error: error.message })
-   }
-}
-
-export async function PUT(request, { params }) {
+export async function POST(request, { params }) {
    const data = await request.json()
    const searchParams = request.nextUrl.searchParams
 
    const resetFrequencies = data['reset-frequencies']
    const frequencyChange = data['frequency-change']
    const nodeIdx = data['node-idx']
-   console.log("PUT", frequencyChange, nodeIdx)
+   console.log("route.PUT", frequencyChange, nodeIdx)
 
    try {
       if (typeof frequencyChange !== "undefined") {
@@ -103,17 +80,18 @@ export async function PUT(request, { params }) {
       else if (typeof resetFrequencies !== "undefined") {
          return await doPromise(resetNodeFrequencies(data))
       } else {
-         return await doPromise(updateNode(data))
+         return await doPromise(createNode(data))
       }
    } catch (error) {
       return NextResponse.json({ error: error.message })
    }
-   async function doPromise(promise) {
-      const { node, error } = await promise;
-      if (error) {
-         throw new Error(error);
-      }
-      return NextResponse.json({ node });
+}
+
+export async function PUT(request, { params }) {
+   try {
+      return await doPromise(updateNode(data))
+   } catch (error) {
+      return NextResponse.json({ error: error.message })
    }
 }
 
@@ -121,7 +99,7 @@ export async function DELETE(request, { params }) {
    const searchParams = request.nextUrl.searchParams
    const nodeID = searchParams.get('node-id');
    // const data = await request.json() 
-   console.log("DELETE removing node with id", nodeID)
+   console.log("route.DELETE, removing node with id", nodeID)
    try {
       const { node, error } = await deleteNode(nodeID)
       if (error) {
