@@ -1,14 +1,23 @@
 "use client";
 import { atom, useAtomValue, createStore } from 'jotai';
+import { atomWithDefault } from 'jotai/utils';
 import _ from 'lodash';
-import { fetchNodes } from '@/public/./api'; 
-export const nodesAtom = atom([])
+import { fetchNodes } from '@/utils/api.js';
+
+export const nodesAtom = atomWithDefault(get => get(fetchedNodesAtom));
 export const deletedNodesAtom = atom([])
 export const currentTimelineIndexAtom = atom(-1)
 export const uniqueTimelineNodeIDsAtom = atom(new Set())
 export const nodeTimelineAtom = atom([])
 export const nodeTimelineLengthAtom = atom((get) => get(nodeTimelineAtom).length)
 
+const fetchedNodesAtom = atom(
+  async (get) => {
+    const data = await fetchNodes();
+    return data;
+  },
+  (get, set, update) => set(fetchedNodesAtom, update)
+);
 
 export const currentNodeAtom = atom((get) => {
 	const currentTimelineIndex = get(currentTimelineIndexAtom)
@@ -143,23 +152,25 @@ export async function redistributeNodeFrequencies2(frequencyChange, nodeIdx) {
 }
 
 // function getWeightedRandomNode() {
-export const nextRandomNodeAtom = atom((get) => {
-	const nodes = get(nodesAtom)
-	if (nodes.length == 0) { console.log("getWeightedRandomNode expected non-empty list of nodes") }
+export const nextRandomNodeAtom = atom(async (get) => {
+	const nodes = await get(nodesAtom)
+	console.log("nextRandomNodeAtom nodes", nodes)
+
+	if (nodes.length == 0) { console.log("nextRandomNodeAtom expected non-empty list of nodes") }
 	const randNum = Math.random(); // range of [0,1)
 	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
-	nodes.forEach(node => console.log(node))
+	// nodes.forEach(node => console.log(node))
 	for (let i = 0; i < nodes.length; i++) {
 		//likelyhood of randNum being inside the range is = to the nodes appearance frequency
 		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + nodes[i].frequency)
 		if (isRandNumInNodeRange) {
-			console.log("getWeightedRandomNode randNum", randNum, "frequencySigma", frequencySigma, "id", nodes[i].id)
+			console.log("nextRandomNodeAtom randNum", randNum, "frequencySigma", frequencySigma, "id", nodes[i].id)
 			return nodes[i]
 		} else {
 			frequencySigma += nodes[i].frequency
 		}
 	}
-	console.log("getWeightedRandomNode returnning last node")
+	console.log("nextRandomNodeAtom returnning last node")
 	return nodes[nodes.length - 1];
 })
 
