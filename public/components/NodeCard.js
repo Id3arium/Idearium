@@ -8,13 +8,11 @@ import { IconButton } from "@mui/material";
 import styled from "styled-components";
 import { motion, useAnimationControls, useAnimation } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { currentNodeAtom, currentTimelineIndexAtom, nodeTimelineLengthAtom } from '@/public/atoms.js';
-import { onPrevNodeAtom, onNextNodeAtom } from '@/public/atoms.js';
+import * as Atoms from '@/public/atoms.js';
 import * as API from '@/utils/api.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
 import { FrequencyChange } from '@/utils/constants.js';
-
 
 const isHoveredAtom = atom(false)
 const isFlippedAtom = atom(false)
@@ -25,22 +23,27 @@ export default function NodeCard() {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [isFlipped, setIsFlipped] = useAtom(isFlippedAtom)
 
-    const currentNode = useAtomValue(currentNodeAtom)
-    const currentTimelineIndex = useAtomValue(currentTimelineIndexAtom)
-    const nodeIDsTimelineLength = useAtomValue(nodeTimelineLengthAtom)
+    const currentNode = useAtomValue(Atoms.currentNodeAtom)
+    const currentTimelineIndex = useAtomValue(Atoms.currentTimelineIndexAtom)
+    const nodeIDsTimelineLength = useAtomValue(Atoms.nodeTimelineLengthAtom)
+    const nextRandomNode = useAtomValue(Atoms.nextRandomNodeAtom)
 
-    const onNextNodeCard = useSetAtom(onNextNodeAtom)
-    const onPrevNodeCard = useSetAtom(onPrevNodeAtom)
+    const onNextNodeCard = useSetAtom(Atoms.onNextNodeAtom)
+    const onPrevNodeCard = useSetAtom(Atoms.onPrevNodeAtom)
+
+    const upDistributeFrequency = useSetAtom(Atoms.upDistributeFrequencyAtom)
+    const downDistributeFrequency = useSetAtom(Atoms.downDistributeFrequencyAtom)
 
     const hasFetchedFirstNode = useRef(false);
 
     useEffect(() => {
         if (!hasFetchedFirstNode.current) {
-            API.fetchNextRandomNode(currentNode).then(randNode => {
-                if (randNode != null) {
-                    onNextNodeCard(randNode);
+            // API.fetchNextRandomNode(currentNode).then(nextRandomNode => {
+                if (nextRandomNode != null) {
+                    console.log("first node" + nextRandomNode)
+                    onNextNodeCard(nextRandomNode);
                 }
-            });
+            // });
             hasFetchedFirstNode.current = true;
         }
     }, [])
@@ -161,12 +164,14 @@ export default function NodeCard() {
             </IconButton>
             {isFlipped && <div>
                 <IconButton className="nav-btn bottom left outlined"
-                    onClick={() => { API.changeNodeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
+                    onClick={() => { upDistributeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
+                    // onClick={() => { API.changeNodeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
                 >
                     <ArrowDropDownIcon />
                 </IconButton>
                 <IconButton className="nav-btn bottom right outlined"
-                    onClick={() => { API.changeNodeFrequency(FrequencyChange.Increase, currentNode.idx) }}
+                    onClick={() => { downDistributeFrequency(FrequencyChange.Increase, currentNode.idx) }}
+                    // onClick={() => { API.changeNodeFrequency(FrequencyChange.Increase, currentNode.idx) }}
                 >
                     <ArrowDropUpIcon />
                 </IconButton>
