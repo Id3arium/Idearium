@@ -1,12 +1,14 @@
 "use client";
 import { atom, useAtomValue, createStore } from 'jotai';
 import _ from 'lodash';
-// export const nodesAtom = atom([])
+import { fetchNodes } from '@/public/./api'; 
+export const nodesAtom = atom([])
 export const deletedNodesAtom = atom([])
 export const currentTimelineIndexAtom = atom(-1)
 export const uniqueTimelineNodeIDsAtom = atom(new Set())
 export const nodeTimelineAtom = atom([])
 export const nodeTimelineLengthAtom = atom((get) => get(nodeTimelineAtom).length)
+
 
 export const currentNodeAtom = atom((get) => {
 	const currentTimelineIndex = get(currentTimelineIndexAtom)
@@ -65,7 +67,7 @@ function getCurrentIndexAfterPruning(currentIndex, indexesToRemove) {
 
 
 export const onNextNodeAtom = atom(null, (get, set, nextNode) => {
-	console.log("onNextNodeAtom nextNode",nextNode )
+	console.log("onNextNodeAtom nextNode", nextNode)
 	if (nextNode === null) { return }
 	const isAtEndOfList = get(currentTimelineIndexAtom) === get(nodeTimelineAtom).length - 1
 	if (isAtEndOfList) {
@@ -89,47 +91,77 @@ export const moveToPrevTimelineNodeAtom = atom(null, (get, set) => {
 	set(currentTimelineIndexAtom, newCurrentTimelineIndex)
 })
 
-// export const increaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
-// 	let numerator = 1;
-// 	set(nodesAtom, getUpdatedFrequencies(get(nodesAtom), nodeID, numerator))
-// })
+export const upDistributeFrequencyAtom = atom(null, (get, set, nodeID) => {
+	let numerator = 1;
+	set(nodesAtom, redistributeNodeFrequencies(nodeID, numerator))
+})
 
-// export const decreaseNodeFrquencyAtom = atom(null, (get, set, nodeID) => {
-// 	let numerator = -1;
-// 	set(nodesAtom, getUpdatedFrequencies(get(nodesAtom), nodeID, numerator))
-// })
+export const downDistributeFrequencyAtom = atom(null, (get, set, nodeID) => {
+	let numerator = -1;
+	set(nodesAtom, redistributeNodeFrequencies(nodeID, numerator))
+})
 
-// function getUpdatedFrequencies(nodes, nodeIdx, numerator) {
-// 	const numNodes = nodes.length
-// 	const freqModifier = numerator / (numNodes * numNodes)
-// 	const nodeIndex = nodes.findIndex(node => node.idx == nodeIdx)
+function redistributeNodeFrequencies(nodeID, numerator) {
+	const nodes = get(nodesAtom)
+	const nodesCount = nodes.length
+	const freqModifier = numerator / (nodesCount * nodesCount)
+	const nodeIndex = nodes.findIndex(node => node.id == nodeID)
 
-// 	const newFrequency = nodes[nodeIndex].frequency + numNodes * freqModifier
-// 	let tempNodes = [...nodes]
+	const newFrequency = nodes[nodeIndex].frequency + nodesCount * freqModifier
+	let tempNodes = [...nodes]
+	console.log(`atoms.redistributeNodeFrequencies: node ${nodeIndex} freq changed from ${nodes[nodeIndex].frequency} to ${newFrequency} by ${nodesCount * freqModifier}`)
 
-// 	if (_.inRange(newFrequency, 0, 1)) {
-// 		tempNodes[nodeIndex].frequency = newFrequency
-// 		tempNodes.forEach(node => { node.frequency -= freqModifier })
-// 	}
-// 	return tempNodes
-// }
+	if (_.inRange(newFrequency, 0, 1)) {
+		tempNodes[nodeIndex].frequency = newFrequency
+		tempNodes.forEach(node => { node.frequency -= freqModifier })
+	}
+	return tempNodes
+}
 
-// function getWeightedRandomNode(nodes) {
-// 	if (nodes.length == 0) { console.log("getWeightedRandomNode expected non-empty list of nodes") }
-// 	const randNum = Math.random(); // range of [0,1)
-// 	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
-// 	nodes.forEach(node => console.log(node))
-// 	for (let i = 0; i < nodes.length; i++) {
-// 		//likelyhood of randNum being inside the range is = to the nodes appearance frequency
-// 		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + nodes[i].frequency)
-// 		if (isRandNumInNodeRange) {
-// 			console.log("getWeightedRandomNode randNum", randNum, "frequencySigma", frequencySigma, "id", nodes[i].id)
-// 			return nodes[i]
-// 		} else {
-// 			frequencySigma += nodes[i].frequency
-// 		}
-// 	}
-// 	console.log("getWeightedRandomNode returnning last node")
-// 	return nodes[nodes.length - 1];
-// }
+export async function redistributeNodeFrequencies2(frequencyChange, nodeIdx) {
+	console.log("atoms.redistributeNodeFrequencies: ", frequencyChange, nodeIdx)
+	try {
+		const nodes = get(nodesAtom)
+		const nodesCount = nodes.length
+		const numerator = frequencyChange
+		const freqModifier = numerator / (nodesCount * nodesCount)
+
+		const newFrequency = nodes[nodeIdx].frequency + (nodesCount * freqModifier)
+		if (_.inRange(newFrequency, 0, 1)) {
+			nodes[nodeIdx].frequency = newFrequency
+			nodes.forEach((node) => { node.frequency -= freqModifier; })
+
+			// update nodes in server
+
+			return nodes[nodeIdx]
+		}
+		return null
+	} catch (error) {
+		console.log("atoms.redistributeNodeFrequencies error:", error)
+		return error
+	}
+}
+
+// function getWeightedRandomNode() {
+export const nextRandomNodeAtom = atom((get) => {
+	const nodes = get(nodesAtom)
+	if (nodes.length == 0) { console.log("getWeightedRandomNode expected non-empty list of nodes") }
+	const randNum = Math.random(); // range of [0,1)
+	let frequencySigma = 0; //the sum of all node frequencies must add up to ~1 
+	nodes.forEach(node => console.log(node))
+	for (let i = 0; i < nodes.length; i++) {
+		//likelyhood of randNum being inside the range is = to the nodes appearance frequency
+		let isRandNumInNodeRange = randNum >= frequencySigma && randNum < (frequencySigma + nodes[i].frequency)
+		if (isRandNumInNodeRange) {
+			console.log("getWeightedRandomNode randNum", randNum, "frequencySigma", frequencySigma, "id", nodes[i].id)
+			return nodes[i]
+		} else {
+			frequencySigma += nodes[i].frequency
+		}
+	}
+	console.log("getWeightedRandomNode returnning last node")
+	return nodes[nodes.length - 1];
+})
+
+
 
