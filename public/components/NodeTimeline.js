@@ -1,7 +1,7 @@
 'use client';
 import styled from "styled-components";
 import PositionedComponent from "@/components/PositionedComponent.js";
-import { nodeTimelineAtom } from "@/public/atoms.js";
+import { nodeTimelineAtom } from "@/lib/utils/atoms.js";
 import { useAtom } from "jotai";
 
 export default function NodeTimeline() {
