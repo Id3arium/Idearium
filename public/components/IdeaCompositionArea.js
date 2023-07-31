@@ -5,8 +5,11 @@ import Fab from "@mui/material/Fab";
 import Zoom from "@mui/material/Zoom";
 import _ from "lodash";
 import styled from "@emotion/styled";
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useSetAtom } from 'jotai';
 import PositionedComponent from "@/components/PositionedComponent.js";
+import * as API from "@/utils/api.js"
+
+import {addToNodeTimelineAtom} from "@/utils/atoms.js"
 
 const noteAtom = atom({ title: "", content: "", inspiration: "" })
 const isExpandedAtom = atom(false)
@@ -14,6 +17,7 @@ const isExpandedAtom = atom(false)
 function IdeaCompositionArea() {
     const [note, setNote] = useAtom(noteAtom);
     const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom);
+    const addToNodeTimeline = useSetAtom(addToNodeTimelineAtom);
 
     function onInputChanged(e) {
         const { name, value } = e.target;
@@ -25,27 +29,7 @@ function IdeaCompositionArea() {
         });
     }
 
-    const createNodeInDB = async (noteData) => {
-        let nodeData = {
-            ...noteData,
-            idx: -1,
-            ranking: -1,
-            frequency: 0,
-            // frequencySigma: 0,
-            // frequencySigmaPlusFrequency: 0
-        }
-        const res = await fetch(`/api/index`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', },
-            body: JSON.stringify(nodeData),
-        });
-        const newData = await res.json();
-        if (newData.node) {
-            console.log("newNode", newData.node);
-            return newData.node
-        }
-        else return null
-    }
+    
 
     function onAddButtonClicked(e) {
         e.preventDefault();
@@ -56,9 +40,10 @@ function IdeaCompositionArea() {
                 content: note.content,
                 inspiration: note.inspiration,
             }
-            let newNode = createNodeInDB(noteData)
             setNote(emptyNote)
             setIsExpanded(false)
+            let newNode = API.createNodeInDB(noteData)
+            // addToNodeTimeline(newNode)
         }
     }
 
