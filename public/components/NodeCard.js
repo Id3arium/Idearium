@@ -23,6 +23,8 @@ export default function NodeCard() {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [isFlipped, setIsFlipped] = useAtom(isFlippedAtom)
 
+    const nodes = useAtomValue(Atoms.nodesAtom)
+
     const currentNode = useAtomValue(Atoms.currentNodeAtom)
     const currentTimelineIndex = useAtomValue(Atoms.currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(Atoms.nodeTimelineLengthAtom)
@@ -37,16 +39,16 @@ export default function NodeCard() {
     const hasFetchedFirstNode = useRef(false);
 
     useEffect(() => {
-        if (!hasFetchedFirstNode.current) {
-            // API.fetchNextRandomNode(currentNode).then(nextRandomNode => {
+        console.log("first nodes", nodes)
+
+        if (nodes.length > 0 && !hasFetchedFirstNode.current) {
                 if (nextRandomNode != null) {
                     console.log("first node" + nextRandomNode)
                     onNextNodeCard(nextRandomNode);
                 }
-            // });
             hasFetchedFirstNode.current = true;
         }
-    }, [])
+    }, [nodes])
 
     useEffect(() => {
         if (isFlipped || isHovered) {
