@@ -13,12 +13,16 @@ import * as API from '@/utils/api.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
 import { FrequencyChange } from '@/utils/constants.js';
+import useRandomNode from '@/lib/hooks/useRandomNode.js';
 
 const isHoveredAtom = atom(false)
 const isFlippedAtom = atom(false)
 
 export default function NodeCard() {
     const wordsPerMinute = 45
+    const getRandomNode = useRandomNode();
+    const hasFetchedFirstNode = useRef(false);
+
     const [duration, setDuration] = useState(0);
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [isFlipped, setIsFlipped] = useAtom(isFlippedAtom)
@@ -28,7 +32,6 @@ export default function NodeCard() {
     const currentNode = useAtomValue(Atoms.currentNodeAtom)
     const currentTimelineIndex = useAtomValue(Atoms.currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(Atoms.nodeTimelineLengthAtom)
-    const nextRandomNode = useAtomValue(Atoms.nextRandomNodeAtom)
 
     const onNextNodeCard = useSetAtom(Atoms.onNextNodeAtom)
     const onPrevNodeCard = useSetAtom(Atoms.onPrevNodeAtom)
@@ -36,17 +39,14 @@ export default function NodeCard() {
     const upDistributeFrequency = useSetAtom(Atoms.upDistributeFrequencyAtom)
     const downDistributeFrequency = useSetAtom(Atoms.downDistributeFrequencyAtom)
 
-    const hasFetchedFirstNode = useRef(false);
 
     useEffect(() => {
-        console.log("first nodes", nodes)
-
         if (nodes.length > 0 && !hasFetchedFirstNode.current) {
-                if (nextRandomNode != null) {
-                    console.log("first node" + nextRandomNode)
-                    onNextNodeCard(nextRandomNode);
-                }
-            hasFetchedFirstNode.current = true;
+            const randNode = getRandomNode()
+            if (randNode != null) {
+                onNextNodeCard(randNode);
+                hasFetchedFirstNode.current = true;
+            }
         }
     }, [nodes])
 
@@ -133,7 +133,8 @@ export default function NodeCard() {
 
     async function onNextCardCliked() {
         if (currentNode == null) { return }
-        let randNode = await API.fetchNextRandomNode(currentNode)
+        // let randNode = await API.fetchNextRandomNode(currentNode)
+        const randNode = getRandomNode()
         onNextNodeCard(randNode)
         restartTimerAnimation()
     }
