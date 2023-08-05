@@ -167,13 +167,13 @@ export default function NodeCard() {
             </IconButton>
             {isFlipped && <div>
                 <IconButton className="nav-btn bottom left outlined"
-                    onClick={() => { upDistributeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
+                    onClick={() => { upDistributeFrequency(currentNode.id) }}
                     // onClick={() => { API.changeNodeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
                 >
                     <ArrowDropDownIcon />
                 </IconButton>
                 <IconButton className="nav-btn bottom right outlined"
-                    onClick={() => { downDistributeFrequency(FrequencyChange.Increase, currentNode.idx) }}
+                    onClick={() => { downDistributeFrequency(currentNode.id) }}
                     // onClick={() => { API.changeNodeFrequency(FrequencyChange.Increase, currentNode.idx) }}
                 >
                     <ArrowDropUpIcon />
