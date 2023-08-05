@@ -8,8 +8,9 @@ import styled from "@emotion/styled";
 import { atom, useAtom, useSetAtom } from 'jotai';
 import PositionedComponent from "@/components/PositionedComponent.js";
 import * as API from "@/utils/api.js"
+import {addNodeAtom} from "@/utils/atoms.js"
+import { NodeFactory } from '@/lib/factories/NodeFactory';
 
-import {addToNodeTimelineAtom} from "@/utils/atoms.js"
 
 const noteAtom = atom({ title: "", content: "", inspiration: "" })
 const isExpandedAtom = atom(false)
@@ -17,7 +18,7 @@ const isExpandedAtom = atom(false)
 function IdeaCompositionArea() {
     const [note, setNote] = useAtom(noteAtom);
     const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom);
-    const addToNodeTimeline = useSetAtom(addToNodeTimelineAtom);
+    const addNode = useSetAtom(addNodeAtom);
 
     function onInputChanged(e) {
         const { name, value } = e.target;
@@ -28,8 +29,6 @@ function IdeaCompositionArea() {
             };
         });
     }
-
-    
 
     function onAddButtonClicked(e) {
         e.preventDefault();
@@ -42,8 +41,9 @@ function IdeaCompositionArea() {
             }
             setNote(emptyNote)
             setIsExpanded(false)
-            let newNode = API.createNodeInDB(noteData)
-            // addToNodeTimeline(newNode)
+            const newNode = NodeFactory.createNode(note)
+            addNode(newNode)
+            API.createNodeInDB(newNode)
         }
     }
 

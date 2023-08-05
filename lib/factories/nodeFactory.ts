@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 export class NodeFactory {
     static createNode(note: Note): Node {
         let nodesCount = useAtomValue(nodesCountAtom)
-        let redistributeFrequencies = useAtomValue(redistributeFrequenciesAtom)
 
         const id = uuidv4()
         const idx = nodesCount
