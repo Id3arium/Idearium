@@ -9,14 +9,15 @@ import { atom, useAtom, useSetAtom } from 'jotai';
 import PositionedComponent from "@/components/PositionedComponent.js";
 import * as API from "@/utils/api.js"
 import {addNodeAtom} from "@/utils/atoms.js"
-import { NodeFactory } from '@/lib/factories/NodeFactory';
+import { useCreateNode } from '@/lib/hooks/useCreateNode';
 
-
-const noteAtom = atom({ title: "", content: "", inspiration: "" })
+const emptyNote = { title: "", content: "", inspiration: "" };
+const noteAtom = atom(emptyNote)
 const isExpandedAtom = atom(false)
 
 function IdeaCompositionArea() {
     const [note, setNote] = useAtom(noteAtom);
+    const createNode = useCreateNode();
     const [isExpanded, setIsExpanded] = useAtom(isExpandedAtom);
     const addNode = useSetAtom(addNodeAtom);
 
@@ -32,7 +33,6 @@ function IdeaCompositionArea() {
 
     function onAddButtonClicked(e) {
         e.preventDefault();
-        let emptyNote = { title: "", content: "", inspiration: "" };
         if (!_.isEqual(note, emptyNote)) {
             let noteData = {
                 title: note.title,
@@ -41,7 +41,7 @@ function IdeaCompositionArea() {
             }
             setNote(emptyNote)
             setIsExpanded(false)
-            const newNode = NodeFactory.createNode(note)
+            const newNode = createNode(noteData)
             addNode(newNode)
             API.createNodeInDB(newNode)
         }
