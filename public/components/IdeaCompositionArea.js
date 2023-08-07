@@ -31,7 +31,7 @@ function IdeaCompositionArea() {
         });
     }
 
-    function onAddButtonClicked(e) {
+    async function onAddButtonClicked(e) {
         e.preventDefault();
         if (!_.isEqual(note, emptyNote)) {
             let noteData = {
@@ -42,8 +42,9 @@ function IdeaCompositionArea() {
             setNote(emptyNote)
             setIsExpanded(false)
             const newNode = createNode(noteData)
-            addNode(newNode)
-            API.createNodeInDB(newNode)
+            const nodeFromDB = await API.createNodeInDB(newNode)
+            console.log("IdeaCompositionArea node from bd", nodeFromDB)
+            addNode(nodeFromDB)
         }
     }
 
@@ -68,7 +69,7 @@ function IdeaCompositionArea() {
                 value={note.inspiration}
                 onChange={(e) => { onInputChanged(e); }} />}
         <Zoom in={isExpanded}>
-            <Fab onClick={(e) => { onAddButtonClicked(e); }}>
+            <Fab onClick={async (e) => { await onAddButtonClicked(e); }}>
                 <AddIcon />
             </Fab>
         </Zoom>

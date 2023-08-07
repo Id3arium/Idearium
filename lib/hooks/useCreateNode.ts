@@ -14,7 +14,7 @@ export function useCreateNode() {
     const ranking = nodesCount + 1;
 
     const newNode: Node = {
-      id: id,
+      // id: id,
       idx: idx,
       created: new Date(),
       lastModified: new Date(),
