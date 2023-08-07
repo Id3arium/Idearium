@@ -43,7 +43,6 @@ function IdeaCompositionArea() {
             setIsExpanded(false)
             const newNode = createNode(noteData)
             const nodeFromDB = await API.createNodeInDB(newNode)
-            console.log("IdeaCompositionArea node from bd", nodeFromDB)
             addNode(nodeFromDB)
         }
     }
