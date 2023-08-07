@@ -21,13 +21,13 @@ const isFlippedAtom = atom(false)
 export default function NodeCard() {
     const wordsPerMinute = 45
     const getRandomNode = useRandomNode();
-    const hasFetchedFirstNode = useRef(false);
 
     const [duration, setDuration] = useState(0);
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [isFlipped, setIsFlipped] = useAtom(isFlippedAtom)
 
     const nodes = useAtomValue(Atoms.nodesAtom)
+    const nodesCount = useAtomValue(Atoms.nodesCountAtom)
 
     const currentNode = useAtomValue(Atoms.currentNodeAtom)
     const currentTimelineIndex = useAtomValue(Atoms.currentTimelineIndexAtom)
@@ -40,15 +40,6 @@ export default function NodeCard() {
     const downDistributeFrequency = useSetAtom(Atoms.downDistributeFrequencyAtom)
 
 
-    useEffect(() => {
-        if (nodes.length > 0 && !hasFetchedFirstNode.current) {
-            const randNode = getRandomNode()
-            if (randNode != null) {
-                onNextNodeCard(randNode);
-                hasFetchedFirstNode.current = true;
-            }
-        }
-    }, [nodes])
 
     useEffect(() => {
         if (isFlipped || isHovered) {
