@@ -4,7 +4,7 @@ import NodeCard from "./NodeCard.js";
 import _ from "lodash";
 import { useEffect } from "react";
 import * as API from '@/lib/utils/api.js'
-import { nodesAtom } from "@/lib/utils/atoms.js";
+import { nodesAtom, addNodeAtom } from "@/lib/utils/atoms.js";
 import { useAtom, useSetAtom } from "jotai";
 
 export default function NodeCardsArea() {
@@ -12,10 +12,15 @@ export default function NodeCardsArea() {
 
     // const currentNode = useAtomValue(currentNodeAtom);
     const [nodes, setNodes] = useAtom(nodesAtom)
+    const addNode = useSetAtom(addNodeAtom)
 
     async function fetchNodes() {
         const fetchedNodes = await API.fetchNodes()
-        setNodes([...fetchedNodes])
+        // setNodes([...fetchedNodes])
+        fetchedNodes.forEach(node => {
+            console.log("NodeCardsArea adding node", node)
+            addNode(node)
+        })
     }
 
     useEffect(() => {
