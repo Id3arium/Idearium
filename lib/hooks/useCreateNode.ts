@@ -1,11 +1,12 @@
 import { Node } from '@/lib/interfaces/Node';
 import { Note } from '@/lib/interfaces/Note';
-import { nodesCountAtom, redistributeFrequenciesAtom } from "@/utils/atoms";
-import { useAtomValue, useSetAtom } from "jotai";
+import { nodesAtom } from "@/utils/atoms";
+import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { v4 as uuidv4 } from 'uuid';
 
 export function useCreateNode() {
-  const nodesCount = useAtomValue(nodesCountAtom);
+  const nodes = useAtomValue(nodesAtom);
+  const nodesCount = Object.keys(nodes).length
 
   const createNode = (note: Note): Node => {
     const id = uuidv4();
