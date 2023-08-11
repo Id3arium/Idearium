@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { useSearchParams } from 'next/navigation';
 import { parse } from 'url';
 import qs from 'qs';
-import { getNodes, createNode, deleteNode, getNextRandomNode, getNodeByID, redistributeNodeFrequencies, resetNodeFrequencies } from "@/lib/prisma/nodes"
+import * as nodesDB from "@/lib/prisma/nodes.js"
 
 // export async function GET(request, { params }) {
 //     // const data = await request.json()
@@ -48,15 +48,15 @@ export async function GET(request, { params }) {
    try {
       if (hasNextRandomNodeParam) {
          console.log('route.GET, getNextRandomNode')
-         return await doPromise(() => getNextRandomNode(currNodeId));
+         return await doPromise(() => nodesDB.getNextRandomNode(currNodeId));
       }
       else if (hasGetNodeByIdParam) {
          console.log('route.GET, getNodeByID')
-         return await doPromise(() => getNodeByID(nodeId));
+         return await doPromise(() => nodesDB.getNodeByID(nodeId));
       }
       else {
          console.log('route.GET, getNodes')
-         return await doPromise(() => getNodes());
+         return await doPromise(() => nodesDB.getNodes());
       }
    } catch (error) {
       return NextResponse.json({ error: error.message });
@@ -65,21 +65,20 @@ export async function GET(request, { params }) {
 
 export async function POST(request, { params }) {
    const data = await request.json()
-   const searchParams = request.nextUrl.searchParams
 
    const resetFrequencies = data['reset-frequencies']
    const frequencyChange = data['frequency-change']
    const nodeIdx = data['node-idx']
-   console.log("route.PUT", frequencyChange, nodeIdx)
+   console.log("route.POST", frequencyChange, nodeIdx)
 
    try {
       if (typeof frequencyChange !== "undefined") {
-         return await doPromise(() => redistributeNodeFrequencies(frequencyChange, nodeIdx))
+         return await doPromise(() => nodesDB.redistributeNodeFrequencies(frequencyChange, nodeIdx))
       }
       else if (typeof resetFrequencies !== "undefined") {
-         return await doPromise(() => resetNodeFrequencies(data))
+         return await doPromise(() => nodesDB.resetNodeFrequencies(data))
       } else {
-         return await doPromise(() => createNode(data))
+         return await doPromise(() => nodesDB.createNode(data))
       }
    } catch (error) {
       return NextResponse.json({ error: error.message })
@@ -87,8 +86,12 @@ export async function POST(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
+   const data = await request.json()
+   // const updateNodes = data['update-nodes']
+   console.log("route.PUT")
+
    try {
-      return await doPromise(() => updateNode(data))
+      return await doPromise(() => nodesDB.updateNodes(data))
    }
    catch (error) {
       return NextResponse.json({ error: error.message })

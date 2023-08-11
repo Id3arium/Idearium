@@ -38,8 +38,6 @@ export default function NodeCard() {
     const upDistributeFrequency = useSetAtom(Atoms.upDistributeFrequencyAtom)
     const downDistributeFrequency = useSetAtom(Atoms.downDistributeFrequencyAtom)
 
-
-
     useEffect(() => {
         if (isFlipped || isHovered) {
             timerAnimation.stop()
@@ -100,7 +98,6 @@ export default function NodeCard() {
         });
     }
 
-
     const timerAnimation = useAnimationControls()
     let initialStyles = {
         opacity: .15,
@@ -123,7 +120,6 @@ export default function NodeCard() {
 
     async function onNextCardCliked() {
         if (currentNode == null) { return }
-        // let randNode = await API.fetchNextRandomNode(currentNode)
         const randNode = getRandomNode()
         onNextNodeCard(randNode)
         restartTimerAnimation()
@@ -157,14 +153,18 @@ export default function NodeCard() {
             </IconButton>
             {isFlipped && <div>
                 <IconButton className="nav-btn bottom left outlined"
-                    onClick={() => { upDistributeFrequency(currentNode.id) }}
-                    // onClick={() => { API.changeNodeFrequency(FrequencyChange.Decrease, currentNode.idx) }}
+                    onClick={() => { 
+                        downDistributeFrequency(currentNode.id) 
+                        API.updateNodesInDB(nodes)
+                    }}
                 >
                     <ArrowDropDownIcon />
                 </IconButton>
                 <IconButton className="nav-btn bottom right outlined"
-                    onClick={() => { downDistributeFrequency(currentNode.id) }}
-                    // onClick={() => { API.changeNodeFrequency(FrequencyChange.Increase, currentNode.idx) }}
+                    onClick={() => { 
+                        upDistributeFrequency(currentNode.id) 
+                        API.updateNodesInDB(nodes)
+                    }}
                 >
                     <ArrowDropUpIcon />
                 </IconButton>
@@ -206,7 +206,6 @@ export default function NodeCard() {
                 {CardContent}
             </StyledNodeCard>
         </PositionedComponent>
-
     );
 }
 
