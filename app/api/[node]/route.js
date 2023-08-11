@@ -74,12 +74,12 @@ export async function POST(request, { params }) {
 
    try {
       if (typeof frequencyChange !== "undefined") {
-         return await doPromise(redistributeNodeFrequencies(frequencyChange, nodeIdx))
+         return await doPromise(() => redistributeNodeFrequencies(frequencyChange, nodeIdx))
       }
       else if (typeof resetFrequencies !== "undefined") {
-         return await doPromise(resetNodeFrequencies(data))
+         return await doPromise(() => resetNodeFrequencies(data))
       } else {
-         return await doPromise(createNode(data))
+         return await doPromise(() => createNode(data))
       }
    } catch (error) {
       return NextResponse.json({ error: error.message })
@@ -88,7 +88,7 @@ export async function POST(request, { params }) {
 
 export async function PUT(request, { params }) {
    try {
-      return await doPromise(updateNode(data))
+      return await doPromise(() => updateNode(data))
    }
    catch (error) {
       return NextResponse.json({ error: error.message })

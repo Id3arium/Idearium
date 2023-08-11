@@ -4,7 +4,7 @@ import NodeCard from "./NodeCard.js";
 import _ from "lodash";
 import { useEffect ,useRef} from "react";
 import * as API from '@/lib/utils/api.js'
-import { nodesAtom, nodesCountAtom, onNextNodeAtom } from "@/lib/utils/atoms.js";
+import { nodesAtom, onNextNodeAtom } from "@/lib/utils/atoms.js";
 import { useAtom, useSetAtom, useAtomValue } from "jotai";
 import useRandomNode from '@/lib/hooks/useRandomNode.js'
 
@@ -13,7 +13,7 @@ export default function NodeCardsArea() {
 
     const [nodes, setNodes] = useAtom(nodesAtom)
     const onNextNode = useSetAtom(onNextNodeAtom)
-    const nodesCount = useAtomValue(nodesCountAtom)
+    // const nodesCount = useAtomValue(nodesCountAtom)
     const getRandomNode = useRandomNode();
 
     async function fetchNodes() {
@@ -29,9 +29,9 @@ export default function NodeCardsArea() {
     }, []);
 
     useEffect(() => {
-        console.log("NodeCardsArea nodes changed and has", nodesCount)
+        // console.log("NodeCardsArea nodes changed and has", nodesCount)
         
-        if (nodesCount > 0 && !hasAddedFirstTimelineNode.current) {
+        if (!hasAddedFirstTimelineNode.current) {
             const randNode = getRandomNode()
             if (randNode != null) {
                 console.log("NodeCardsArea first node added", randNode)

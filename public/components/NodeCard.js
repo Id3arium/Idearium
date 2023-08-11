@@ -27,7 +27,6 @@ export default function NodeCard() {
     const [isFlipped, setIsFlipped] = useAtom(isFlippedAtom)
 
     const nodes = useAtomValue(Atoms.nodesAtom)
-    const nodesCount = useAtomValue(Atoms.nodesCountAtom)
 
     const currentNode = useAtomValue(Atoms.currentNodeAtom)
     const currentTimelineIndex = useAtomValue(Atoms.currentTimelineIndexAtom)
