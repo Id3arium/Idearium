@@ -53,7 +53,7 @@ export default function ForceGraph_3D() {
       console.log("isRotating", isRotatingRef.current)
 
       const rotationInterval = setInterval(() => {
-         if (isRotatingRef.current) {
+         if (graphRef.current != null && isRotatingRef.current) {
             camPosRef.current.x = distanceFromCenter * Math.sin(angleRef.current)
             camPosRef.current.z = distanceFromCenter * Math.cos(angleRef.current)
 
