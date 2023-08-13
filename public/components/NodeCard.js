@@ -120,7 +120,11 @@ export default function NodeCard() {
 
     async function onNextCardCliked() {
         if (currentNode == null) { return }
-        const randNode = getRandomNode()
+        let randNode;
+        do {
+            randNode = getRandomNode();
+        } while (currentNode && randNode.id === currentNode.id);
+
         onNextNodeCard(randNode)
         restartTimerAnimation()
     }
