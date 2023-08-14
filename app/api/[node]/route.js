@@ -66,10 +66,22 @@ export async function GET(request, { params }) {
 export async function POST(request, { params }) {
    const data = await request.json()
 
+   console.log("route.POST")
+
+   try {
+      return await doPromise(() => nodesDB.createNode(data))
+   } catch (error) {
+      return NextResponse.json({ error: error.message })
+   }
+}
+
+export async function PUT(request, { params }) {
+   const data = await request.json()
+
    const resetFrequencies = data['reset-frequencies']
    const frequencyChange = data['frequency-change']
    const nodeIdx = data['node-idx']
-   console.log("route.POST", frequencyChange, nodeIdx)
+   console.log("route.PUT")
 
    try {
       if (typeof frequencyChange !== "undefined") {
@@ -78,20 +90,8 @@ export async function POST(request, { params }) {
       else if (typeof resetFrequencies !== "undefined") {
          return await doPromise(() => nodesDB.resetNodeFrequencies(data))
       } else {
-         return await doPromise(() => nodesDB.createNode(data))
+         return await doPromise(() => nodesDB.updateNodes(data))
       }
-   } catch (error) {
-      return NextResponse.json({ error: error.message })
-   }
-}
-
-export async function PUT(request, { params }) {
-   const data = await request.json()
-   // const updateNodes = data['update-nodes']
-   console.log("route.PUT")
-
-   try {
-      return await doPromise(() => nodesDB.updateNodes(data))
    }
    catch (error) {
       return NextResponse.json({ error: error.message })
@@ -104,7 +104,7 @@ export async function DELETE(request, { params }) {
    // const data = await request.json() 
    console.log("route.DELETE, removing node with id", nodeID)
    try {
-      const { node, error } = await deleteNode(nodeID)
+      const { node, error } = await nodesDB.deleteNode(nodeID)
       if (error) {
          throw new Error(error)
       }
