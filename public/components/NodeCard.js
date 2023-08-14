@@ -9,7 +9,6 @@ import styled from "styled-components";
 import { motion, useAnimationControls, useAnimation } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import * as Atoms from '@/lib/utils/atoms.js';
-import * as API from '@/utils/api.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import PositionedComponent from "./PositionedComponent";
 import { FrequencyChange } from '@/utils/constants.js';
@@ -35,6 +34,9 @@ export default function NodeCard() {
     const onNextNodeCard = useSetAtom(Atoms.onNextNodeAtom)
     const onPrevNodeCard = useSetAtom(Atoms.onPrevNodeAtom)
 
+    const removeNode = useSetAtom(Atoms.removeNodeAtom)
+    const resetNodeFrequencies = useSetAtom(Atoms.resetNodeFrequenciesAtom)
+
     const upDistributeFrequency = useSetAtom(Atoms.upDistributeFrequencyAtom)
     const downDistributeFrequency = useSetAtom(Atoms.downDistributeFrequencyAtom)
 
@@ -54,12 +56,12 @@ export default function NodeCard() {
 
     useHotkeys('ctrl+d', (e) => {
         e.preventDefault()
-        API.removeNodeInDB(currentNode.id)
+        removeNode(currentNode.id)
     })
     
     useHotkeys('ctrl+r', (e) => {
         e.preventDefault()
-        API.resetNodeFrequencies()
+        resetNodeFrequencies()
     })
 
     function getCurrentNodeCardDuration(wordsPerMinute = 60) {
@@ -159,7 +161,6 @@ export default function NodeCard() {
                 <IconButton className="nav-btn bottom left outlined"
                     onClick={() => { 
                         downDistributeFrequency(currentNode.id) 
-                        API.updateNodesInDB(nodes)
                     }}
                 >
                     <ArrowDropDownIcon />
@@ -167,7 +168,6 @@ export default function NodeCard() {
                 <IconButton className="nav-btn bottom right outlined"
                     onClick={() => { 
                         upDistributeFrequency(currentNode.id) 
-                        API.updateNodesInDB(nodes)
                     }}
                 >
                     <ArrowDropUpIcon />

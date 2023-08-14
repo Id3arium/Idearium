@@ -7,7 +7,7 @@ import _ from "lodash";
 import styled from "@emotion/styled";
 import { atom, useAtom, useSetAtom } from 'jotai';
 import PositionedComponent from "@/components/PositionedComponent.js";
-import * as API from "@/utils/api.js"
+// import * as API from "@/utils/api.js"
 import {addNodeAtom} from "@/utils/atoms.js"
 import { useCreateNode } from '@/lib/hooks/useCreateNode';
 
@@ -42,7 +42,6 @@ function IdeaCompositionArea() {
             setNote(emptyNote)
             setIsExpanded(false)
             const newNode = createNode(noteData)
-            const nodeFromDB = await API.createNodeInDB(newNode)
             addNode(nodeFromDB)
         }
     }
