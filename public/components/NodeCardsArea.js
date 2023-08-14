@@ -4,24 +4,24 @@ import NodeCard from "./NodeCard.js";
 import _ from "lodash";
 import { useEffect ,useRef} from "react";
 import * as API from '@/lib/utils/api.js'
-import { nodesAtom, onNextNodeAtom } from "@/lib/utils/atoms.js";
+import { clientNodesAtom, onNextNodeAtom } from "@/lib/utils/atoms.js";
 import { useAtom, useSetAtom, useAtomValue } from "jotai";
 import useRandomNode from '@/lib/hooks/useRandomNode.js'
 
 export default function NodeCardsArea() {
     const hasAddedFirstTimelineNode = useRef(false);
 
-    const [nodes, setNodes] = useAtom(nodesAtom)
+    const [clientNodes, clientNodesNodes] = useAtom(clientNodesAtom)
     const onNextNode = useSetAtom(onNextNodeAtom)
     // const nodesCount = useAtomValue(nodesCountAtom)
     const getRandomNode = useRandomNode();
 
     async function fetchNodes() {
         const fetchedNodes = await API.fetchNodes()
-        const nodes = Object.fromEntries(
+        const nodesDictionary = Object.fromEntries(
             fetchedNodes.map(node => [node.id, node])
         )
-        setNodes(nodes)
+        clientNodesNodes(nodesDictionary)
     }
 
     useEffect(() => {
@@ -39,7 +39,7 @@ export default function NodeCardsArea() {
                 hasAddedFirstTimelineNode.current = true;
             }
         }
-    }, [nodes])
+    }, [clientNodes])
     
     return (
         <StyledNodeCardsArea id="node-cards-area">
