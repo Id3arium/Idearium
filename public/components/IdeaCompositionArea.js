@@ -42,7 +42,7 @@ function IdeaCompositionArea() {
             setNote(emptyNote)
             setIsExpanded(false)
             const newNode = createNode(noteData)
-            addNode(nodeFromDB)
+            addNode(newNode)
         }
     }
 
