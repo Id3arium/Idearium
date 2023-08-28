@@ -1,6 +1,5 @@
 export interface Node {
-    id?: string;
-    idx: number;
+    id: string;
     created: Date;
     lastModified: Date;
     title: string;
