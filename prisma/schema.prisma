@@ -22,8 +22,7 @@ model User {
 }
 
 model Node {
-  id                          String   @id @default(auto()) @map("_id") @db.ObjectId
-  idx                         Int?
+  id                          String   @id @default(uuid()) @map("_id") 
   created                     DateTime @default(now())
   lastModified                DateTime @default(now())
   title                       String?
@@ -31,6 +30,4 @@ model Node {
   inspiration                 String?
   frequency                   Float?
   ranking                     Int?
-  // frequencySigma              Float?
-  // frequencySigmaPlusFrequency Float?
 }
