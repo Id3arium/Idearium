@@ -25,8 +25,6 @@ export default function NodeCard() {
     const [isHovered, setIsHovered] = useAtom(isHoveredAtom)
     const [isFlipped, setIsFlipped] = useAtom(isFlippedAtom)
 
-    const nodes = useAtomValue(Atoms.nodesAtom)
-
     const currentNode = useAtomValue(Atoms.currentNodeAtom)
     const currentTimelineIndex = useAtomValue(Atoms.currentTimelineIndexAtom)
     const nodeIDsTimelineLength = useAtomValue(Atoms.nodeTimelineLengthAtom)

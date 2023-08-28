@@ -82,7 +82,7 @@ export async function PUT(request, { params }) {
    const frequencyChange = data['frequency-change']
    const nodeIdx = data['node-idx']
    console.log("route.PUT")
-
+   
    try {
       if (typeof frequencyChange !== "undefined") {
          return await doPromise(() => nodesDB.redistributeNodeFrequencies(frequencyChange, nodeIdx))
