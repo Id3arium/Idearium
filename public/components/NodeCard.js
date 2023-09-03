@@ -21,7 +21,7 @@ const isHoveredAtom = atom(false)
 const isFlippedAtom = atom(false)
 
 export default function NodeCard() {
-    const wordsPerMinute = 45
+    const wordsPerMinute = 90
     const getRandomNode = useRandomNode();
 
     const [duration, setDuration] = useState(0);
@@ -43,21 +43,19 @@ export default function NodeCard() {
 
     useEffect(() => {
         if (isFlipped || isHovered) {
-
             timerAnimation.stop()
         } else {
-            // timerAnimation.start(targetStyles)
+            timerAnimation.start(targetStyles)
+            // timerAnimation.start(targetStyles).then(() => { onNextCardCliked()})
         }
-    }, [isFlipped, isHovered, duration])
+    }, [isFlipped, isHovered])
 
     useEffect(() => {
         let currCardDuration = getCurrentNodeCardDuration(wordsPerMinute)
         setDuration(currCardDuration);
         console.log("NodeCard nodeID", currentNode?.id, "duration:", currCardDuration, "timleine idx:", currentTimelineIndex)
     }, [currentNode]);
-
-
-
+    
     function getCurrentNodeCardDuration(wordsPerMinute = 60) {
         let minTime = 3
         if (currentNode == null) { return 0 }
@@ -72,14 +70,10 @@ export default function NodeCard() {
         // console.log("getCurrentNodeCardDuration readingSpeedInSeconds", readingSpeedInSeconds )
         return _.round(Math.max(readingSpeedInSeconds, minTime), 2)
     }
-
-    
+ 
     const rotationAnimation = useAnimation()
 
-    const handleClick = (e) => {
-        if (e.target.id !== "node-card") return;
-        flipNodeCardOver();
-    }
+    const handleClick = (e) => { if (e.target.id == "node-card") { flipNodeCardOver() } }
 
     function flipNodeCardOver() {
         const halfRotationDuration = .125
@@ -97,12 +91,6 @@ export default function NodeCard() {
         });
     }
     const timerAnimation = useAnimation()
-
-    const [timerScope, timerAnimationtControls] = useAnimate()
-    // const timerAnimation2 = timerAnimationtControls(
-    //     timerScope.current, { width: "0px" }, { duration: Math.max(5, duration) }
-    // )
-
     let initialStyles = {
         opacity: .15,
         width: "525px",
@@ -111,20 +99,20 @@ export default function NodeCard() {
         opacity: .2,
         width: "0px",
         transition: {
-            duration: Math.min(5, duration),
+            duration: Math.max(5, duration),
             ease: "linear"
         }
     }
 
     function restartTimerAnimation() {
-        // timerAnimation2.cancel()
-        // timerAnimation2.play()
-        timerAnimation.stop()
+        console.log("NodeCard.restartTimerAnimation()")
+        // timerAnimation.stop()
         timerAnimation.set(initialStyles)
         timerAnimation.start(targetStyles)
     }
 
     function onNextCardCliked() {
+        console.log("NodeCard.onNextCardCliked()")
         if (currentNode == null) { return }
         let randNode;
         do {
@@ -136,12 +124,10 @@ export default function NodeCard() {
     }
 
     function onPrevCardClicked() {
+        console.log("NodeCard.onPrevCardClicked()")
         onPrevNodeCard()
         restartTimerAnimation()
     }
-
-
-
 
     let CardControls =
         <div className="card-controls" >
@@ -151,7 +137,7 @@ export default function NodeCard() {
                 <KeyboardArrowLeftIcon />
             </IconButton>
             <IconButton className="nav-btn top right outlined"
-                onClick={async () => { await onNextCardCliked() }}
+                onClick={ () => { onNextCardCliked() }}
             >
                 <KeyboardArrowRightIcon disabled={true} />
             </IconButton>
@@ -192,27 +178,27 @@ export default function NodeCard() {
         </div>
 
     const nodeCardKeyMap = {
-        reset: 'ctrl+r',
-        delete: 'ctrl+d',
         flip: 'ctrl+f',
         prev: ['left','ctrl+a'],
-        next: ['right', 'ctrl+d'],
+        next: ['right','ctrl+d'],
+        reset: 'ctrl+r',
+        delete: 'ctrl+d',
     }
     const nodeCardHandlers = {
-        'reset': (e) => { e.preventDefault();  resetNodeFrequencies()},
-        'delete': (e) => async () => { await removeNode(currentNode.id)},
         'flip': (e) => { e.preventDefault(); flipNodeCardOver()},
-        'prev': (e) => { onPrevCardClicked() },
-        'next': (e) =>  { onNextCardCliked() } ,
+        'prev': (e) => { e.preventDefault(); onPrevCardClicked() },
+        'next': (e) =>  { e.preventDefault(); onNextCardCliked() } ,
+        'reset': (e) => { e.preventDefault(); resetNodeFrequencies()},
+        'delete': (e) => async () => { e.preventDefault(); await removeNode(currentNode.id)},
     }
     return (
-        <HotKeys keyMap={nodeCardKeyMap} handlers={nodeCardHandlers} focused={"true"}>
+        <HotKeys keyMap={nodeCardKeyMap} handlers={nodeCardHandlers} focused="true">
             <PositionedComponent
                 id="positioned-component"
                 position="middle-center">
                 <StyledMotionNodeCard
                     id="node-card" $isHovered={isHovered} tabIndex='-1'
-                    onClick={e => handleClick(e)}
+                    onClick={e => { handleClick(e)} }
                     onMouseEnter={() => { setIsHovered(true) }}
                     onMouseLeave={() => { setIsHovered(false) }}
                     animate={rotationAnimation}
@@ -222,7 +208,12 @@ export default function NodeCard() {
                         $isHovered={isHovered}
                         animate={timerAnimation}
                         initial={initialStyles}
-                        onAnimationComplete={async () => { await onNextCardCliked() }}
+                        onUpdate={ (animationDef) => { 
+                            if (animationDef.width == "0px"){
+                                console.log("animationDef",animationDef)
+                                onNextCardCliked() 
+                            }
+                        }}
                     />
                     {CardControls}
                     {CardContent}
