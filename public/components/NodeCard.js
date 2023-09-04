@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback} from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -21,7 +21,7 @@ const isHoveredAtom = atom(false)
 const isFlippedAtom = atom(false)
 
 export default function NodeCard() {
-    const wordsPerMinute = 90
+    const wordsPerMinute = 30
     const getRandomNode = useRandomNode();
 
     const [duration, setDuration] = useState(0);
@@ -41,22 +41,21 @@ export default function NodeCard() {
     const upDistributeFrequency = useSetAtom(Atoms.upDistributeFrequencyAtom)
     const downDistributeFrequency = useSetAtom(Atoms.downDistributeFrequencyAtom)
 
-    useEffect(() => {
-        if (isFlipped || isHovered) {
-            timerAnimation.stop()
-        } else {
-            timerAnimation.start(targetStyles)
-            // timerAnimation.start(targetStyles).then(() => { onNextCardCliked()})
+    const timerAnimation = useAnimation()
+    const initialStyles = {
+        opacity: .15,
+        width: "525px",
+    }    
+    const targetStyles = useMemo(() => ({
+        opacity: .2,
+        width: "0px",
+        transition: {
+            duration: Math.max(5, duration),
+            ease: "linear"
         }
-    }, [isFlipped, isHovered])
+    }), [duration]);
 
-    useEffect(() => {
-        let currCardDuration = getCurrentNodeCardDuration(wordsPerMinute)
-        setDuration(currCardDuration);
-        console.log("NodeCard nodeID", currentNode?.id, "duration:", currCardDuration, "timleine idx:", currentTimelineIndex)
-    }, [currentNode]);
-    
-    function getCurrentNodeCardDuration(wordsPerMinute = 60) {
+    const getCurrentNodeCardDuration = useCallback((wordsPerMinute = 60) => {
         let minTime = 3
         if (currentNode == null) { return 0 }
         const wordCount = currentNode?.title.split(' ').length + currentNode?.content.split(' ').length
@@ -69,12 +68,25 @@ export default function NodeCard() {
         const readingSpeedInSeconds = readingSpeedInMinutes / 60
         // console.log("getCurrentNodeCardDuration readingSpeedInSeconds", readingSpeedInSeconds )
         return _.round(Math.max(readingSpeedInSeconds, minTime), 2)
-    }
+    }, [currentNode]);
+
+    useEffect(() => {
+        if (isFlipped || isHovered) {
+            timerAnimation.stop()
+        } else {
+            timerAnimation.start(targetStyles)
+        }
+    }, [isFlipped, isHovered, timerAnimation, targetStyles])
+
+    useEffect(() => {
+        let currCardDuration = getCurrentNodeCardDuration(wordsPerMinute)
+        setDuration(currCardDuration);
+        console.log("NodeCard nodeID", currentNode?.id, "duration:", currCardDuration, "timleine idx:", currentTimelineIndex)
+    }, [currentNode, currentTimelineIndex, getCurrentNodeCardDuration]);
  
-    const rotationAnimation = useAnimation()
-
     const handleClick = (e) => { if (e.target.id == "node-card") { flipNodeCardOver() } }
-
+    
+    const rotationAnimation = useAnimation()
     function flipNodeCardOver() {
         const halfRotationDuration = .125
         rotationAnimation.start({
@@ -90,23 +102,10 @@ export default function NodeCard() {
             });
         });
     }
-    const timerAnimation = useAnimation()
-    let initialStyles = {
-        opacity: .15,
-        width: "525px",
-    }
-    let targetStyles = {
-        opacity: .2,
-        width: "0px",
-        transition: {
-            duration: Math.max(5, duration),
-            ease: "linear"
-        }
-    }
 
     function restartTimerAnimation() {
         console.log("NodeCard.restartTimerAnimation()")
-        // timerAnimation.stop()
+        timerAnimation.stop()
         timerAnimation.set(initialStyles)
         timerAnimation.start(targetStyles)
     }

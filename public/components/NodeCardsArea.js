@@ -50,6 +50,6 @@ export default function NodeCardsArea() {
 
 let StyledNodeCardsArea = styled.div`
   margin: 20px;
-  // overflow-y: hidden;
+  overflow-y: hidden;
   width: 600px;
 `;
