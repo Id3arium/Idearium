@@ -178,8 +178,8 @@ export default function NodeCard() {
 
     const nodeCardKeyMap = {
         flip: 'ctrl+f',
-        prev: ['left','ctrl+a'],
-        next: ['right','ctrl+d'],
+        prev: ['left'],
+        next: ['right'],
         reset: 'ctrl+r',
         delete: 'ctrl+d',
     }
@@ -188,7 +188,7 @@ export default function NodeCard() {
         'prev': (e) => { e.preventDefault(); onPrevCardClicked() },
         'next': (e) =>  { e.preventDefault(); onNextCardCliked() } ,
         'reset': (e) => { e.preventDefault(); resetNodeFrequencies()},
-        'delete': (e) => async () => { e.preventDefault(); await removeNode(currentNode.id)},
+        'delete': async (e) => { e.preventDefault(); await removeNode(currentNode.id)},
     }
     return (
         <HotKeys keyMap={nodeCardKeyMap} handlers={nodeCardHandlers} focused="true">
@@ -209,7 +209,7 @@ export default function NodeCard() {
                         initial={initialStyles}
                         onUpdate={ (animationDef) => { 
                             if (animationDef.width == "0px"){
-                                console.log("animationDef",animationDef)
+                                console.log("animationDef", animationDef)
                                 onNextCardCliked() 
                             }
                         }}
@@ -242,8 +242,7 @@ const StyledMotionTimerBar = styled(motion.div)`
 const StyledCardSide = styled.div`
     opacity: ${props => props.$isVisible ? "1" : ".15"};
     filter: ${props => props.$isVisible ? "none" : (props.$isHovered ? "blur(3px)" : "blur(9px)")};
-    transform: ${props => props.$isVisible ? "scale(1, 1)" : "scale(-1, 1)"};;
-    transform: ${props => props.$isVisible ? "scale(1, 1)" : "scale(-1, 1)"};;
+    transform: ${props => props.$isVisible ? "scale(1, 1)" : "scale(-1, 1)"};
     padding: 10px 0px;
     grid-area: 1/1;
     pointer-events: none;
