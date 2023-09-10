@@ -6,16 +6,14 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
-import { animate, motion, useAnimate, useAnimation, useAnimationControls } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import * as Atoms from '@/lib/utils/atoms.js';
 import { useHotkeys } from "react-hotkeys-hook";
 import { HotKeys } from 'react-hotkeys'
-import PositionedComponent from "./PositionedComponent";
-import { FrequencyChange } from '@/utils/constants.js';
+import { PositionedComponent } from "./PositionedComponent.js";
 import useRandomNode from '@/lib/hooks/useRandomNode.js';
 import _ from 'lodash'
-// import { animate } from "motion";
 
 const isHoveredAtom = atom(false)
 const isFlippedAtom = atom(false)
@@ -128,7 +126,7 @@ export default function NodeCard() {
         restartTimerAnimation()
     }
 
-    let CardControls =
+    let CardControls = () =>
         <div className="card-controls" >
             <IconButton className="nav-btn top left outlined"
                 onClick={() => { onPrevCardClicked() }}
@@ -158,7 +156,7 @@ export default function NodeCard() {
             </div>}
         </div>
 
-    let CardContent =
+    let CardContent =() =>
         <div className="card-content" >
             <StyledCardSide id="front-side" $isVisible={!isFlipped} $isHovered={isHovered}>
                 {currentNode?.title && <h1 >{currentNode?.title} </h1>}
@@ -184,11 +182,11 @@ export default function NodeCard() {
         delete: 'ctrl+d',
     }
     const nodeCardHandlers = {
-        'flip': (e) => { e.preventDefault(); flipNodeCardOver()},
-        'prev': (e) => { e.preventDefault(); onPrevCardClicked() },
-        'next': (e) =>  { e.preventDefault(); onNextCardCliked() } ,
-        'reset': (e) => { e.preventDefault(); resetNodeFrequencies()},
-        'delete': async (e) => { e.preventDefault(); await removeNode(currentNode.id)},
+        'flip': (e) => {e.preventDefault(); flipNodeCardOver()},
+        'prev': (e) => {e.preventDefault(); onPrevCardClicked()},
+        'next': (e) => {e.preventDefault(); onNextCardCliked()} ,
+        'reset': (e) => {e.preventDefault(); resetNodeFrequencies()},
+        'delete': async (e) => {e.preventDefault(); await removeNode(currentNode.id)},
     }
     return (
         <HotKeys keyMap={nodeCardKeyMap} handlers={nodeCardHandlers} focused="true">

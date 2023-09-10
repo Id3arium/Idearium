@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const PositionedComponent = styled.div`
+export const PositionedComponent = styled.div`
   position: absolute;
   ${({ position }) => {
         if (position === "middle-center") {
@@ -58,5 +58,3 @@ const PositionedComponent = styled.div`
 //         return styles.join(" ");
 //     }}
 //   `;
-
-export default PositionedComponent;

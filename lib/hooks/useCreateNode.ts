@@ -2,7 +2,8 @@ import { Node } from '@/lib/interfaces/Node';
 import { Note } from '@/lib/interfaces/Note';
 import { nodesAtom } from "@/utils/atoms";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
-import { v4 as uuidv4 } from 'uuid';
+import { ObjectId } from 'bson';
+// import { v4 as uuidv4 } from 'uuid';
 
 export function useCreateNode() {
   const nodes = useAtomValue(nodesAtom);
@@ -13,7 +14,7 @@ export function useCreateNode() {
     const ranking = nodesCount + 1;
 
     const newNode: Node = {
-      id: uuidv4(),
+      id: new ObjectId().toHexString(),
       created: new Date(),
       lastModified: new Date(),
       title: note.title,

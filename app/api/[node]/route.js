@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server"
 import { useSearchParams } from 'next/navigation';
-import { parse } from 'url';
-import qs from 'qs';
 import * as nodesDB from "@/lib/prisma/nodes.js"
 
 // export async function GET(request, { params }) {

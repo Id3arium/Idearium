@@ -6,9 +6,9 @@ import Zoom from "@mui/material/Zoom";
 import _ from "lodash";
 import styled from "@emotion/styled";
 import { atom, useAtom, useSetAtom } from 'jotai';
-import PositionedComponent from "@/components/PositionedComponent.js";
+import { PositionedComponent } from "@/components/PositionedComponent.js";
 // import * as API from "@/utils/api.js"
-import {addNodeAtom} from "@/utils/atoms.js"
+import { addNodeAtom } from "@/utils/atoms.js"
 import { useCreateNode } from '@/lib/hooks/useCreateNode';
 
 const emptyNote = { title: "", content: "", inspiration: "" };

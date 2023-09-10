@@ -13,6 +13,9 @@ export default function RootLayout({ children }) {
         */}
         <head />
         <body >
+            {/* <React.Suspense fallback={<div>Loading 3D Graph...</div>}>
+                <ForceGraph3D id='ForceGraph3D'/>
+            </React.Suspense> */}
             <ForceGraph3D id='ForceGraph3D'/>
             {children}
         </body>
