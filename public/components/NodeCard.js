@@ -45,7 +45,7 @@ export default function NodeCard() {
         width: "525px",
     }    
     const targetStyles = useMemo(() => ({
-        opacity: .25,
+        opacity: .2,
         width: "0px",
         transition: {
             duration: Math.max(5, duration),
