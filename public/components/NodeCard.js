@@ -19,7 +19,7 @@ const isHoveredAtom = atom(false)
 const isFlippedAtom = atom(false)
 
 export default function NodeCard() {
-    const wordsPerMinute = 30
+    const wordsPerMinute = 60
     const getRandomNode = useRandomNode();
 
     const [duration, setDuration] = useState(0);
@@ -41,11 +41,11 @@ export default function NodeCard() {
 
     const timerAnimation = useAnimation()
     const initialStyles = {
-        opacity: .15,
+        opacity: .05,
         width: "525px",
     }    
     const targetStyles = useMemo(() => ({
-        opacity: .2,
+        opacity: .25,
         width: "0px",
         transition: {
             duration: Math.max(5, duration),
@@ -126,7 +126,7 @@ export default function NodeCard() {
         restartTimerAnimation()
     }
 
-    let CardControls = () =>
+    let CardControls =
         <div className="card-controls" >
             <IconButton className="nav-btn top left outlined"
                 onClick={() => { onPrevCardClicked() }}
@@ -156,7 +156,7 @@ export default function NodeCard() {
             </div>}
         </div>
 
-    let CardContent =() =>
+    let CardContent =
         <div className="card-content" >
             <StyledCardSide id="front-side" $isVisible={!isFlipped} $isHovered={isHovered}>
                 {currentNode?.title && <h1 >{currentNode?.title} </h1>}
@@ -233,7 +233,7 @@ const StyledMotionTimerBar = styled(motion.div)`
 
     top: 100%; 
     left: 50%; 
-    transform: translate(-50%, -3px); 
+    transform: translate(-50%, -3.5px); 
     transform-origin: center center;
 `
 
@@ -250,7 +250,7 @@ const StyledMotionNodeCard = styled(motion.div)`
     background: #00219708;
     border-radius: 5px;
     box-shadow: 0px 0px 4px #CCC;
-    padding: 20px 30px 30px;
+    padding: 20px 30px 25px;
     width: 525px;
     margin: 4px;
     position: relative;
