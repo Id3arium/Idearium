@@ -41,8 +41,8 @@ function IdeaCompositionArea() {
             }
             setNote(emptyNote)
             setIsExpanded(false)
-            const newNode = createNode(noteData)
-            addNode(newNode)
+            const newNode = await createNode(noteData)
+            await addNode(newNode)
         }
     }
 
