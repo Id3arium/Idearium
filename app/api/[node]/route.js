@@ -79,7 +79,7 @@ export async function PUT(request, { params }) {
    const resetFrequencies = data['reset-frequencies']
    const frequencyChange = data['frequency-change']
    const nodeIdx = data['node-idx']
-   console.log("route.PUT data", data)
+   console.log("route.PUT")
    
    try {
       if (typeof frequencyChange !== "undefined") {
