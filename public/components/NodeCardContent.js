@@ -33,7 +33,7 @@ const StyledNodeCardContent = styled.div`
         left: 0;
         right: 0;
         bottom: -8px;
-        font-size: .8em;
+        font-size: 1em;
     }
 `
 const StyledCardSide = styled.div`
