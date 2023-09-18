@@ -49,14 +49,14 @@ export default function NodeCardsArea() {
     }, [clientNodes])
 
     const nodeCardKeyMap = {
-        flip: 'f',
+        flip: 'ctrl+f',
         prev: ['left'],
         next: ['right'],
         reset: 'ctrl+r',
         delete: 'ctrl+d',
     }
     const nodeCardHandlers = {
-        // 'flip': (e) => {e.preventDefault(); actions.flipNodeCard()},
+        // 'flip': async(e) => {e.preventDefault(); await actions.flipNodeCard()},
         'prev': (e) => {e.preventDefault(); actions.onPrevCardClicked()},
         'next': (e) => {e.preventDefault(); actions.onNextCardCliked()} ,
         'reset': (e) => {e.preventDefault(); resetNodeFrequencies()},

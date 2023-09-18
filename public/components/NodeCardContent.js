@@ -9,7 +9,6 @@ export default
                 <p style={{ whiteSpace: "pre-line" }}>
                     {currentNode?.content}
                 </p>
-
             </StyledCardSide>
             <StyledCardSide id="back-side" $isVisible={isFlipped} $isHovered={isHovered}>
                 <h1> Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
