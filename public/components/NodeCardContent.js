@@ -26,6 +26,17 @@ const StyledNodeCardContent = styled.div`
     align-items:center;
     pointer-events: none;
     height: auto;
+    
+    h1 {
+        text-align: center;
+        font-size: 1.25em;
+        margin: 0px 15px 20px;
+    }
+
+    p {
+        margin: auto;
+        font-size: 1.2em;
+    }  
 
     .frequency {
         position: absolute;

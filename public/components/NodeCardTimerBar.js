@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export default function NodeCardTimerBar({ isFlipped, isHovered, animation, initialStyles, onNextCardCliked }) {
     return (
-        <StyledMotionTimerBar className="timer-bar"
+        <StyledMotionTimerBar id="timer-bar"
             $isVisible={!isFlipped}
             $isHovered={isHovered}
             animate={animation}

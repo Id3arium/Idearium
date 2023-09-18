@@ -70,15 +70,4 @@ const StyledMotionNodeCard = styled(motion.div)`
     :hover > #card-controls {
         display: block;
     }
-        
-    h1 {
-        text-align: center;
-        font-size: 1.2em;
-        margin: 0px 15px 20px;
-    }
-
-    p {
-        margin: auto;
-        font-size: 1.15em;
-    }  
 `;
