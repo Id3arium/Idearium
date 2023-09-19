@@ -22,7 +22,7 @@ const StyledMotionTimerBar = styled(motion.div)`
     width: 100%;
     opacity: .15;
     position: absolute;
-    border-radius: 2px;
+    border-radius: 1px;
     filter: ${props => props.$isVisible ? "none" : (props.$isHovered ? "blur(3px)" : "blur(9px)")};
     pointer-events: none;
     height: 3px;
@@ -31,6 +31,6 @@ const StyledMotionTimerBar = styled(motion.div)`
 
     top: 100%; 
     left: 50%; 
-    transform: translate(-50%, -3.5px); 
+    transform: translate(-50%, -4px); 
     transform-origin: center center;
 `
