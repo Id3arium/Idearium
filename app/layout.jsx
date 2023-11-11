@@ -5,6 +5,7 @@ import ForceGraph3D from "@/components/ForceGraph3DWrapper.js";
 
 // export default function RootLayout({ children, } : { children: React.ReactNode }) {
 export default function RootLayout({ children }) {
+  
   return (
     <html lang="en">
         {/*
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
             {/* <React.Suspense fallback={<div>Loading 3D Graph...</div>}>
                 <ForceGraph3D id='ForceGraph3D'/>
             </React.Suspense> */}
+
             <ForceGraph3D id='ForceGraph3D'/>
             {children}
         </body>
