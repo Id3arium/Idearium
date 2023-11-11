@@ -24,6 +24,7 @@
     "express": "^4.18.2",
     "framer-motion": "^10.16.2",
     "jotai": "^2.0.2",
+    "jotai-signal": "^0.8.1",
     "lodash": "^4.17.21",
     "mongodb": "^4.12.1",
     "mongoose": "^6.8.0",
