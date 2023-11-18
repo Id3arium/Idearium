@@ -2,15 +2,16 @@
 import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { HotKeys } from 'react-hotkeys'
 import { PositionedComponent } from "./PositionedComponent.js";
 import NodeCardControls from './NodeCardControls.js'
 import NodeCardContent from './NodeCardContent.js'
 import NodeCardTimerBar from './NodeCardTimerBar.js'
 import useNodeCardLogic from "@/lib/hooks/useNodeCardLogic.js";
+import { isFlippedSig, isHoveredSig } from "@/lib/hooks/useNodeCardLogic";
+
 
 export default function NodeCard() {
-    const { actions, state } = useNodeCardLogic();    
+    const { actions, state, signals } = useNodeCardLogic();    
 
     return (
         <PositionedComponent
@@ -18,14 +19,23 @@ export default function NodeCard() {
             position="middle-center">
             <StyledMotionNodeCard
                 id="node-card" $isHovered={state.isHovered} tabIndex='-1'
-                onClick={e => { actions.handleClick(e) }}
-                onMouseEnter={() => { actions.setIsHovered(true) }}
-                onMouseLeave={() => { actions.setIsHovered(false) }}
+                // onClick={e => { actions.handleClick(e) }}
+                // onMouseEnter={() => { actions.setIsHovered(true) }}
+                // onMouseLeave={() => { actions.setIsHovered(false) }}
+                onClick={e => { isFlippedSig.value = !isFlippedSig.value }}
+                onMouseEnter={() => { 
+                    isHoveredSig.value = true 
+                    console.log("isHoveredSig.value", isHoveredSig.value)
+                }}
+                onMouseLeave={() => { 
+                    isHoveredSig.value = false 
+                    console.log("isHoveredSig.value", isHoveredSig.value)
+                }}
                 animate={state.rotationAnimation}
             >
                 <NodeCardTimerBar
-                    isFlipped={state.isFlipped}
-                    isHovered={state.isHovered}
+                    isFlipped={isFlippedSig.value}
+                    isHovered={isHoveredSig.value}
                     onNextCardCliked={actions.onNextCardCliked}
                     animation={state.timerAnimation}
                     initialStyles={state.initialStyles}
@@ -34,14 +44,14 @@ export default function NodeCard() {
                     currentNode={state.currentNode}
                     onNextCardCliked={actions.onNextCardCliked}
                     onPrevCardClicked={actions.onPrevCardClicked}
-                    isFlipped={state.isFlipped}
+                    isFlipped={isFlippedSig.value}
                     upDistributeFrequency={actions.upDistributeFrequency}
                     downDistributeFrequency={actions.downDistributeFrequency}
                 />
                 <NodeCardContent
                     currentNode={state.currentNode}
-                    isFlipped={state.isFlipped}
-                    isHovered={state.isHovered}
+                    isFlipped={isFlippedSig.value}
+                    isHovered={isHoveredSig.value}
                     currentTimelineIndex={state.currentTimelineIndex}
                     nodeIDsTimelineLength={state.nodeIDsTimelineLength}
                 />

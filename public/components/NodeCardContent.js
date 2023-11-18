@@ -1,16 +1,25 @@
 import styled from "styled-components";
+import { isFlippedSig } from "@/lib/hooks/useNodeCardLogic";
 
 export default
     function NodeCardContent({ isFlipped, isHovered, currentNode, currentTimelineIndex, nodeIDsTimelineLength }) {
     return (
         <StyledNodeCardContent id="card-content">
-            <StyledCardSide id="front-side" $isVisible={!isFlipped} $isHovered={isHovered}>
+            <StyledCardSide 
+                id="front-side" 
+                $isVisible={!isFlipped} 
+                $isHovered={isHovered}
+            >
                 {currentNode?.title && <h1>{currentNode?.title} </h1>}
                 <p style={{ whiteSpace: "pre-line" }}>
                     {currentNode?.content}
                 </p>
             </StyledCardSide>
-            <StyledCardSide id="back-side" $isVisible={isFlipped} $isHovered={isHovered}>
+            <StyledCardSide 
+                id="back-side" 
+                $isVisible={isFlipped} 
+                $isHovered={isHovered}
+            >
                 <h1> Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
                 <p> - {currentNode?.inspiration}  </p><br></br>
                 <p className="frequency">

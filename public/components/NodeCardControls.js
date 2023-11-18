@@ -5,8 +5,9 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "@emotion/styled";
+import { isFlippedSig } from "@/lib/hooks/useNodeCardLogic";
 
-export default function NodeCardControls({ onPrevCardClicked, onNextCardCliked, isFlipped, downDistributeFrequency, currentNode, upDistributeFrequency }) {
+export default function NodeCardControls({ isFlipped, onPrevCardClicked, onNextCardCliked, downDistributeFrequency, currentNode, upDistributeFrequency }) {
     return (
         <StyledNodeCardControls id="card-controls">
             <IconButton className="nav-btn top left outlined"

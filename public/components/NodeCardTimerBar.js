@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
+import { isFlippedSig } from "@/lib/hooks/useNodeCardLogic";
 
 export default function NodeCardTimerBar({ isFlipped, isHovered, animation, initialStyles, onNextCardCliked }) {
     return (
         <StyledMotionTimerBar id="timer-bar"
             $isVisible={!isFlipped}
+            // $isVisible={!isFlippedSig.value}
             $isHovered={isHovered}
             animate={animation}
             initial={initialStyles}
