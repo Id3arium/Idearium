@@ -26,6 +26,7 @@ export default function NodeCard() {
                 <NodeCardTimerBar
                     isFlipped={state.isFlipped}
                     isHovered={state.isHovered}
+                    progress={state.timerAnimationProgress}
                     onNextCardCliked={actions.onNextCardCliked}
                     animation={state.timerAnimation}
                     initialStyles={state.initialStyles}

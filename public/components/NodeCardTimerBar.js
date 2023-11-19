@@ -1,11 +1,14 @@
-import { motion } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
 import styled from "styled-components";
 
-export default function NodeCardTimerBar({ isFlipped, isHovered, animation, initialStyles, onNextCardCliked }) {
+export default function NodeCardTimerBar({ isFlipped, isHovered, progress, animation, initialStyles, onNextCardCliked }) {
+    const width = useTransform(progress, [0, 1], ['525px', '0px']);
+    const opacity = useTransform(progress, [0, 1], [0.2, 0.1]);
     return (
         <StyledMotionTimerBar id="timer-bar"
             $isVisible={!isFlipped}
             $isHovered={isHovered}
+            style={{ width, opacity }}
             animate={animation}
             initial={initialStyles}
             onUpdate={(animationDef) => {
@@ -20,9 +23,9 @@ export default function NodeCardTimerBar({ isFlipped, isHovered, animation, init
 
 const StyledMotionTimerBar = styled(motion.div)`
     width: 100%;
-    opacity: .15;
+    /* opacity: .15; */
     position: absolute;
-    border-radius: 1px;
+    /* border-radius: 1px; */
     filter: ${props => props.$isVisible ? "none" : (props.$isHovered ? "blur(3px)" : "blur(9px)")};
     pointer-events: none;
     height: 3px;
