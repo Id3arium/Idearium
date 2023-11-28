@@ -91,8 +91,6 @@ export default function NodeCard() {
                     isHovered={isHovered}
                     progress={timerAnimationProgress}
                     onNextCardCliked={actions.onNextCardCliked}
-                    // animation={timerAnimation}
-                    // initialStyles={state.initialStyles}
                 />
                 <NodeCardControls
                     node={state.currentNode}
