@@ -91,7 +91,7 @@ let StyledCreateArea = styled.div`
 
     form.create-note {
         position: relative;
-        backdrop-filter: blur(7px);
+        backdrop-filter: blur(9px);
         background: transparent;
         padding: 10px;
         border-radius: 7px;

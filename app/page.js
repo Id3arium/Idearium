@@ -1,8 +1,11 @@
 
 'use client';
 import styles from "./page.module.css";
-import NodeCardsArea from '@/public/components/NodeCardsArea.js';
-import IdeaCompositionArea from '@/public/components/IdeaCompositionArea.js';
+import styled from "styled-components";
+import NodeCardsArea from '@/components/NodeCardsArea.js';
+import IdeaCompositionArea from '@/components/IdeaCompositionArea.js';
+import NodeCardsLibrary from '@/components/nodeCardLibrary/NodeCardsLibrary'
+import { PositionedComponent } from "@/components/PositionedComponent.js";
 import useNodeCardLogic from '@/lib/hooks/useNodeCardLogic.js'
 import { GlobalHotKeys } from "react-hotkeys";
 
@@ -26,12 +29,15 @@ export default function Home() {
 	return (
 		<main className={styles.main}>
 			<GlobalHotKeys keyMap={nodeCardKeyMap} handlers={nodeCardHandlers} focused="true">
-				<div id="Home">
-					<IdeaCompositionArea />
-					<NodeCardsArea />
-					{/* <NodeTimeline /> */}
-				</div>
+                <div id="Home">
+                    <IdeaCompositionArea />
+                    <NodeCardsLibrary /> 
+                    <NodeCardsArea />
+                    {/* <NodeTimeline /> */}
+                </div>
             </GlobalHotKeys>
 		</main>
 	);
 }
+
+

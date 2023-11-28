@@ -1,8 +1,8 @@
 "use client";
 import styled from "styled-components";
-import NodeCard from "./NodeCard.js";
+import NodeCard from "./nodeCard/NodeCard.js";
 import _ from "lodash";
-import { useEffect ,useRef} from "react";
+import { useEffect, useRef} from "react";
 import * as API from '@/lib/utils/api.js'
 import * as Atoms from '@/lib/utils/atoms.js';
 
