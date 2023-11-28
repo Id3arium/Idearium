@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { HotKeys } from 'react-hotkeys'
-import { PositionedComponent } from "./PositionedComponent.js";
+import { PositionedComponent } from "../PositionedComponent.js";
 import NodeCardControls from './NodeCardControls.js'
 import NodeCardContent from './NodeCardContent.js'
 import NodeCardTimerBar from './NodeCardTimerBar.js'
@@ -32,7 +32,7 @@ export default function NodeCard() {
                     initialStyles={state.initialStyles}
                 />
                 <NodeCardControls
-                    currentNode={state.currentNode}
+                    node={state.currentNode}
                     onNextCardCliked={actions.onNextCardCliked}
                     onPrevCardClicked={actions.onPrevCardClicked}
                     isFlipped={state.isFlipped}
@@ -40,7 +40,7 @@ export default function NodeCard() {
                     downDistributeFrequency={actions.downDistributeFrequency}
                 />
                 <NodeCardContent
-                    currentNode={state.currentNode}
+                    node={state.currentNode}
                     isFlipped={state.isFlipped}
                     isHovered={state.isHovered}
                     currentTimelineIndex={state.currentTimelineIndex}
@@ -56,12 +56,12 @@ const StyledMotionNodeCard = styled(motion.div)`
     border-radius: 5px;
     box-shadow: 0px 0px 4px #CCC;
     padding: 20px 30px 25px;
-    width: 525px;
+    max-width: 525px;
     margin: 4px;
     position: relative;
     color: #EEE;
     backdrop-filter: ${props => props.$isHovered ? "blur(4px)" : "blur(15px)"};
-    background-color: #22222260;
+    background-color: #22222250;
     overflow: visible;
 
     :hover {
