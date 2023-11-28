@@ -1,20 +1,20 @@
 import styled from "styled-components";
 
 export default
-    function NodeCardContent({ isFlipped, isHovered, currentNode, currentTimelineIndex, nodeIDsTimelineLength }) {
+    function NodeCardContent({ isFlipped, isHovered, node, currentTimelineIndex, nodeIDsTimelineLength }) {
     return (
         <StyledNodeCardContent id="card-content">
             <StyledCardSide id="front-side" $isVisible={!isFlipped} $isHovered={isHovered}>
-                {currentNode?.title && <h1>{currentNode?.title} </h1>}
+                {node?.title && <h1>{node?.title} </h1>}
                 <p style={{ whiteSpace: "pre-line" }}>
-                    {currentNode?.content}
+                    {node?.content}
                 </p>
             </StyledCardSide>
             <StyledCardSide id="back-side" $isVisible={isFlipped} $isHovered={isHovered}>
                 <h1> Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}] </h1>
-                <p> - {currentNode?.inspiration}  </p><br></br>
+                <p> - {node?.inspiration}  </p><br></br>
                 <p className="frequency">
-                    {(currentNode?.frequency * 100).toFixed(2)}% Likely to appear
+                    {(node?.frequency * 100).toFixed(2)}% Likely to appear
                 </p>
             </StyledCardSide>
         </StyledNodeCardContent>

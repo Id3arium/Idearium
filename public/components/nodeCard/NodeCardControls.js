@@ -6,7 +6,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import styled from "@emotion/styled";
 
-export default function NodeCardControls({ onPrevCardClicked, onNextCardCliked, isFlipped, downDistributeFrequency, currentNode, upDistributeFrequency }) {
+export default function NodeCardControls({ onPrevCardClicked, onNextCardCliked, isFlipped, downDistributeFrequency, node, upDistributeFrequency }) {
     return (
         <StyledNodeCardControls id="card-controls">
             <IconButton className="nav-btn top left outlined"
@@ -22,14 +22,14 @@ export default function NodeCardControls({ onPrevCardClicked, onNextCardCliked, 
             {isFlipped && <div>
                 <IconButton className="nav-btn bottom left outlined"
                     onClick={() => {
-                        downDistributeFrequency(currentNode.id);
+                        downDistributeFrequency(node.id);
                     }}
                 >
                     <ArrowDropDownIcon />
                 </IconButton>
                 <IconButton className="nav-btn bottom right outlined"
                     onClick={() => {
-                        upDistributeFrequency(currentNode.id);
+                        upDistributeFrequency(node.id);
                     }}
                 >
                     <ArrowDropUpIcon />
