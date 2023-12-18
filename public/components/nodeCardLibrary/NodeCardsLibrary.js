@@ -47,7 +47,7 @@ const LibraryContainer = styled.div`
     right: 10px;
     width: 350px;
     height: 100%;
-    background-color: blue;
+    background-color: black;
     overflow-y: auto;
 `;
 

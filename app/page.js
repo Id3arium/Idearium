@@ -31,7 +31,7 @@ export default function Home() {
 			<GlobalHotKeys keyMap={nodeCardKeyMap} handlers={nodeCardHandlers} focused="true">
                 <div id="Home">
                     <IdeaCompositionArea />
-                    <NodeCardsLibrary /> 
+                    {/* <NodeCardsLibrary />  */}
                     <NodeCardsArea />
                     {/* <NodeTimeline /> */}
                 </div>

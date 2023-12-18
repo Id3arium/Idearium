@@ -1,19 +1,46 @@
 'use client';
-import React from "react";
+import React, { useState, useCallback} from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import NodeCardContent from '@/components/nodeCard/NodeCardContent'
 import useNodeCardLogic from "@/lib/hooks/useNodeCardLogic.js";
 
 export default function LibraryNodeCard( {node} ) {
-    const { actions, state } = useNodeCardLogic();    
+    const [isHovered, setIsHovered] = useState(false);
+    const [isFlipped, setIsFlipped] = useState(false);
+    const { actions, state } = useNodeCardLogic();   
+
+    const rotationAnimation = useAnimation();
+    
+    const handleClick = async (e) => { if (e.target.id === "node-card") { await flipNodeCard(); } }
+
+    const flipNodeCard = useCallback(
+        async () => {
+            const halfRotationDuration = .1;
+            await rotationAnimation.start({
+                rotateY: 90,
+                transition: {
+                    duration: halfRotationDuration,
+                    ease: "easeOut"
+                },
+            });
+            setIsFlipped(!isFlipped);
+            await rotationAnimation.start({
+                rotateY: 0,
+                transition: {
+                    duration: halfRotationDuration,
+                    ease: "easeIn"
+                },
+            });
+        }, [rotationAnimation, isFlipped, setIsFlipped]);
+    
     return (
         <MotionNodeCard
-            id="node-card" $isHovered={state.isHovered} tabIndex='-1'
-            onClick={e => { actions.handleClick(e) }}
-            onMouseEnter={() => { actions.setIsHovered(true) }}
-            onMouseLeave={() => { actions.setIsHovered(false) }}
-            animate={state.rotationAnimation}
+            id="node-card" $isHovered={isHovered} tabIndex='-1'
+            onClick={e => { handleClick(e) }}
+            onMouseEnter={() => { setIsHovered(true) }}
+            onMouseLeave={() => { setIsHovered(false) }}
+            animate={rotationAnimation}
         >
             {/* <NodeCardControls
                 node={state.currentNode}
@@ -25,8 +52,8 @@ export default function LibraryNodeCard( {node} ) {
             /> */}
             <NodeCardContent
                 node={node}
-                isFlipped={state.isFlipped}
-                isHovered={state.isHovered}
+                isFlipped={isFlipped}
+                isHovered={isHovered}
                 currentTimelineIndex={state.currentTimelineIndex}
                 nodeIDsTimelineLength={state.nodeIDsTimelineLength}
             />
