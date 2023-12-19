@@ -4,7 +4,7 @@ import styled from "styled-components";
 export const PositionedComponent = styled.div`
   position: absolute;
   ${({ position }) => {
-        if (position === "middle-center") {
+        if (position === "middle-center" || "centered") {
             return "left: 50%; top: 50%; transform: translate(-50%, -50%);";
         }
 

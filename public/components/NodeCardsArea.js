@@ -43,7 +43,7 @@ export default function NodeCardsArea() {
                 hasAddedFirstTimelineNode.current = true;
             }
         }
-    }, [clientNodes])
+    }, [clientNodes, getRandomNode, onNextNode])
 
     
     return (
@@ -54,7 +54,7 @@ export default function NodeCardsArea() {
 }
 
 let StyledNodeCardsArea = styled.div`
-  margin: 20px;
+  /* margin: 20px; */
   overflow-y: hidden;
-  width: 600px;
+  /* width: 600px; */
 `;

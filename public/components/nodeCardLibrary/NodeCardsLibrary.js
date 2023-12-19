@@ -7,11 +7,11 @@ import { nodesAtom,  } from '@/utils/atoms.js';
 export default function NodeCardsLibrary() {
     const nodes = useAtomValue(nodesAtom)
     const [searchTerm, setSearchTerm] = useState('');
-    const nodesList = Object.values(nodes)
     const [filteredNodes, setFilteredCards] = useState();
 
 
     useEffect(() => {
+        const nodesList = Object.values(nodes)
         if (searchTerm == "") {
             setFilteredCards(nodesList);
             return;
@@ -22,7 +22,7 @@ export default function NodeCardsLibrary() {
             node.inspiration.toLowerCase().includes(searchTerm.toLocaleLowerCase())
         );
         setFilteredCards(filtered);
-    }, [searchTerm, nodesList]);
+    }, [searchTerm, nodes]);
 
     return (
         <LibraryContainer>
@@ -47,7 +47,7 @@ const LibraryContainer = styled.div`
     right: 10px;
     width: 350px;
     height: 100%;
-    background-color: black;
+    background-color: none;
     overflow-y: auto;
 `;
 
