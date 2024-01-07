@@ -1,22 +1,16 @@
 "use client";
-import styles from "./page.module.css";
-import styled from "styled-components";
+import "./styles.css";
 import NodeCardsArea from "@/components/NodeCardsArea.js";
 import IdeaCompositionArea from "@/components/IdeaCompositionArea.js";
 import NodeCardsLibrary from "@/components/nodeCardLibrary/NodeCardsLibrary";
 import useNodeCardLogic from "@/lib/hooks/useNodeCardLogic.js";
-import Loading from "@/components/Loading.js";
-import { GlobalHotKeys } from "react-hotkeys";
-import {
-    ClerkProvider,
-    SignedIn,
-    SignedOut,
-    SignIn,
-    SignOutButton,
-} from "@clerk/nextjs";
-import { PositionedComponent } from "@/public/components/PositionedComponent";
 
-export default function Home() {
+import { GlobalHotKeys } from "react-hotkeys";
+import {ClerkProvider, SignedIn, SignedOut, SignIn, SignOutButton,} from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
+
+import ForceGraph3D from "@/components/graph/ForceGraph3DWrapper.js";
+Sexport default function Home() {
     const { actions, state } = useNodeCardLogic();
     const nodeCardKeyMap = {
         flip: "ctrl+f",
@@ -48,7 +42,7 @@ export default function Home() {
     return (
         <ClerkProvider>
             <SignedIn>
-                <main className={styles.main}>
+                <main class="">
                     <GlobalHotKeys
                         keyMap={nodeCardKeyMap}
                         handlers={nodeCardHandlers}
@@ -58,33 +52,36 @@ export default function Home() {
                             <IdeaCompositionArea />
                             <NodeCardsLibrary />
                             <NodeCardsArea />
-                            <PositionedComponent position={"top-right"}>
-                                <SignOutButton />
-                            </PositionedComponent>
+                            <div className="relative">
+                                <div className="absolute m-auto top-0 right-0">
+                                    <SignOutButton />
+                                </div>
+                            </div>
                             {/* <NodeTimeline /> */}
                         </div>
                     </GlobalHotKeys>
                 </main>
             </SignedIn>
             <SignedOut>
-            <div class="relative w-screen h-screen flex">
-                <div class="w-1/3 flex items-center justify-center">
-                    <div class="absolute" style="top: 50%; transform: translateY(-50%);">
-                        <SignIn></SignIn>
+                <div class="relative w-screen h-screen">
+                    <ForceGraph3D id="ForceGraph3D" />
+                    <div class="absolute left-1/3 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <SignIn
+                            appearance={{
+                                baseTheme: dark,
+                                variables: { 
+                                    colorPrimary: '#4000FF',
+                                    colorBackground: "#606060C0",
+                                    colorInputBackground: "#404040C0",
+                                    // colorText: "#FF0000",
+                                    // colorTextSecondary: "#FF0000",
+                                    colorWarning: "#FF0000",
+                                },
+                            }}
+                        ></SignIn>
                     </div>
                 </div>
-            </div>
-
-                    
             </SignedOut>
         </ClerkProvider>
     );
 }
-
-const LeftMiddleSection = styled.div`
-    position: absolute;
-    top: 20%;
-    left: 0;
-    width: 33.33%;
-    height: 33.33%;
-`;
