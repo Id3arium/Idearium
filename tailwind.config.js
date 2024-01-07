@@ -23,6 +23,9 @@ module.exports = {
       serif: ['Merriweather', 'serif'],
     },
     extend: {
+      left: {
+        '1/5': '20%',
+      },
       spacing: {
         '8xl': '96rem',
         '9xl': '128rem',
