@@ -10,7 +10,7 @@ import {ClerkProvider, SignedIn, SignedOut, SignIn, SignOutButton,} from "@clerk
 import { dark } from "@clerk/themes";
 
 import ForceGraph3D from "@/components/graph/ForceGraph3DWrapper.js";
-Sexport default function Home() {
+export default function Home() {
     const { actions, state } = useNodeCardLogic();
     const nodeCardKeyMap = {
         flip: "ctrl+f",
@@ -49,6 +49,7 @@ Sexport default function Home() {
                         focused="true"
                     >
                         <div id="Home">
+                            <ForceGraph3D id="ForceGraph3D" />
                             <IdeaCompositionArea />
                             <NodeCardsLibrary />
                             <NodeCardsArea />
