@@ -6,7 +6,6 @@ import Zoom from "@mui/material/Zoom";
 import _ from "lodash";
 import styled from "@emotion/styled";
 import { atom, useAtom, useSetAtom } from 'jotai';
-import { PositionedComponent } from "@/components/PositionedComponent.js";
 // import * as API from "@/utils/api.js"
 import { addNodeAtom } from "@/utils/atoms.js"
 import { useCreateNode } from '@/lib/hooks/useCreateNode';
@@ -73,14 +72,14 @@ function IdeaCompositionArea() {
         </Zoom>
     </form>;
     return (
-        <PositionedComponent id="positioned-component" position="top-left">
+        <div class="absolute top-0 left-0">
             <StyledCreateArea
                 id="create-area"
                 onFocus={() => setIsExpanded(true)}
             >
                 {ideaForm}
             </StyledCreateArea>
-        </PositionedComponent>
+        </div>
 
     );
 }
