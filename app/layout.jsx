@@ -1,9 +1,4 @@
 'use client'
-import './globals.css'
-import ForceGraph3D from "@/components/graph/ForceGraph3DWrapper.js";
-// import IdeaCompositionArea from "@/components/IdeaCompositionArea.js"
-
-// export default function RootLayout({ children, } : { children: React.ReactNode }) {
 export default function RootLayout({ children }) {
   
   return (
@@ -17,8 +12,6 @@ export default function RootLayout({ children }) {
             {/* <React.Suspense fallback={<div>Loading 3D Graph...</div>}>
                 <ForceGraph3D id='ForceGraph3D'/>
             </React.Suspense> */}
-
-            <ForceGraph3D id='ForceGraph3D'/>
             {children}
         </body>
     </html>
