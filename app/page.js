@@ -1,5 +1,5 @@
 "use client";
-import "./styles.css";
+import "@/app/styles.css";
 import NodeCardsArea from "@/components/NodeCardsArea.js";
 import IdeaCompositionArea from "@/components/IdeaCompositionArea.js";
 import NodeCardsLibrary from "@/components/nodeCardLibrary/NodeCardsLibrary";
@@ -53,14 +53,14 @@ export default function Home() {
                     >
                         <div id="Home">
                             <ForceGraph3D id="ForceGraph3D" />
-                            <UserDashboard/>
-                            <IdeaCompositionArea />
+                            <div class="absolute top-0 left-0 ">
+                                <UserDashboard/>
+                                <IdeaCompositionArea />
+                            </div>
                             <NodeCardsLibrary />
                             <NodeCardsArea />
                             <div className="relative">
-                                <div className="absolute m-auto top-0 right-0">
-                                    <SignOutButton />
-                                </div>
+                                
                             </div>
                             {/* <NodeTimeline /> */}
                         </div>

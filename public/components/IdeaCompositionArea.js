@@ -72,7 +72,7 @@ function IdeaCompositionArea() {
         </Zoom>
     </form>;
     return (
-        <div class="absolute top-0 left-0">
+        <div >
             <StyledCreateArea
                 id="create-area"
                 onFocus={() => setIsExpanded(true)}
