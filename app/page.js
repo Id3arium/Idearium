@@ -6,12 +6,14 @@ import NodeCardsLibrary from "@/components/nodeCardLibrary/NodeCardsLibrary";
 import useNodeCardLogic from "@/lib/hooks/useNodeCardLogic.js";
 
 import { GlobalHotKeys } from "react-hotkeys";
-import {ClerkProvider, SignedIn, SignedOut, SignIn, SignOutButton,} from "@clerk/nextjs";
+import {ClerkProvider, SignedIn, SignedOut, currentUser, SignIn, SignOutButton,} from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import { useUser } from "@clerk/clerk-react";
 
 import ForceGraph3D from "@/components/graph/ForceGraph3DWrapper.js";
 import UserDashboard from "@/components/UserDashboard.js";
 export default function Home() {
+
     const { actions, state } = useNodeCardLogic();
     const nodeCardKeyMap = {
         flip: "ctrl+f",
@@ -51,7 +53,7 @@ export default function Home() {
                     >
                         <div id="Home">
                             <ForceGraph3D id="ForceGraph3D" />
-                            <UserDashboard name={userName} id={userId} />
+                            <UserDashboard/>
                             <IdeaCompositionArea />
                             <NodeCardsLibrary />
                             <NodeCardsArea />
@@ -72,8 +74,8 @@ export default function Home() {
                         <SignIn
                             appearance={{
                                 baseTheme: dark,
-                                variables: { 
-                                    colorPrimary: '#4000FF',
+                                variables: {
+                                    colorPrimary: "#4000FF",
                                     colorBackground: "#606060C0",
                                     colorInputBackground: "#404040C0",
                                     // colorText: "#FF0000",
