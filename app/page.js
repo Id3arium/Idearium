@@ -10,6 +10,7 @@ import {ClerkProvider, SignedIn, SignedOut, SignIn, SignOutButton,} from "@clerk
 import { dark } from "@clerk/themes";
 
 import ForceGraph3D from "@/components/graph/ForceGraph3DWrapper.js";
+import UserDashboard from "@/components/UserDashboard.js";
 export default function Home() {
     const { actions, state } = useNodeCardLogic();
     const nodeCardKeyMap = {
@@ -50,6 +51,7 @@ export default function Home() {
                     >
                         <div id="Home">
                             <ForceGraph3D id="ForceGraph3D" />
+                            <UserDashboard name={userName} id={userId} />
                             <IdeaCompositionArea />
                             <NodeCardsLibrary />
                             <NodeCardsArea />
