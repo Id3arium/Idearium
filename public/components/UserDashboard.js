@@ -11,13 +11,13 @@ export default function UserDashboard() {
     const id = user.id;
 
     return (
-        <div className="bg-blue h-200px w-600px p-4 rounded shadow-md border-2 border-white">
+        <div id="user-dashboard" className="bg-blue h-200px w-600px p-4 rounded shadow-md border-2 border-white text-white">
             <div className="absolute m-auto top-0 right-0">
                 <SignOutButton />
             </div>
             <p className="font-bold text-white">Name: {name}</p>
-            <p className="font-bold text-white">Email: {email}</p>
-            <p className="font-bold">ID: {id}</p>
+            <p className="font-bold ">Email: {email}</p>
+            <p className="font-bold text-white ">ID: {id}</p>
             <div>
                 <h2 className="font-bold mt-4">Your Constellations:</h2>
                 {/* <ul>

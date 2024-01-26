@@ -53,9 +53,9 @@ export default function Home() {
                     >
                         <div id="Home">
                             <ForceGraph3D id="ForceGraph3D" />
-                            <div class="absolute top-0 left-0 ">
-                                <UserDashboard/>
+                            <div id="left-content" className="absolute top-0 left-0">
                                 <IdeaCompositionArea />
+                                <UserDashboard/>
                             </div>
                             <NodeCardsLibrary />
                             <NodeCardsArea />
