@@ -43,6 +43,12 @@ export async function GET(request, { params }) {
    const hasGetNodeByIdParam = searchParams.get('get-node-by-id') === 'true';
    const nodeId = searchParams.get('node-id');
 
+   const hasUserIDParam = searchParams.get('user-id') === 'true';
+   const userId = searchParams.get('user-id');
+
+   console.log("GET request searchParams", searchParams)
+
+
    try {
       if (hasNextRandomNodeParam) {
          console.log('route.GET, getNextRandomNode')
@@ -52,9 +58,9 @@ export async function GET(request, { params }) {
          console.log('route.GET, getNodeByID')
          return await doPromise(() => nodesDB.getNodeByID(nodeId));
       }
-      else {
-         console.log('route.GET, getNodes')
-         return await doPromise(() => nodesDB.getNodes());
+      else if (hasUserIDParam) {
+         console.log('route.GET, getUserNodes')
+         return await doPromise(() => nodesDB.getUserNodes(userId));
       }
    } catch (error) {
       return NextResponse.json({ error: error.message });
