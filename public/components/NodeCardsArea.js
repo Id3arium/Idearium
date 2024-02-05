@@ -22,8 +22,8 @@ export default function NodeCardsArea() {
     const user = useAtomValue(Atoms.userAtom)
 
     useEffect(() => {
-        async function getUserNodes() {
-            const userNodes = await API.getUserNodes(user.id)
+        async function getUserNodes(userId) {
+            const userNodes = await API.getUserNodes(userId)
             const nodesDictionary = Object.fromEntries(
                 userNodes.map(node => [node.id, node])
             )
@@ -32,8 +32,8 @@ export default function NodeCardsArea() {
         console.log("NodeCardsArea trying to get user nodes")
         
         if (user) {
-            console.log("NodeCardsArea getting user nodes")
-            getUserNodes();
+            console.log("NodeCardsArea getting nodes for user:", user.id)
+            getUserNodes(user.id);
         }
     }, [user, setClientNodes]);
 

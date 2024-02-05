@@ -37,17 +37,14 @@ async function doPromise(callback) {
 export async function GET(request, { params }) {
    const searchParams = request.nextUrl.searchParams
 
-   const hasNextRandomNodeParam = searchParams.get('next-random-node') === 'true';
    const currNodeId = searchParams.get('curr-node-id');
+   const hasNextRandomNodeParam = searchParams.get('next-random-node') === 'true';
 
    const hasGetNodeByIdParam = searchParams.get('get-node-by-id') === 'true';
    const nodeId = searchParams.get('node-id');
 
-   const hasUserIDParam = searchParams.get('user-id') === 'true';
    const userId = searchParams.get('user-id');
-
-   console.log("GET request searchParams", searchParams)
-
+   const hasUserIDParam = userId !== null && userId !== undefined;
 
    try {
       if (hasNextRandomNodeParam) {
@@ -62,6 +59,7 @@ export async function GET(request, { params }) {
          console.log('route.GET, getUserNodes')
          return await doPromise(() => nodesDB.getUserNodes(userId));
       }
+      return NextResponse.json({ error: "failed to process request with params " + searchParams.toString() });
    } catch (error) {
       return NextResponse.json({ error: error.message });
    }
