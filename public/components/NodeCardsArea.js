@@ -13,24 +13,29 @@ import useRandomNode from '@/lib/hooks/useRandomNode.js'
 export default function NodeCardsArea() {
     const hasAddedFirstTimelineNode = useRef(false);
        
-    const [clientNodes, clientNodesNodes] = useAtom(Atoms.clientNodesAtom)
+    const [clientNodes, setClientNodes] = useAtom(Atoms.clientNodesAtom)
     const onNextNode = useSetAtom(Atoms.onNextNodeAtom)
     const removeNode = useSetAtom(Atoms.removeNodeAtom)
     const resetNodeFrequencies = useSetAtom(Atoms.resetNodeFrequenciesAtom)
     // const nodesCount = useAtomValue(nodesCountAtom)
     const getRandomNode = useRandomNode();
-
-    async function fetchNodes() {
-        const fetchedNodes = await API.fetchNodes()
-        const nodesDictionary = Object.fromEntries(
-            fetchedNodes.map(node => [node.id, node])
-        )
-        clientNodesNodes(nodesDictionary)
-    }
+    const user = useAtomValue(Atoms.userAtom)
 
     useEffect(() => {
-        fetchNodes()
-    }, []);
+        async function getUserNodes() {
+            const userNodes = await API.getUserNodes(user.id)
+            const nodesDictionary = Object.fromEntries(
+                userNodes.map(node => [node.id, node])
+            )
+            setClientNodes(nodesDictionary)
+        }
+        console.log("NodeCardsArea trying to get user nodes")
+        
+        if (user) {
+            console.log("NodeCardsArea getting user nodes")
+            getUserNodes();
+        }
+    }, [user, setClientNodes]);
 
     useEffect(() => {
         // console.log("NodeCardsArea nodes changed and has", nodesCount)
