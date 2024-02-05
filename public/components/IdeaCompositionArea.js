@@ -13,7 +13,6 @@ import { useCreateNode } from '@/lib/hooks/useCreateNode';
 const emptyNote = { title: "", content: "", inspiration: "" };
 const noteAtom = atom(emptyNote)
 const isExpandedAtom = atom(false)
-
 function IdeaCompositionArea() {
     const [note, setNote] = useAtom(noteAtom);
     const createNode = useCreateNode();
