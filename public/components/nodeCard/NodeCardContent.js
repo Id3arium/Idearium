@@ -8,53 +8,34 @@ export default function NodeCardContent({
     currentTimelineIndex,
     nodeIDsTimelineLength,
 }) {
-    const frontSideClasses = [
-        "py-2.5 pointer-events-none transition-opacity duration-100",
-        !isFlipped ? "opacity-100 filter-none" : "opacity-15",
-        !isFlipped ? "" : isHovered ? "blur-sm" : "blur-xl",
-    ].join(" ");
-
-    const frontSideStyle = {
-        transform: !isFlipped ? "scale(1, 1)" : "scale(-1, 1)",
-        // gridArea: "1 / 1",
-    };
+    function getConditionalStyles(isVisible) {
+        const opacityClass = isVisible ? "opacity-100" : "opacity-35";
+        const scaleClass = isVisible ? "scale-x-[1]" : "scale-x-[-1]";
+        const blurClass = isVisible
+            ? ""
+            : isHovered
+            ? "blur-[4px]"
+            : "blur-[15px]";
+        return `${opacityClass} ${scaleClass} ${blurClass}`;
+    }
 
     return (
         <div
             id="card-content"
-            className={`relative h-auto text-center pointer-events-none select-none`}
+            className={`relative grid text-center pointer-events-none select-none`}
         >
             <div
                 id="front-side"
-                className={`absolute transition-opacity ${
-                    !isFlipped
-                        ? "opacity-100 filter-none"
-                        : isHovered
-                        ? "opacity-20 blur-[3px]"
-                        : "opacity-20 blur-[9px]"
-                }`}
-                style={frontSideStyle}
+                className={`py-2.5 col-start-1 row-start-1 ${getConditionalStyles(!isFlipped)}`}
             >
                 {node?.title && <h1>{node?.title}</h1>}
                 <p style={{ whiteSpace: "pre-line" }}>{node?.content}</p>
             </div>
-
-            {/* Assuming back-side uses similar logic for visibility */}
             <div
                 id="back-side"
-                className={`py-2.5 transition-opacity ${
-                    isFlipped
-                        ? "opacity-100 filter-none"
-                        : isHovered
-                        ? "opacity-20 blur-[3px]"
-                        : "opacity-20 blur-[9px]"
-                } `}
-                style={{
-                    transform: isFlipped ? "scale(1, 1)" : "scale(-1, 1)",
-                    // gridArea: "1 / 1",
-                }}
+                className={`py-2.5 col-start-1 row-start-1 ${getConditionalStyles(isFlipped)}`}
             >
-                <h1 className="my-0 text-xl text-center">
+                <h1 className="mb-4 text-xl text-center">
                     Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}]
                 </h1>
                 <p> - {node?.inspiration} </p>
