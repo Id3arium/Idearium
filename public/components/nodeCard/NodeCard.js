@@ -6,7 +6,6 @@ import {
     useMotionValue,
     useTransform,
 } from "framer-motion";
-import styled from "styled-components";
 import { motion } from "framer-motion";
 import NodeCardControls from "./NodeCardControls.js";
 import NodeCardContent from "./NodeCardContent.js";
@@ -134,26 +133,3 @@ export default function NodeCard() {
         </motion.div>
     );
 }
-
-const StyledMotionNodeCard = styled(motion.div)`
-    background: #00219708;
-    border-radius: 5px;
-    box-shadow: 0px 0px 4px #ccc;
-    padding: 20px 30px 25px;
-    max-width: 525px;
-    margin: 4px;
-    position: relative;
-    color: #eee;
-    backdrop-filter: ${(props) =>
-        props.$isHovered ? "blur(4px)" : "blur(15px)"};
-    background-color: #22222250;
-    overflow: visible;
-
-    :hover {
-        background-color: #22222230;
-    }
-
-    :hover > #card-controls {
-        display: block;
-    }
-`;

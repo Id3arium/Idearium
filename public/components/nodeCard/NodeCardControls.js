@@ -2,8 +2,6 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { IconButton } from "@mui/material";
-import styled from "@emotion/styled";
 
 export default function NodeCardControls({
     onPrevCardClicked,

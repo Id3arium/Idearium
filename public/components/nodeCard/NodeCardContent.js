@@ -1,6 +1,3 @@
-import { Opacity } from "@mui/icons-material";
-import styled from "styled-components";
-
 export default function NodeCardContent({
     isFlipped,
     isHovered,
@@ -47,44 +44,3 @@ export default function NodeCardContent({
         </div>
     );
 }
-
-const StyledCardSide = styled.div`
-    opacity: ${(props) => (props.$isVisible ? "1" : ".15")};
-    filter: ${(props) =>
-        props.$isVisible
-            ? "none"
-            : props.$isHovered
-            ? "blur(3px)"
-            : "blur(9px)"};
-    transform: ${(props) =>
-        props.$isVisible ? "scale(1, 1)" : "scale(-1, 1)"};
-    padding: 10px 0px;
-    grid-area: 1/1;
-    pointer-events: none;
-`;
-
-const StyledNodeCardContent = styled.div`
-    display: grid;
-    align-items: center;
-    pointer-events: none;
-    height: auto;
-
-    h1 {
-        text-align: center;
-        font-size: 1.25em;
-        margin: 0px 15px 20px;
-    }
-
-    p {
-        margin: auto;
-        font-size: 1.2em;
-    }
-
-    .frequency {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: -8px;
-        font-size: 1em;
-    }
-`;
