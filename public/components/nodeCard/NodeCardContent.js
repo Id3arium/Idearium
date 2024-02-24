@@ -22,18 +22,18 @@ export default function NodeCardContent({
     return (
         <div
             id="card-content"
-            className={`relative grid text-center pointer-events-none select-none`}
+            className={`grid text-center m-[40px] pointer-events-none select-none`}
         >
             <div
                 id="front-side"
-                className={`py-2.5 col-start-1 row-start-1 ${getConditionalStyles(!isFlipped)}`}
+                className={`col-start-1 row-start-1 ${getConditionalStyles(!isFlipped)}`}
             >
                 {node?.title && <h1>{node?.title}</h1>}
                 <p style={{ whiteSpace: "pre-line" }}>{node?.content}</p>
             </div>
             <div
                 id="back-side"
-                className={`py-2.5 col-start-1 row-start-1 ${getConditionalStyles(isFlipped)}`}
+                className={`col-start-1 row-start-1 ${getConditionalStyles(isFlipped)}`}
             >
                 <h1 className="mb-4 text-xl text-center">
                     Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}]
