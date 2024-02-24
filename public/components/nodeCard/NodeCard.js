@@ -8,7 +8,6 @@ import {
 } from "framer-motion";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { PositionedComponent } from "../PositionedComponent.js";
 import NodeCardControls from "./NodeCardControls.js";
 import NodeCardContent from "./NodeCardContent.js";
 import NodeCardTimerBar from "./NodeCardTimerBar.js";
@@ -92,48 +91,47 @@ export default function NodeCard() {
     };
 
     return (
-        <PositionedComponent id="positioned-component" position="middle-center">
-            <motion.div
-                id="node-card"
-                className={`relative text-[#EEE] m-[4px] [padding:20px_30px_25px] max-w-[525px]
-                rounded-md [box-shadow:0px_0px_4px_#fff]  bg-[#22222250] hover:bg-[#22222230]
-                hover:block overflow-hidden ${isHovered ? "backdrop-blur-[4px]" : "backdrop-blur-[15px]"}`}
-                // $isHovered={isHovered}
-                tabIndex="-1"
-                onClick={(e) => {
-                    handleClick(e);
-                }}
-                onMouseEnter={() => {
-                    setIsHovered(true);
-                }}
-                onMouseLeave={() => {
-                    setIsHovered(false);
-                }}
-                animate={rotationAnimation}
-            >
-                <NodeCardTimerBar
-                    isFlipped={isFlipped}
-                    isHovered={isHovered}
-                    progress={timerAnimationProgress}
-                    onNextCardCliked={actions.onNextCardCliked}
-                />
-                <NodeCardControls
-                    node={state.currentNode}
-                    onNextCardCliked={actions.onNextCardCliked}
-                    onPrevCardClicked={actions.onPrevCardClicked}
-                    isFlipped={isFlipped}
-                    upDistributeFrequency={actions.upDistributeFrequency}
-                    downDistributeFrequency={actions.downDistributeFrequency}
-                />
-                <NodeCardContent
-                    node={state.currentNode}
-                    isFlipped={isFlipped}
-                    isHovered={isHovered}
-                    currentTimelineIndex={state.currentTimelineIndex}
-                    nodeIDsTimelineLength={state.nodeIDsTimelineLength}
-                />
-            </motion.div>
-        </PositionedComponent>
+        <motion.div
+            id="node-card"
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#EEE]
+             max-w-[525px] rounded-md overflow-hidden [box-shadow:0px_0px_4px_white]  bg-[#22222250] hover:bg-[#22222230]
+                ${isHovered ? "backdrop-blur-[4px]" : "backdrop-blur-[15px]"}`}
+            // $isHovered={isHovered}
+            tabIndex="-1"
+            onClick={(e) => {
+                handleClick(e);
+            }}
+            onMouseEnter={() => {
+                setIsHovered(true);
+            }}
+            onMouseLeave={() => {
+                setIsHovered(false);
+            }}
+            animate={rotationAnimation}
+        >
+            <NodeCardTimerBar
+                isFlipped={isFlipped}
+                isHovered={isHovered}
+                progress={timerAnimationProgress}
+                onNextCardCliked={actions.onNextCardCliked}
+            />
+            <NodeCardControls
+                node={state.currentNode}
+                onNextCardCliked={actions.onNextCardCliked}
+                onPrevCardClicked={actions.onPrevCardClicked}
+                isFlipped={isFlipped}
+                isHovered={isHovered}
+                upDistributeFrequency={actions.upDistributeFrequency}
+                downDistributeFrequency={actions.downDistributeFrequency}
+            />
+            <NodeCardContent
+                node={state.currentNode}
+                isFlipped={isFlipped}
+                isHovered={isHovered}
+                currentTimelineIndex={state.currentTimelineIndex}
+                nodeIDsTimelineLength={state.nodeIDsTimelineLength}
+            />
+        </motion.div>
     );
 }
 
