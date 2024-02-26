@@ -92,9 +92,9 @@ export default function NodeCard() {
     return (
         <motion.div
             id="node-card"
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#EEE]
-             max-w-[525px] rounded-md overflow-hidden [box-shadow:0px_0px_4px_white]  bg-[#22222250] hover:bg-[#22222230]
-                ${isHovered ? "backdrop-blur-[4px]" : "backdrop-blur-[15px]"}`}
+            className={`text-[#EEE] max-w-[525px] rounded-md [box-shadow:0px_0px_4px_white] 
+            bg-[#22222250] hover:bg-[#22222230]
+            ${isHovered ? "backdrop-blur-[4px]" : "backdrop-blur-[15px]"}`}
             // $isHovered={isHovered}
             tabIndex="-1"
             onClick={(e) => {

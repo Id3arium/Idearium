@@ -26,7 +26,7 @@ export default function NodeCardContent({
                 className={`col-start-1 row-start-1 ${getConditionalStyles(!isFlipped)}`}
             >
                 {node?.title && <h1>{node?.title}</h1>}
-                <p style={{ whiteSpace: "pre-line" }}>{node?.content}</p>
+                <p>{node?.content}</p>
             </div>
             <div
                 id="back-side"

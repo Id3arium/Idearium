@@ -52,9 +52,9 @@ export default function NodeCardsArea() {
 
     
     return (
-        <StyledNodeCardsArea id="node-cards-area">
+        <div id="node-cards-area" className="absolute top-0 w-full h-full grid place-items-center">
             <NodeCard />
-        </StyledNodeCardsArea>
+        </div>
     );
 }
 
