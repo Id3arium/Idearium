@@ -1,5 +1,4 @@
 "use client";
-import styled from "styled-components";
 import NodeCard from "./nodeCard/NodeCard.js";
 import _ from "lodash";
 import { useEffect, useRef} from "react";
@@ -52,14 +51,10 @@ export default function NodeCardsArea() {
 
     
     return (
-        <div id="node-cards-area" className="absolute top-0 w-full h-full grid place-items-center">
+        <div id="node-cards-area"
+            className="absolute top-0 w-full h-full grid place-items-center overflow-y-hidden">
             <NodeCard />
         </div>
     );
 }
 
-let StyledNodeCardsArea = styled.div`
-  /* margin: 20px; */
-  overflow-y: hidden;
-  /* width: 600px; */
-`;
