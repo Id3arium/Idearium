@@ -52,7 +52,7 @@ export default function NodeCardsArea() {
     
     return (
         <div id="node-cards-area"
-            className="absolute top-0 w-full h-full grid place-items-center overflow-y-hidden">
+            className="absolute top-0 w-full h-full grid place-items-center pointer-events-none">
             <NodeCard />
         </div>
     );

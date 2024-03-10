@@ -4,7 +4,6 @@ import {
     animate,
     useAnimation,
     useMotionValue,
-    useTransform,
 } from "framer-motion";
 import { motion } from "framer-motion";
 import NodeCardControls from "./NodeCardControls.js";
@@ -92,8 +91,8 @@ export default function NodeCard() {
     return (
         <motion.div
             id="node-card"
-            className={`text-[#EEE] max-w-[525px] rounded-md [box-shadow:0px_0px_4px_white] 
-            bg-[#22222250] hover:bg-[#22222230]
+            className={`text-[#EEE] w-[525px] rounded-md pointer-events-auto
+            [box-shadow:0px_0px_4px_white] bg-[#22222250] hover:bg-[#22222230]
             ${isHovered ? "backdrop-blur-[4px]" : "backdrop-blur-[15px]"}`}
             // $isHovered={isHovered}
             tabIndex="-1"
