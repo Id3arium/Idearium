@@ -88,10 +88,11 @@ function IdeaCompositionArea() {
                             </Fab>
                         </Zoom>
                     </div> */}
-                    <Box className="absolute bottom-0 right-0 rounded-[50%]">
+                    <Box className="absolute -bottom-2.5 -right-3 bg-grey-dark rounded-[50%] 
+                    shadow-[0_1_3px_#CCC] backdrop-blur-[5px] focus:outline-none ">
                         <Button
-                            variant="outlined"
-                            className="m-0 w-0 h-9 rounded-[50%]  bg-blue"
+                            variant="contained"
+                            className=""
                         >
                         </Button>
                     </Box>
@@ -113,49 +114,5 @@ function IdeaCompositionArea() {
         </div>
     );
 }
-
-let StyledCreateArea = styled.div`
-    width: 400px;
-    margin: 20px;
-
-    form.create-note {
-        position: relative;
-        backdrop-filter: blur(9px);
-        background: transparent;
-        padding: 10px;
-        border-radius: 7px;
-        box-shadow: 0px 0px 4px #ccc;
-    }
-
-    form.create-note input,
-    form.create-note textarea {
-        color: #eee;
-        width: 100%;
-        height: 30px;
-        border: none;
-        background: transparent;
-        padding: 4px;
-        outline: none;
-        font-size: 1.2em;
-        font-family: inherit;
-        resize: none;
-    }
-
-    form.create-note button {
-        position: absolute;
-        right: 12px;
-        bottom: -18px;
-        background: #1313f580;
-        backdrop-filter: blur(5px);
-        color: #ccc;
-        border: 1px solid black;
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        cursor: pointer;
-        outline: none;
-    }
-`;
 
 export default IdeaCompositionArea;
