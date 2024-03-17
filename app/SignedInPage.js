@@ -62,8 +62,8 @@ export function SignedInPage() {
                     id="left-content"
                     className="absolute top-0 left-0"
                 >
-                    <IdeaCompositionArea />
                     <UserDashboard />
+                    <IdeaCompositionArea />
                 </div>
                 <NodeCardsLibrary />
                 <div className="relative"></div>
