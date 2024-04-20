@@ -1,5 +1,4 @@
 "use client";
-import "@/app/styles.css";
 import ForceGraph3D from "@/components/graph/ForceGraph3DWrapper.js";
 
 import { ClerkProvider, SignedIn, SignedOut, useUser, SignIn, SignOutButton} from "@clerk/nextjs";

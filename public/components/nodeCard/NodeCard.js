@@ -94,7 +94,6 @@ export default function NodeCard() {
             className={`text-[#EEE] w-[525px] rounded-md pointer-events-auto
             [box-shadow:0px_0px_4px_white] bg-[#22222250] hover:bg-[#22222230]
             ${isHovered ? "backdrop-blur-[4px]" : "backdrop-blur-[15px]"}`}
-            // $isHovered={isHovered}
             tabIndex="-1"
             onClick={(e) => {
                 handleClick(e);

@@ -48,7 +48,7 @@ function IdeaCompositionArea() {
     }
 
     const ideaForm = (
-        <div
+        <form
             className={`transition-all duration-150 ease-in-out focus:outline-none focus:ring-0${
                 isExpanded ? "p-2.5" : "p-0"
             } bg-clear rounded-lg shadow-[0_0_6px_#CCC] backdrop-blur-[9px]`}
@@ -60,14 +60,14 @@ function IdeaCompositionArea() {
                         className="w-full bg-clear p-1 m-2.5 text-white focus:outline-none focus:ring-0 focus:ring-grey-dark/50 rounded-md"
                         placeholder="Title"
                         value={note.title}
-                        onChange={(e) => onInputChanged(e)}
+                        onChange={(e) => { onInputChanged(e); }}
                     />
                     <textarea
                         className="w-full bg-clear p-1 m-2.5 text-white focus:outline-none focus:ring-0 focus:ring-grey-dark/50 rounded-md "
                         rows="4"
                         placeholder="Content"
                         value={note.content}
-                        onChange={(e) => onInputChanged(e)}
+                        onChange={(e) => { onInputChanged(e); }}
                     />
                     <input
                         type="text"
@@ -76,7 +76,7 @@ function IdeaCompositionArea() {
                         value={note.inspiration}
                         onChange={(e) => onInputChanged(e)}
                     />
-                    {/* <div className="absolute bottom-0 right-0 bg-blue">
+                    <div className="absolute bottom-[-20px] -right-0 bg-clear">
                         <Zoom in={isExpanded}>
                             <Fab
                                 size="small"
@@ -84,18 +84,10 @@ function IdeaCompositionArea() {
                                     await onButtonClicked(e);
                                 }}
                             >
-                                <AddIcon />
+                                <AddIcon/>
                             </Fab>
                         </Zoom>
-                    </div> */}
-                    <Box className="absolute -bottom-2.5 -right-3 bg-grey-dark rounded-[50%] 
-                    shadow-[0_1_3px_#CCC] backdrop-blur-[5px] focus:outline-none ">
-                        <Button
-                            variant="contained"
-                            className=""
-                        >
-                        </Button>
-                    </Box>
+                    </div> 
                 </>
             ) : (
                 <input
@@ -105,7 +97,7 @@ function IdeaCompositionArea() {
                     onFocus={() => setIsExpanded(true)}
                 />
             )}
-        </div>
+        </form>
     );
 
     return (
