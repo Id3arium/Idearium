@@ -31,6 +31,7 @@ module.exports = {
       sans: ['Graphik', 'sans-serif'],
       serif: ['Merriweather', 'serif'],
     },
+    
     extend: {
       left: {
         '1/5': '20%',
@@ -41,7 +42,11 @@ module.exports = {
       },
       borderRadius: {
         '4xl': '2rem',
-      }
+      },
+      fontSize: {
+        'sm-md': ['0.9375rem', '1.375rem'], // 15px with a line height of 22px
+        'md-lg': ['1.0625rem', '1.625rem'],  // 17px with a line height of 26px
+     },
     }
   },
 }
