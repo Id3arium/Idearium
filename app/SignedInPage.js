@@ -11,8 +11,7 @@ import { GlobalHotKeys } from "react-hotkeys";
 
 import { useUser } from "@clerk/nextjs";
 import { userAtom } from "@/lib/utils/atoms.js";
-import { useSetAtom } from 'jotai';
-
+import { useSetAtom } from "jotai";
 
 export function SignedInPage() {
     const { user } = useUser();
@@ -28,7 +27,7 @@ export function SignedInPage() {
         prev: ["left"],
         next: ["right"],
         reset: "ctrl+r",
-        delete: "ctrl+d"
+        delete: "ctrl+d",
     };
     const nodeCardHandlers = {
         // 'flip': async(e) => {e.preventDefault(); await actions.flipNodeCard()},
@@ -47,28 +46,29 @@ export function SignedInPage() {
         delete: async (e) => {
             e.preventDefault();
             await removeNode(state.currentNode);
-        }
+        },
     };
-    return <main className="">
-        <GlobalHotKeys
-            keyMap={nodeCardKeyMap}
-            handlers={nodeCardHandlers}
-            focused="true"
-        >
-            <div id="Home">
-                <ForceGraph3D id="ForceGraph3D" />
-                <NodeCardsArea />
-                <div
-                    id="left-content"
-                    className="absolute top-0 left-0"
-                >
-                    <UserDashboard />
-                    <IdeaCompositionArea />
+    return (
+        <main className="">
+            <GlobalHotKeys
+                keyMap={nodeCardKeyMap}
+                handlers={nodeCardHandlers}
+                focused="true"
+            >
+                <div id="Home">
+                    <ForceGraph3D id="ForceGraph3D" />
+                    <NodeCardsArea />
+                    <div id="left-content" className="absolute top-0 left-0 h-full overflow-y-auto">
+                        <UserDashboard />
+                        <IdeaCompositionArea />
+                    </div>
+                    <div id="right-content" className="absolute top-0 right-0 h-full overflow-y-auto">
+                        <NodeCardsLibrary />
+                    </div>
+                    <div className="relative"></div>
+                    {/* <NodeTimeline /> */}
                 </div>
-                <NodeCardsLibrary />
-                <div className="relative"></div>
-                {/* <NodeTimeline /> */}
-            </div>
-        </GlobalHotKeys>
-    </main>;
+            </GlobalHotKeys>
+        </main>
+    );
 }
