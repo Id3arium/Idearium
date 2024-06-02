@@ -1,41 +1,27 @@
 'use client';
-import styled from "styled-components";
-import { PositionedComponent } from "@/components/PositionedComponent.js";
+import React from 'react';
 import { nodeTimelineAtom } from "@/lib/utils/atoms.js";
 import { useAtom } from "jotai";
 
 export default function NodeTimeline() {
     // const nodeTimeline = useAtom(nodeTimelineAtom)
 
-    const TimelineNode = () => {
-        const Node = styled.div`
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: white;
-        `;
-        return <Node />;
-    };
+    const TimelineNode = () => (
+        <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
+    );
 
-    const TimelineEdge = () => {
-        const Edge = styled.div`
-            width: ${({ spacing }) => `calc(100% - ${spacing}px)`};
-            height: 2px;
-            background-color: grey;
-        `;
-        return <Edge />;
-    };
+    const TimelineEdge = ({ spacing }) => (
+        <div className="h-0.5 bg-gray-500" style={{ width: `calc(100% - ${spacing}px)` }}></div>
+    );
 
     return (
-        <PositionedComponent position="bottom-center">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-                {timelineData.map((node, index) => (
-                    <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                        <TimelineNode key={node.id} />
-                        {index < timelineData.length - 1 && <TimelineEdge />}
-                    </div>
-                ))}
-            </div>
-        </PositionedComponent>
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex items-center">
+            {timelineData.map((node, index) => (
+                <div key={index} className="flex items-center">
+                    <TimelineNode key={node.id} />
+                    {index < timelineData.length - 1 && <TimelineEdge spacing={10} />}
+                </div>
+            ))}
+        </div>
     );
 };

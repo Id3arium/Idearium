@@ -1,64 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import LibraryNodeCard from '@/components/nodeCardLibrary/LibraryNodeCard'; 
-import { useAtomValue} from 'jotai';
-import { nodesAtom,  } from '@/utils/atoms.js';
+import { useAtomValue } from 'jotai';
+import { nodesAtom } from '@/utils/atoms.js';
 
 export default function NodeCardsLibrary() {
-    const nodes = useAtomValue(nodesAtom)
+    const nodes = useAtomValue(nodesAtom);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredNodes, setFilteredCards] = useState();
 
-
     useEffect(() => {
-        const nodesList = Object.values(nodes)
-        if (searchTerm == "") {
+        const nodesList = Object.values(nodes);
+        if (searchTerm === "") {
             setFilteredCards(nodesList);
             return;
         }
         const filtered = nodesList.filter(node => 
-            node.title.toLowerCase().includes(searchTerm.toLocaleLowerCase()) ||
-            node.content.toLowerCase().includes(searchTerm.toLocaleLowerCase()) ||
-            node.inspiration.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+            node.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            node.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            node.inspiration.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredCards(filtered);
     }, [searchTerm, nodes]);
 
     return (
-        <LibraryContainer>
-            <SearchBar
+        <div
+            id="node-cards-library"
+            className="top-0 right-2 w-[350px] h-full overflow-y-auto"
+        >
+            <input
+                className="m-1 h-8 rounded border-0"
                 type="text"
                 placeholder="Search Node Cards..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
             />
-            <CardList>
+            <div className="flex flex-col">
                 {filteredNodes?.map(node => (
                     <LibraryNodeCard key={node.id} node={node}/>
                 ))}
-            </CardList>
-        </LibraryContainer>
+            </div>
+        </div>
     );
 }
-
-const LibraryContainer = styled.div`
-    position: absolute;
-    top: 0;
-    right: 10px;
-    width: 350px;
-    height: 100%;
-    background-color: none;
-    overflow-y: auto;
-`;
-
-const SearchBar = styled.input`
-    margin: 3px;
-    height: 30px;
-    border-radius: 1px;
-    border-width: 0px;
-`;
-
-const CardList = styled.div`
-    display: flex;
-    flex-direction: column; 
-`;

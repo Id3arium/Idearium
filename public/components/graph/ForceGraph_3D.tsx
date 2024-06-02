@@ -157,7 +157,7 @@ export default function ForceGraph_3D() {
    }
 
    return (
-      <DivForceGraph3D >
+      <div>
          <div
             onMouseDown={(e) => handleMouseDown(e)}
             onMouseUp={(e) => handleMouseUp(e)}
@@ -184,14 +184,6 @@ export default function ForceGraph_3D() {
                onLinkHover={(link, event) => handle(event)}
             />
          </div>
-      </DivForceGraph3D>
+      </div>
    );
 }
-
-let DivForceGraph3D = styled.div`
-    // border: 2px solid #888;
-    // background-color: blue;
-    // margin: 0px auto;
-    // width: 1040px;
-    // height: 100hv;
-  `;
