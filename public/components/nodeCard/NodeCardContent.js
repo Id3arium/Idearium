@@ -19,7 +19,7 @@ export default function NodeCardContent({
     return (
         <div
             id="card-content"
-            className={`grid text-center m-[40px] pointer-events-none select-none`}
+            className={`grid text-center text-md-lg m-9 pointer-events-none select-none`}
         >
             <div
                 id="front-side"
@@ -32,7 +32,7 @@ export default function NodeCardContent({
                 id="back-side"
                 className={`col-start-1 row-start-1 ${getConditionalStyles(isFlipped)}`}
             >
-                <h1 className="mb-4 text-xl text-center">
+                <h1 className="mb-4 text-lg text-center">
                     Node [{currentTimelineIndex + 1} / {nodeIDsTimelineLength}]
                 </h1>
                 <p> - {node?.inspiration} </p>
