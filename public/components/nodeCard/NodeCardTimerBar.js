@@ -23,10 +23,10 @@ const StyledMotionTimerBar = styled(motion.div)`
     width: 100%;
     opacity: .15;
     position: absolute;
-    border-radius: 0px;
-    filter: ${props => props.$isVisible ? "none" : (props.$isHovered ? "blur(3px)" : "blur(9px)")};
+    border-radius: 2px;
+    filter: ${props => props.$isVisible ? "none" : (props.$isHovered ? "blur-sm" : "blur-md")};
     pointer-events: none;
-    height: 3px;
+    height: 4px;
     margin: 0 auto;
     background-color: white;
 

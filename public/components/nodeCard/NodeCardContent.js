@@ -11,19 +11,19 @@ export default function NodeCardContent({
         const blurClass = isVisible
             ? ""
             : isHovered
-            ? "blur-[4px]"
-            : "blur-[15px]";
+            ? "blur-sm"
+            : "blur-lg";
         return `${opacityClass} ${scaleClass} ${blurClass}`;
     }
 
     return (
         <div
             id="card-content"
-            className={`grid text-center text-md-lg m-9 pointer-events-none select-none`}
+            className="grid text-center text-md-lg m-9 pointer-events-none select-none"
         >
             <div
                 id="front-side"
-                className={`col-start-1 row-start-1 ${getConditionalStyles(!isFlipped)}`}
+                className={`col-start-1 row-start-1 flex flex-col items-center justify-center transform -translate-y-0.5 ${getConditionalStyles(!isFlipped)}`}
             >
                 {node?.title && <h1>{node?.title}</h1>}
                 <p>{node?.content}</p>
