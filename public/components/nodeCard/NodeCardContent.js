@@ -19,7 +19,7 @@ export default function NodeCardContent({
     return (
         <div
             id="card-content"
-            className="grid text-center text-md-lg m-9 pointer-events-none select-none"
+            className="grid text-center text-md-lg p-7 pointer-events-none select-none"
         >
             <div
                 id="front-side"

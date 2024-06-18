@@ -1,10 +1,5 @@
-"use client";
 import React, { useState, useEffect, useCallback } from "react";
-import {
-    animate,
-    useAnimation,
-    useMotionValue,
-} from "framer-motion";
+import { animate, useAnimation, useMotionValue } from "framer-motion";
 import { motion } from "framer-motion";
 import NodeCardControls from "./NodeCardControls.js";
 import NodeCardContent from "./NodeCardContent.js";
@@ -63,7 +58,7 @@ export default function NodeCard() {
         startTimerAnimation,
     ]);
 
-    const flipNodeCard = useCallback(async () => {
+    const flipNodeCardAnimation = useCallback(async () => {
         const halfRotationDuration = 0.1;
         await rotationAnimation.start({
             rotateY: 90,
@@ -84,50 +79,56 @@ export default function NodeCard() {
 
     const handleClick = async (e) => {
         if (e.target.id === "node-card") {
-            await flipNodeCard();
+            await flipNodeCardAnimation();
         }
     };
 
+    const handleMouseEnter = async (e) => {
+        setIsHovered(true);
+    };
+    const handleMouseLeave = async (e) => {
+        setIsHovered(false);
+    };
+
     return (
-        <motion.div
-            id="node-card"
-            className={`text-[#EEE] w-[525px] rounded-md pointer-events-auto
+        <div
+            id="node-card-container"
+            className="pointer-events-auto"
+            tabIndex="-1"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            <motion.div
+                id="node-card"
+                className={`relative text-[#EEE] w-[525px] rounded-md 
             [box-shadow:0px_0px_4px_white] bg-[#22222250] hover:bg-[#22222230]
             ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
-            tabIndex="-1"
-            onClick={(e) => {
-                handleClick(e);
-            }}
-            onMouseEnter={() => {
-                setIsHovered(true);
-            }}
-            onMouseLeave={() => {
-                setIsHovered(false);
-            }}
-            animate={rotationAnimation}
-        >
-            <NodeCardTimerBar
-                isFlipped={isFlipped}
-                isHovered={isHovered}
-                progress={timerAnimationProgress}
-                onNextCardCliked={actions.onNextCardCliked}
-            />
+                
+                onClick={(e) => {
+                    handleClick(e);
+                }}
+                animate={rotationAnimation}
+            >
+                <NodeCardTimerBar
+                    isFlipped={isFlipped}
+                    isHovered={isHovered}
+                    progress={timerAnimationProgress}
+                    onNextCardCliked={actions.onNextCardCliked}
+                />
+                <NodeCardContent
+                    node={state.currentNode}
+                    isFlipped={isFlipped}
+                    isHovered={isHovered}
+                    currentTimelineIndex={state.currentTimelineIndex}
+                    nodeIDsTimelineLength={state.nodeIDsTimelineLength}
+                />
+            </motion.div>
             <NodeCardControls
                 node={state.currentNode}
-                onNextCardCliked={actions.onNextCardCliked}
-                onPrevCardClicked={actions.onPrevCardClicked}
+                actions={actions}
                 isFlipped={isFlipped}
                 isHovered={isHovered}
-                upDistributeFrequency={actions.upDistributeFrequency}
-                downDistributeFrequency={actions.downDistributeFrequency}
             />
-            <NodeCardContent
-                node={state.currentNode}
-                isFlipped={isFlipped}
-                isHovered={isHovered}
-                currentTimelineIndex={state.currentTimelineIndex}
-                nodeIDsTimelineLength={state.nodeIDsTimelineLength}
-            />
-        </motion.div>
+        </div>
     );
 }

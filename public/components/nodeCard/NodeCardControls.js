@@ -4,31 +4,34 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
 export default function NodeCardControls({
-    onPrevCardClicked,
-    onNextCardCliked,
+    node,
+    actions,
     isFlipped,
     isHovered,
-    downDistributeFrequency,
-    node,
-    upDistributeFrequency,
+    onMouseEnter,
+    onMouseLeave,
 }) {
     return (
         <div
             id="card-controls"
-            className={`${isHovered ? "block" : "hidden"} relative`}
+            className={`${ 
+                isHovered || isFlipped ? "opacity-100" : "opacity-0"
+            } relative left-0 right-0 px-4 w-[525px] h-[50px]`}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
         >
             <button
-                className="absolute w-9 h-9 top-3 left-3 rounded-[50%] z-10 outline-none  hover:outline-1 hover:outline-white/50"
+                className="absolute w-9 h-9 left-0 rounded-[50%] z-10 outline-none  hover:outline-1 hover:outline-white/50"
                 onClick={() => {
-                    onPrevCardClicked();
+                    actions.onPrevCardClicked();
                 }}
             >
                 <KeyboardArrowLeftIcon className="text-white -m-right-1" />
             </button>
             <button
-                className="absolute w-9 h-9 top-4 right-4 rounded-[50%] z-10 outline-none  hover:outline-1 hover:outline-white/50"
+                className="absolute w-9 h-9 right-0 rounded-[50%] z-10 outline-none  hover:outline-1 hover:outline-white/50"
                 onClick={() => {
-                    onNextCardCliked();
+                    actions.onNextCardCliked();
                 }}
             >
                 <KeyboardArrowRightIcon className="text-white" />
@@ -38,7 +41,7 @@ export default function NodeCardControls({
                     <button
                         className="nav-btn outline-none hover:outline hover:outline-1 hover:outline-white/50"
                         onClick={() => {
-                            downDistributeFrequency(node.id);
+                            actions.downDistributeFrequency(node.id);
                         }}
                     >
                         <ArrowDropDownIcon className="text-white mx-auto" />
@@ -46,7 +49,7 @@ export default function NodeCardControls({
                     <button
                         className="nav-btn outline-none hover:outline hover:outline-1 hover:outline-white/50"
                         onClick={() => {
-                            upDistributeFrequency(node.id);
+                            actions.upDistributeFrequency(node.id);
                         }}
                     >
                         <ArrowDropUpIcon className="text-white" />
