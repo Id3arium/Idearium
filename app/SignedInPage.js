@@ -57,7 +57,6 @@ export function SignedInPage() {
             >
                 <div id="Home">
                     <ForceGraph3D id="ForceGraph3D" />
-                    <NodeCardsArea />
                     <div id="left-content" className="absolute top-0 left-0 h-full overflow-y-auto">
                         <UserDashboard />
                         <IdeaCompositionArea />
@@ -65,6 +64,7 @@ export function SignedInPage() {
                     <div id="right-content" className="absolute top-0 right-0 h-full overflow-y-auto">
                         <NodeCardsLibrary />
                     </div>
+                    <NodeCardsArea />
                     <div className="relative"></div>
                     {/* <NodeTimeline /> */}
                 </div>
