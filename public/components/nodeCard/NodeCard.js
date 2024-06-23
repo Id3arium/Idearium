@@ -10,6 +10,7 @@ import { getNodeCardDuration } from "@/lib/utils/utils.js";
 export default function NodeCard() {
     const [isHovered, setIsHovered] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
     const { actions, state } = useNodeCardLogic();
 
     const rotationAnimation = useAnimation();
@@ -42,7 +43,7 @@ export default function NodeCard() {
 
     useEffect(() => {
         if (state.currentNode == null) return;
-        var shouldPauseTimerBar = isFlipped || isHovered;
+        var shouldPauseTimerBar = isFlipped || isHovered || isEditing;
         if (shouldPauseTimerBar && timerAnimationProgress.isAnimating()) {
             pauseTimerAnimation();
         }
@@ -53,6 +54,7 @@ export default function NodeCard() {
         state.currentNode,
         isHovered,
         isFlipped,
+        isEditing,
         timerAnimationProgress,
         pauseTimerAnimation,
         startTimerAnimation,
@@ -78,16 +80,19 @@ export default function NodeCard() {
     }, [rotationAnimation, isFlipped, setIsFlipped]);
 
     const handleClick = async (e) => {
-        if (e.target.id === "node-card") {
+        if (e.target.id === "node-card" && !isEditing) {
             await flipNodeCardAnimation();
         }
     };
 
-    const handleMouseEnter = async (e) => {
+    const onMouseEnter = async (e) => {
         setIsHovered(true);
     };
-    const handleMouseLeave = async (e) => {
+    const onMouseLeave = async (e) => {
         setIsHovered(false);
+    };
+    const onEditCardClicked = () => {
+        setIsEditing(!isEditing);
     };
 
     return (
@@ -95,15 +100,14 @@ export default function NodeCard() {
             id="node-card-container"
             className="pointer-events-auto"
             tabIndex="-1"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
         >
             <motion.div
                 id="node-card"
                 className={`relative text-[#EEE] w-[525px] rounded-md 
             [box-shadow:0px_0px_4px_white] bg-[#22222250] hover:bg-[#22222230]
             ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
-                
                 onClick={(e) => {
                     handleClick(e);
                 }}
@@ -112,6 +116,7 @@ export default function NodeCard() {
                 <NodeCardTimerBar
                     isFlipped={isFlipped}
                     isHovered={isHovered}
+                    isEditing={isEditing}
                     progress={timerAnimationProgress}
                     onNextCardCliked={actions.onNextCardCliked}
                 />
@@ -119,6 +124,7 @@ export default function NodeCard() {
                     node={state.currentNode}
                     isFlipped={isFlipped}
                     isHovered={isHovered}
+                    isEditing={isEditing}
                     currentTimelineIndex={state.currentTimelineIndex}
                     nodeIDsTimelineLength={state.nodeIDsTimelineLength}
                 />
@@ -128,6 +134,7 @@ export default function NodeCard() {
                 actions={actions}
                 isFlipped={isFlipped}
                 isHovered={isHovered}
+                onEditCardClicked={onEditCardClicked}
             />
         </div>
     );
