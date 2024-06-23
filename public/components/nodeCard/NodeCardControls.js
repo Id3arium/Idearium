@@ -2,6 +2,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 export default function NodeCardControls({
@@ -49,6 +50,12 @@ export default function NodeCardControls({
                 }}
             >
                 <KeyboardArrowRightIcon className="text-white" />
+            </button>
+            <button
+                className="absolute w-9 h-9 right-12 rounded-full z-10 outline-none hover:outline hover:outline-1 hover:outline-white/50"
+                onClick={() => actions.removeNode(node)}
+            >
+                <DeleteIcon className="text-white" />
             </button>
             <button
                 className="absolute w-9 h-9 right-2 rounded-full z-10 outline-none hover:outline hover:outline-1 hover:outline-white/50"
