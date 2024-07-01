@@ -11,6 +11,7 @@ export default function NodeCard() {
     const [isHovered, setIsHovered] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [editedNode, setEditedNode] = useState(null);
     const { actions, state } = useNodeCardLogic();
 
     const rotationAnimation = useAnimation();
@@ -79,10 +80,14 @@ export default function NodeCard() {
         });
     }, [rotationAnimation, isFlipped, setIsFlipped]);
 
-    const handleClick = async (e) => {
+    const onClick = async (e) => {
         if (e.target.id === "node-card" && !isEditing) {
             await flipNodeCardAnimation();
         }
+    };
+    const onCardContentInputChange = (e) => {
+        const { name, value } = e.target;
+        setEditedNode((prev) => ({ ...prev, [name]: value }));
     };
 
     const onMouseEnter = async (e) => {
@@ -93,6 +98,17 @@ export default function NodeCard() {
     };
     const onEditCardClicked = () => {
         setIsEditing(!isEditing);
+        setEditedNode({ ...state.currentNode });
+    };
+
+    const onConfirmEditClicked = () => {
+        actions.updateNode(editedNode);
+        setIsEditing(false);
+    };
+
+    const onCancelEditClicked = () => {
+        setIsEditing(false);
+        setEditedNode(null);
     };
 
     return (
@@ -108,9 +124,7 @@ export default function NodeCard() {
                 className={`relative text-[#EEE] w-[525px] rounded-md 
             [box-shadow:0px_0px_4px_white] bg-[#22222250] hover:bg-[#22222230]
             ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
-                onClick={(e) => {
-                    handleClick(e);
-                }}
+                onClick={onClick}
                 animate={rotationAnimation}
             >
                 <NodeCardTimerBar
@@ -134,7 +148,10 @@ export default function NodeCard() {
                 actions={actions}
                 isFlipped={isFlipped}
                 isHovered={isHovered}
+                isEditing={isEditing}
                 onEditCardClicked={onEditCardClicked}
+                onCancelEditClicked={onCancelEditClicked}
+                onConfirmEditClicked={onConfirmEditClicked}
             />
         </div>
     );
