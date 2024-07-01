@@ -96,9 +96,15 @@ export default function NodeCard() {
     const onMouseLeave = async (e) => {
         setIsHovered(false);
     };
+    
     const onEditCardClicked = () => {
-        setIsEditing(!isEditing);
+        setIsEditing(true);
         setEditedNode({ ...state.currentNode });
+    };
+
+    const onRemoveCardClicked = () => {
+        setIsEditing(true);
+        () => actions.removeNode(node)
     };
 
     const onConfirmEditClicked = () => {
@@ -107,8 +113,8 @@ export default function NodeCard() {
     };
 
     const onCancelEditClicked = () => {
-        setIsEditing(false);
         setEditedNode(null);
+        setIsEditing(false);
     };
 
     return (
@@ -150,6 +156,7 @@ export default function NodeCard() {
                 isHovered={isHovered}
                 isEditing={isEditing}
                 onEditCardClicked={onEditCardClicked}
+                onRemoveCardClicked={onRemoveCardClicked}
                 onCancelEditClicked={onCancelEditClicked}
                 onConfirmEditClicked={onConfirmEditClicked}
             />

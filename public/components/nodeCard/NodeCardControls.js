@@ -1,70 +1,172 @@
+// import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+// import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+// import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+// import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import EditIcon from "@mui/icons-material/Edit";
+// import Close from "@mui/icons-material/Close";
+// import Check from "@mui/icons-material/Check";
+
+// export default function NodeCardControls({
+//     node,
+//     actions,
+//     isFlipped,
+//     isHovered,
+//     isEditing,
+//     onEditCardClicked,
+//     onCancelEditClicked,
+//     onConfirmEditClicked,
+// }) {
+//     const buttonClass = "relative w-9 h-9 mx-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
+
+//     return (
+//         <div
+//             id="card-controls"
+//             // className={`
+//             //     ${isHovered || isFlipped ? "opacity-100" : "opacity-0"}
+//             //     absolute left-0 right-0 bottom-0
+//             //     py-2 w-full h-[50px]
+//             //     ${isFlipped ? "bg-blue-500/25" : "bg-transparent"}
+//             //     rounded-bl-lg rounded-br-lg
+//             //     transition-all duration-300
+//             //     border border-white/20
+//             //     -z-10 overflow-hidden
+//             // `}
+//             className={`${isHovered || isFlipped ? "opacity-100 " : "opacity-0"} 
+//             ${isFlipped ? "bg-blue/15 border-white/15" : "bg-transparent border-transparent"} 
+//             relative left-0 right-0 py-2 w-full h-[50px] border 
+//             rounded-bl-md rounded-br-md transition-all duration-150`}
+//         >
+//             <button
+//                 className={buttonClass}
+//                 onClick={() => {
+//                     actions.downDistributeFrequency(node.id);
+//                 }}
+//             >
+//                 <ArrowDropDownIcon className="text-white" />
+//             </button>
+//             <button
+//                 className={buttonClass}
+//                 onClick={() => {
+//                     actions.upDistributeFrequency(node.id);
+//                 }}
+//             >
+//                 <ArrowDropUpIcon className="text-white" />
+//             </button>
+//             <button
+//                 className={buttonClass}
+//                 onClick={() => {
+//                     actions.onPrevCardClicked();
+//                 }}
+//             >
+//                 <KeyboardArrowLeftIcon className="text-white" />
+//             </button>
+//             <button
+//                 className={buttonClass}
+//                 onClick={() => {
+//                     actions.onNextCardCliked();
+//                 }}
+//             >
+//                 <KeyboardArrowRightIcon className="text-white" />
+//             </button>
+            
+//             <div className="absolute right-0 top-2 flex overflow-visible">
+//                 <div className={`absolute right-0 transition-all duration-300 ${isEditing ? 'top-0' : 'top-full'}`}>
+//                     <button className={buttonClass} onClick={()=>actions.removeNode(node)}>
+//                         <DeleteIcon className="text-white" />
+//                     </button>
+//                     <button className={buttonClass} onClick={onEditCardClicked}>
+//                         <EditIcon className="text-white" />
+//                     </button>
+//                 </div>
+//                 <div className={`absolute right-0 transition-all duration-300 ${isEditing ? '-top-full' : 'top-0'}`}>
+//                     <button className={buttonClass} onClick={onCancelEditClicked}>
+//                         <Close className="text-white" />
+//                     </button>
+//                     <button className={buttonClass} onClick={onConfirmEditClicked}>
+//                         <Check className="text-white" />
+//                     </button>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// }
+{/* <div className="absolute right-0 top-0 h-full w-[84px] ">
+</div> */}
+
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Close from "@mui/icons-material/Close";
+import Check from "@mui/icons-material/Check";
 
 export default function NodeCardControls({
     node,
     actions,
     isFlipped,
     isHovered,
+    isEditing,
     onEditCardClicked,
+    onRemoveCardClicked,
+    onCancelEditClicked,
+    onConfirmEditClicked,
 }) {
+    const buttonClass = "relative w-9 h-9 mx-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
+
     return (
         <div
             id="card-controls"
-            className={`${
-                isHovered || isFlipped ? "opacity-100" : "opacity-0"
-            } relative left-0 right-0 py-2 w-full h-[50px]`}
+            className={`${isHovered || isFlipped ? "opacity-100 " : "opacity-0"}
+                ${isFlipped ? "bg-blue/15 border-white/15" : "bg-transparent border-transparent"}
+                relative left-0 right-0 py-2 w-full h-[50px] border
+                rounded-bl-md rounded-br-md transition-all duration-150`}
         >
             <button
-                className="relative w-9 h-9 mx-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50"
-                onClick={() => {
-                    actions.downDistributeFrequency(node.id);
-                }}
+                className={buttonClass}
+                onClick={() => actions.downDistributeFrequency(node.id)}
             >
-                <ArrowDropDownIcon className="text-white mx-auto" />
+                <ArrowDropDownIcon className="text-white" />
             </button>
             <button
-                className="relative w-9 h-9 mx-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50"
-                onClick={() => {
-                    actions.upDistributeFrequency(node.id);
-                }}
+                className={buttonClass}
+                onClick={() => actions.upDistributeFrequency(node.id)}
             >
                 <ArrowDropUpIcon className="text-white" />
             </button>
             <button
-                className="relative w-9 h-9 mx-2 rounded-[50%] z-10 outline-none hover:outline-1 hover:outline-white/50"
-                onClick={() => {
-                    actions.onPrevCardClicked();
-                }}
+                className={buttonClass}
+                onClick={() => actions.onPrevCardClicked()}
             >
                 <KeyboardArrowLeftIcon className="text-white" />
             </button>
             <button
-                className="relative w-9 h-9 mx-2 rounded-[50%] z-10 outline-none hover:outline-1 hover:outline-white/50"
-                onClick={() => {
-                    actions.onNextCardCliked();
-                }}
+                className={buttonClass}
+                onClick={() => actions.onNextCardCliked()}
             >
                 <KeyboardArrowRightIcon className="text-white" />
             </button>
-            <button
-                className="absolute w-9 h-9 right-12 rounded-full z-10 outline-none hover:outline hover:outline-1 hover:outline-white/50"
-                onClick={() => actions.removeNode(node)}
-            >
-                <DeleteIcon className="text-white" />
-            </button>
-            <button
-                className="absolute w-9 h-9 right-2 rounded-full z-10 outline-none hover:outline hover:outline-1 hover:outline-white/50"
-                onClick={() => {
-                    onEditCardClicked();
-                }}
-            >
-                <EditIcon className="text-white" />
-            </button>
+            <div className="absolute right-0 top-2 h-full w-[104px] overflow-hidden">
+                <div className={`absolute right-0 transition-all duration-250 ${isEditing ? '-top-full' : 'top-0'}`}>
+                    <button className={buttonClass} onClick={onRemoveCardClicked}>
+                        <DeleteIcon className="text-white" />
+                    </button>
+                    <button className={buttonClass} onClick={onEditCardClicked}>
+                        <EditIcon className="text-white" />
+                    </button>
+                </div>
+                <div className={`absolute right-0 transition-all duration-300 ${isEditing ? 'top-0' : 'top-full'}`}>
+                    <button className={buttonClass} onClick={onCancelEditClicked}>
+                        <Close className="text-white" />
+                    </button>
+                    <button className={buttonClass} onClick={onConfirmEditClicked}>
+                        <Check className="text-white" />
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
+

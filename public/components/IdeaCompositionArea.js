@@ -47,8 +47,7 @@ function IdeaCompositionArea() {
         <form
             onSubmit={handleSubmit}
             className={`
-                relative overflow-visible w-[400px] m-5
-                transition-all duration-250 ease-in-out 
+                relative overflow-visible w-[400px] m-5 transition-all duration-250 ease-in-out 
                 focus:outline-none focus:ring-0 
                 bg-clear rounded-lg shadow-[0_0_6px_#CCC] backdrop-blur-[9px]
                 ${isExpanded ? "h-[200px]" : "h-[44px]"}
@@ -56,8 +55,7 @@ function IdeaCompositionArea() {
         >
             <div
                 id="note-input-bars"
-                className={`absolute top-0 left-0 w-full 
-                    transition-all duration-250 ease-in-out 
+                className={`absolute top-0 left-0 w-full transition-all duration-250 ease-in-out 
                     ${isExpanded ? "opacity-100" : "opacity-0"}
                 `}
             >
@@ -99,8 +97,7 @@ function IdeaCompositionArea() {
                 onFocus={() => setIsExpanded(true)}
             />
             <div
-                className={`absolute -bottom-5 right-0 
-                    transition-all duration-250 ease-in-out
+                className={`absolute -bottom-5 right-0 transition-all duration-250 ease-in-out
                     ${isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"}
                 `}
             >
