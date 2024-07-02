@@ -96,7 +96,7 @@ export default function NodeCard() {
     const onMouseLeave = async (e) => {
         setIsHovered(false);
     };
-    
+
     const onEditCardClicked = () => {
         setIsEditing(true);
         setEditedNode({ ...state.currentNode });
@@ -127,8 +127,8 @@ export default function NodeCard() {
         >
             <motion.div
                 id="node-card"
-                className={`relative text-[#EEE] w-[525px] rounded-md 
-            [box-shadow:0px_0px_4px_white] bg-[#22222250] hover:bg-[#22222230]
+                className={`relative text-[#EEE] mx-1 w-[525px] rounded-[4px] 
+            [box-shadow:0px_0px_4px_white] bg-[#22222230] z-10
             ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
                 onClick={onClick}
                 animate={rotationAnimation}
