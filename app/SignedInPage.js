@@ -57,11 +57,11 @@ export function SignedInPage() {
             >
                 <div id="Home">
                     <ForceGraph3D id="ForceGraph3D" />
-                    <div id="left-content" className="absolute top-0 left-0 w-[350px] h-full overflow-y-auto">
+                    <div id="left-content" className="absolute top-0 left-0 w-[375px] h-full overflow-y-auto">
                         <UserDashboard />
                         <IdeaCompositionArea />
                     </div>
-                    <div id="right-content" className="absolute top-0 right-0 h-full overflow-y-auto">
+                    <div id="right-content" className="absolute top-0 right-0 w-[375px] h-full overflow-y-auto">
                         <NodeCardsLibrary />
                     </div>
                     <NodeCardsArea />

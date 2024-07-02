@@ -47,7 +47,7 @@ function IdeaCompositionArea() {
         <form
             onSubmit={handleSubmit}
             className={`
-                relative overflow-visible ml-5 mr-1 transition-all duration-250 ease-in-out 
+                relative overflow-visible ml-3 mr-1 transition-all duration-250 ease-in-out 
                 focus:outline-none focus:ring-0 
                 bg-clear rounded-lg shadow-[0_0_6px_#CCC] backdrop-blur-[9px]
                 ${isExpanded ? "h-[200px]" : "h-[44px]"}

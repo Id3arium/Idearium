@@ -39,7 +39,7 @@ export default function LibraryNodeCard({ node }) {
     return (
         <motion.div
             id="library-node-card"
-            className={`text-[#EEE] w-[320px] m-1 pointer-events-auto [box-shadow:0px_0px_4px_white] bg-[#22222250] hover:bg-[#22222230] rounded-md ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
+            className={`text-[#EEE] ml-1 mr-3 my-1 pointer-events-auto [box-shadow:0px_0px_4px_white] bg-[#22222250] hover:bg-[#22222230] rounded-md ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
             tabIndex='-1'
             onClick={handleClick}
             onMouseEnter={() => setIsHovered(true)}

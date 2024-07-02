@@ -25,9 +25,10 @@ export default function NodeCardsLibrary() {
     return (
         <div
             id="node-cards-library"
-            className="top-0 right-2 w-[350px] h-full overflow-y-auto"
+            className="top-0 right- h-full overflow-y-auto"
         >
             <input
+                id="search-bar"
                 className="m-1 h-8 rounded border-0"
                 type="text"
                 placeholder="Search Node Cards..."

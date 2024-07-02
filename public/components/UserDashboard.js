@@ -23,7 +23,7 @@ export default function UserDashboard() {
     return (
         <div
             id="user-dashboard"
-            className=" text-[#EEE] ml-5 mr-1 my-5 p-3 bg-clear rounded-lg shadow-[0_0_6px_#CCC] backdrop-blur-[9px]"
+            className=" text-[#EEE] ml-3 mr-1 my-5 p-3 bg-clear rounded-lg shadow-[0_0_6px_#CCC] backdrop-blur-[9px]"
         >
            
             <div
