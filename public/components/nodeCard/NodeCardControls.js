@@ -114,14 +114,14 @@ export default function NodeCardControls({
     onCancelEditClicked,
     onConfirmEditClicked,
 }) {
-    const buttonClass = "relative w-9 h-9 mx-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
+    const buttonClass = "relative w-9 h-9 m-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
 
     return (
         <div
             id="card-controls"
             className={`${isHovered || isFlipped ? "opacity-100 " : "opacity-0"}
                 ${isFlipped ? "bg-blue/15 border-white/15" : "bg-transparent border-transparent"}
-                relative left-0 right-0 py-2 w-full h-[50px] border
+                relative left-0 right-0 w-full h-[54px] border
                 rounded-bl-md rounded-br-md transition-all duration-150`}
         >
             <button
@@ -148,8 +148,11 @@ export default function NodeCardControls({
             >
                 <KeyboardArrowRightIcon className="text-white" />
             </button>
-            <div className="absolute right-0 top-2 h-full w-[104px] overflow-hidden">
-                <div className={`absolute right-0 transition-all duration-250 ${isEditing ? '-top-full' : 'top-0'}`}>
+            <div
+                id="right-side-controls"
+                className="absolute right-0 top-0 h-full w-[104px] overflow-hidden"
+            >
+                <div className={`absolute right-0 transition-all duration-150 ${isEditing ? '-top-full' : 'top-0'}`}>
                     <button className={buttonClass} onClick={onRemoveCardClicked}>
                         <DeleteIcon className="text-white" />
                     </button>
@@ -157,7 +160,7 @@ export default function NodeCardControls({
                         <EditIcon className="text-white" />
                     </button>
                 </div>
-                <div className={`absolute right-0 transition-all duration-300 ${isEditing ? 'top-0' : 'top-full'}`}>
+                <div className={`absolute right-0 transition-all duration-150 ${isEditing ? 'top-0' : 'top-full'}`}>
                     <button className={buttonClass} onClick={onCancelEditClicked}>
                         <Close className="text-white" />
                     </button>
