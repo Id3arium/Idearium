@@ -5,10 +5,25 @@ import { useAtomValue } from 'jotai';
 export default function UserDashboard() {
     const user = useAtomValue(userAtom);
 
+    function maskEmail(email)
+    {
+        if (typeof email !== 'string') {
+            return '...';
+        }
+        const [localPart, domain] = email.split('@');
+        let maskedLocal;
+        if (localPart.length <= 2) {
+            maskedLocal = '*'.repeat(localPart.length);
+        } else {
+            maskedLocal = localPart[0] + '*'.repeat(localPart.length - 2) + localPart[localPart.length - 1];
+        }
+        return `${maskedLocal}@${domain}`;
+    }
+
     return (
         <div
             id="user-dashboard"
-            className=" text-[#EEE] w-[400px] m-5 p-3 bg-clear rounded-lg shadow-[0_0_6px_#CCC] backdrop-blur-[9px]"
+            className=" text-[#EEE] ml-5 mr-1 my-5 p-3 bg-clear rounded-lg shadow-[0_0_6px_#CCC] backdrop-blur-[9px]"
         >
            
             <div
@@ -17,7 +32,7 @@ export default function UserDashboard() {
                 <SignOutButton> Sign out </SignOutButton>
             </div>
             <p className="" >Name: {user?.fullName}</p>
-            <p className="" >Email: {user?.primaryEmailAddress?.emailAddress}</p>
+            <p className="" >Email: {maskEmail(user?.primaryEmailAddress?.emailAddress)}</p>
             <p className="" >ID: {user?.id}</p>
             <div>
                 <h2 className=" mt-4">Your Constellations:</h2>
