@@ -104,7 +104,7 @@ export default function NodeCard() {
 
     const onRemoveCardClicked = () => {
         setIsEditing(true);
-        () => actions.removeNode(node)
+        () => actions.removeNode(node);
     };
 
     const onConfirmEditClicked = () => {
@@ -128,7 +128,7 @@ export default function NodeCard() {
             <motion.div
                 id="node-card"
                 className={`relative text-[#EEE] mx-1 w-[525px] rounded-[4px] 
-            [box-shadow:0px_0px_4px_white] bg-[#22222230] z-10
+                [box-shadow:0px_0px_4px_white] bg-[#22222230] z-10
             ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
                 onClick={onClick}
                 animate={rotationAnimation}
@@ -148,18 +148,18 @@ export default function NodeCard() {
                     currentTimelineIndex={state.currentTimelineIndex}
                     nodeIDsTimelineLength={state.nodeIDsTimelineLength}
                 />
+                <NodeCardControls
+                    node={state.currentNode}
+                    actions={actions}
+                    isFlipped={isFlipped}
+                    isHovered={isHovered}
+                    isEditing={isEditing}
+                    onEditCardClicked={onEditCardClicked}
+                    onRemoveCardClicked={onRemoveCardClicked}
+                    onCancelEditClicked={onCancelEditClicked}
+                    onConfirmEditClicked={onConfirmEditClicked}
+                />
             </motion.div>
-            <NodeCardControls
-                node={state.currentNode}
-                actions={actions}
-                isFlipped={isFlipped}
-                isHovered={isHovered}
-                isEditing={isEditing}
-                onEditCardClicked={onEditCardClicked}
-                onRemoveCardClicked={onRemoveCardClicked}
-                onCancelEditClicked={onCancelEditClicked}
-                onConfirmEditClicked={onConfirmEditClicked}
-            />
         </div>
     );
 }

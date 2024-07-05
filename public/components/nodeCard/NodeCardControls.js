@@ -21,13 +21,12 @@ export default function NodeCardControls({
     const buttonClass = "relative w-9 h-9 m-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
 
     return (
-        <div className="h-[54px] overflow-hidden">
+        <div className={`${isHovered || isFlipped ? "h-[54px]" : "h-0"} transition-h duration-100 overflow-hidden`}>
             <div
                 id="card-controls"
                 className={`
                     ${isHovered || isFlipped ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}
-                    ${isFlipped ? "bg-blue/15" : "bg-[#22222230]"}
-                    mx-1 [box-shadow:0px_0px_4px_white] rounded-[4px] transition-all duration-100 backdrop-blur-sm  
+                    mx-1 transition-all duration-100  
                 `}
             >
                 <button
