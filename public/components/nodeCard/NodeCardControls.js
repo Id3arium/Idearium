@@ -21,12 +21,12 @@ export default function NodeCardControls({
     const buttonClass = "relative w-9 h-9 m-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
 
     return (
-        <div className={`${isHovered || isFlipped ? "h-[54px]" : "h-0"} transition-h duration-100 overflow-hidden`}>
+        <div className={"overflow-hidden"}>
             <div
                 id="card-controls"
                 className={`
-                    ${isHovered || isFlipped ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}
-                    mx-1 transition-all duration-100  
+                    ${isHovered || isFlipped ? "translate-y-0 opacity-100 h-[54px]" : "-translate-y-full opacity-0 h-0"}
+                    mx-1 transition-all transform-gpu  
                 `}
             >
                 <button
@@ -57,7 +57,7 @@ export default function NodeCardControls({
                         id="right-side-controls"
                         className="absolute right-0 top-0 h-full w-[104px] overflow-hidden"
                     >
-                        <div className={`absolute right-0 transition-all duration-150 ${isEditing ? '-top-full' : 'top-0'}`}>
+                        <div className={`absolute right-0 transition-all transform-gpu ${isEditing ? '-top-full' : 'top-0'}`}>
                             <button className={buttonClass} onClick={onRemoveCardClicked}>
                                 <DeleteIcon className="text-white" />
                             </button>
@@ -65,7 +65,7 @@ export default function NodeCardControls({
                                 <EditIcon className="text-white" />
                             </button>
                         </div>
-                        <div className={`absolute right-0 transition-all duration-150 ${isEditing ? 'top-0' : 'top-full'}`}>
+                        <div className={`absolute right-0 transition-all transform-gpu ${isEditing ? 'top-0' : 'top-full'}`}>
                             <button className={buttonClass} onClick={onCancelEditClicked}>
                                 <Close className="text-white" />
                             </button>

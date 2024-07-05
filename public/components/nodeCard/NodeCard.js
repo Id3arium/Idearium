@@ -120,16 +120,17 @@ export default function NodeCard() {
     return (
         <div
             id="node-card-container"
-            className="pointer-events-auto"
+            className="relative pointer-events-auto"
             tabIndex="-1"
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
             <motion.div
                 id="node-card"
-                className={`relative text-[#EEE] mx-1 w-[525px] rounded-[4px] 
-                [box-shadow:0px_0px_4px_white] bg-[#22222230] z-10
-            ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
+                className={`relative text-[#EEE] mx-1 w-[525px]  rounded-[4px] 
+                [box-shadow:0px_0px_4px_white] bg-[#22222230] z-10 transform
+                transition-all transform-gpu
+            ${isHovered ? "backdrop-blur-sm translate-y-[27px]" : "backdrop-blur-lg translate-y-0"}`}
                 onClick={onClick}
                 animate={rotationAnimation}
             >

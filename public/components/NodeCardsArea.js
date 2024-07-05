@@ -49,20 +49,12 @@ export default function NodeCardsArea() {
     }, [clientNodes, getRandomNode, onNextNode]);
 
     return (
-        // <div id="node-cards-area"
-        //     className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        //         <div className="relative transform translate-y-1/2">
-        //             <NodeCard />
-        //         </div>
-        // </div>
         <div
             id="node-cards-area"
-            className="absolute top-0 w-full h-full"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-1/2 pointer-events-none"
         >
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="relative transform -translate-y-1/2">
-                    <NodeCard />
-                </div>
+            <div className="relative transform -translate-y-full">
+                <NodeCard />
             </div>
         </div>
     );
