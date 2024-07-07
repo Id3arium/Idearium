@@ -18,13 +18,6 @@ export default function NodeCardContent({
             id="card-content"
             className="grid text-center text-md-lg p-7 pointer-events-none select-none"
         >
-            {/* <div
-                id="front-side"
-                className={`col-start-1 row-start-1 flex flex-col items-center justify-center transform -translate-y-0.5 ${getConditionalStyles(!isFlipped)}`}
-            >
-                {node?.title && <h1>{node?.title}</h1>}
-                <p>{node?.content}</p>
-            </div> */}
             <div
                 id="front-side"
                 className={`col-start-1 row-start-1 flex flex-col items-center justify-center transform -translate-y-0.5 ${getConditionalStyles(

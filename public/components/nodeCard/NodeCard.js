@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import NodeCardControls from "./NodeCardControls.js";
 import NodeCardContent from "./NodeCardContent.js";
 import NodeCardTimerBar from "./NodeCardTimerBar.js";
+import GlowBorders from "./GlowBorders.js";
 import useNodeCardLogic from "@/lib/hooks/useNodeCardLogic.js";
 import { getNodeCardDuration } from "@/lib/utils/utils.js";
 
@@ -104,7 +105,7 @@ export default function NodeCard() {
 
     const onRemoveCardClicked = () => {
         setIsEditing(true);
-        () => actions.removeNode(node)
+        () => actions.removeNode(node);
     };
 
     const onConfirmEditClicked = () => {
@@ -127,9 +128,10 @@ export default function NodeCard() {
         >
             <motion.div
                 id="node-card"
-                className={`relative text-[#EEE] mx-1 w-[525px] rounded-[4px] 
-            [box-shadow:0px_0px_4px_white] bg-[#22222230] z-10
-            ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
+                className={`relative text-[#EEE] p-0 w-[525px]
+                    bg-[#22222230] overflow-visible
+                    ${isHovered || isFlipped ? "rounded-t-md" : "rounded-md"}
+                    ${isHovered ? "backdrop-blur-sm" : "backdrop-blur-lg"}`}
                 onClick={onClick}
                 animate={rotationAnimation}
             >
@@ -147,6 +149,9 @@ export default function NodeCard() {
                     isEditing={isEditing}
                     currentTimelineIndex={state.currentTimelineIndex}
                     nodeIDsTimelineLength={state.nodeIDsTimelineLength}
+                />
+                <GlowBorders
+                    bottom={!isHovered}
                 />
             </motion.div>
             <NodeCardControls

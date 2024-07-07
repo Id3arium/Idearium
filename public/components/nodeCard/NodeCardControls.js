@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Close from "@mui/icons-material/Close";
 import Check from "@mui/icons-material/Check";
+import GlowBorders from "./GlowBorders.js";
 
 export default function NodeCardControls({
     node,
@@ -21,15 +22,18 @@ export default function NodeCardControls({
     const buttonClass = "relative w-9 h-9 m-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
 
     return (
-        <div className="h-[54px] overflow-hidden">
+        <div className="h-[52px] overflow-hidden">
             <div
                 id="card-controls"
                 className={`
                     ${isHovered || isFlipped ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}
                     ${isFlipped ? "bg-blue/15" : "bg-[#22222230]"}
-                    mx-1 [box-shadow:0px_0px_4px_white] rounded-[4px] transition-all duration-100 backdrop-blur-sm  
+                    transition-all duration-100 backdrop-blur-sm rounded-b-md
                 `}
             >
+                <GlowBorders
+                    top={!isHovered}
+                />
                 <button
                     className={buttonClass}
                     onClick={() => actions.downDistributeFrequency(node.id)}
