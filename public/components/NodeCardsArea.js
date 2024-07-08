@@ -13,7 +13,6 @@ export default function NodeCardsArea() {
 
     const [clientNodes, setClientNodes] = useAtom(Atoms.clientNodesAtom);
     const onNextNode = useSetAtom(Atoms.onNextNodeAtom);
-    const removeNode = useSetAtom(Atoms.removeNodeAtom);
     const resetNodeFrequencies = useSetAtom(Atoms.resetNodeFrequenciesAtom);
     // const nodesCount = useAtomValue(nodesCountAtom)
     const getRandomNode = useRandomNode();
@@ -51,10 +50,10 @@ export default function NodeCardsArea() {
     return (
         <div
             id="node-cards-area"
-            className="absolute top-[50%] left-[50%] transform -translate-x-[50%] translate-y-[0%] origin-top"
+            className="absolute top-[50%] left-[50%] origin-top"
         >
             <div className="relative">
-                <div className="absolute w-[530px] h-[200px] top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]">
+                <div className="absolute w-[530px] h-[200px] transform -translate-x-[50%] -translate-y-[50%]">
                     <NodeCard />
                 </div>
             </div>

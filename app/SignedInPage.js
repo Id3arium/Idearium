@@ -37,7 +37,7 @@ export function SignedInPage() {
         },
         next: (e) => {
             e.preventDefault();
-            actions.onNextCardCliked();
+            actions.onNextCardClicked();
         },
         reset: (e) => {
             e.preventDefault();

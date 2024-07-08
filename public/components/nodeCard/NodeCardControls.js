@@ -13,6 +13,7 @@ export default function NodeCardControls({
     isFlipped,
     isHovered,
     isEditing,
+    isRemoving,
     onEditCardClicked,
     onRemoveCardClicked,
     onCancelEditClicked,
@@ -29,7 +30,7 @@ export default function NodeCardControls({
             <div
                 id="card-controls"
                 className={`
-                    ${isHovered || isFlipped ? "translate-y-[0px] opacity-100" : "-translate-y-full opacity-0"}
+                    ${isHovered || isFlipped ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}
                     mx-0 rounded-[4px] transition-all
                 `}
             >
@@ -53,7 +54,7 @@ export default function NodeCardControls({
                 </button>
                 <button
                     className={buttonClass}
-                    onClick={() => actions.onNextCardCliked()}
+                    onClick={() => actions.onNextCardClicked()}
                 >
                     <KeyboardArrowRightIcon className="text-white" />
                 </button>
@@ -61,7 +62,7 @@ export default function NodeCardControls({
                         id="right-side-controls"
                         className="absolute right-0 top-0 h-full w-[104px] overflow-hidden"
                     >
-                        <div className={`absolute right-0 transition-all ${isEditing ? '-top-full' : 'top-0'}`}>
+                        <div className={`absolute right-0 transition-all ${isEditing || isRemoving ? '-top-full' : 'top-0'}`}>
                             <button className={buttonClass} onClick={onRemoveCardClicked}>
                                 <DeleteIcon className="text-white" />
                             </button>
@@ -69,7 +70,7 @@ export default function NodeCardControls({
                                 <EditIcon className="text-white" />
                             </button>
                         </div>
-                        <div className={`absolute right-0 transition-all ${isEditing ? 'top-0' : 'top-full'}`}>
+                        <div className={`absolute right-0 transition-all ${isEditing || isRemoving ? 'top-0' : 'top-full'}`}>
                             <button className={buttonClass} onClick={onCancelEditClicked}>
                                 <Close className="text-white" />
                             </button>
