@@ -30,7 +30,6 @@ export default function NodeCardControls({
                 id="card-controls"
                 className={`
                     ${isHovered || isFlipped ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}
-                    ${isFlipped ? "bg-blue/15" : "bg-transparent"}
                     mx-0 rounded-[4px] transition-all
                 `}
             >
