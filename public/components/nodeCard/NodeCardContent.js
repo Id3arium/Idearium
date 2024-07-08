@@ -7,7 +7,7 @@ export default function NodeCardContent({
     nodeIDsTimelineLength,
 }) {
     function getConditionalStyles(isVisible) {
-        const opacityClass = isVisible ? "opacity-100" : "opacity-35";
+        const opacityClass = isVisible ? "opacity-100" : "opacity-50";
         const scaleClass = isVisible ? "scale-x-[1]" : "scale-x-[-1]";
         const blurClass = isVisible ? "" : isHovered ? "blur-sm" : "blur-lg";
         return `${opacityClass} ${scaleClass} ${blurClass}`;

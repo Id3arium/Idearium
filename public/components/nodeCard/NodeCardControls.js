@@ -23,13 +23,13 @@ export default function NodeCardControls({
     return (
         <div
             className={`
-                ${isHovered || isFlipped ? "h-[54px]" : "h-[0px]"} transition-all overflow-visible  
+                ${isHovered || isFlipped ? "h-[54px]" : "h-[0px]"} transition-all 
             `}
         >
             <div
                 id="card-controls"
                 className={`
-                    ${isHovered || isFlipped ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}
+                    ${isHovered || isFlipped ? "translate-y-[0px] opacity-100" : "-translate-y-full opacity-0"}
                     mx-0 rounded-[4px] transition-all
                 `}
             >

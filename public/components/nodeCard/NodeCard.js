@@ -127,11 +127,9 @@ export default function NodeCard() {
         >
             <motion.div
                 id="node-card"
-                className={`relative text-[#EEE] rounded-md [box-shadow:0px_0px_4px_white]  overflow-hidden transition-all z-10
-                ${
-                    isFlipped || isHovered
-                        ? "backdrop-blur-sm bg-clear"
-                        : "backdrop-blur-lg bg-[#22222240]"
+                className={`relative text-[#CCC] rounded-md [box-shadow:0px_0px_6px_white] overflow-hidden transition-all z-10
+                ${isFlipped || isHovered 
+                    ? "backdrop-blur-sm bg-clear" : "backdrop-blur-lg bg-[#22222240]"
                 }`}
                 onClick={onClick}
                 animate={rotationAnimation}
