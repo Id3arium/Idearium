@@ -14,10 +14,10 @@ export default function NodeCardControls({
     isHovered,
     isEditing,
     isRemoving,
-    onEditCardClicked,
-    onRemoveCardClicked,
-    onCancelEditClicked,
-    onConfirmEditClicked,
+    onEditClicked,
+    onRemoveClicked,
+    onConfirmClicked,
+    onCancelClicked,
 }) {
     const buttonClass = "relative w-9 h-9 m-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
 
@@ -63,18 +63,18 @@ export default function NodeCardControls({
                         className="absolute right-0 top-0 h-full w-[104px] overflow-hidden"
                     >
                         <div className={`absolute right-0 transition-all ${isEditing || isRemoving ? '-top-full' : 'top-0'}`}>
-                            <button className={buttonClass} onClick={onRemoveCardClicked}>
+                            <button className={buttonClass} onClick={onRemoveClicked}>
                                 <DeleteIcon className="text-white" />
                             </button>
-                            <button className={buttonClass} onClick={onEditCardClicked}>
+                            <button className={buttonClass} onClick={onEditClicked}>
                                 <EditIcon className="text-white" />
                             </button>
                         </div>
                         <div className={`absolute right-0 transition-all ${isEditing || isRemoving ? 'top-0' : 'top-full'}`}>
-                            <button className={buttonClass} onClick={onCancelEditClicked}>
+                            <button className={buttonClass} onClick={onCancelClicked}>
                                 <Close className="text-white" />
                             </button>
-                            <button className={buttonClass} onClick={onConfirmEditClicked}>
+                            <button className={buttonClass} onClick={onConfirmClicked}>
                                 <Check className="text-white" />
                             </button>
                         </div>

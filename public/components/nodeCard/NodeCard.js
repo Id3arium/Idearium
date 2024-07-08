@@ -11,6 +11,7 @@ export default function NodeCard() {
     const [isHovered, setIsHovered] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [isRemoving, setIsRemoving] = useState(false);
     const [editedNode, setEditedNode] = useState(null);
     const { actions, state } = useNodeCardLogic();
 
@@ -44,7 +45,7 @@ export default function NodeCard() {
 
     useEffect(() => {
         if (state.currentNode == null) return;
-        var shouldPauseTimerBar = isFlipped || isHovered || isEditing;
+        var shouldPauseTimerBar = isFlipped || isHovered || isEditing || isRemoving;
         if (shouldPauseTimerBar && timerAnimationProgress.isAnimating()) {
             pauseTimerAnimation();
         }
@@ -67,7 +68,7 @@ export default function NodeCard() {
             rotateY: 90,
             transition: {
                 duration: halfRotationDuration,
-                ease: "easeOut",
+                ease: "linear",
             },
         });
         setIsFlipped(!isFlipped);
@@ -75,7 +76,7 @@ export default function NodeCard() {
             rotateY: 0,
             transition: {
                 duration: halfRotationDuration,
-                ease: "easeIn",
+                ease: "linear",
             },
         });
     }, [rotationAnimation, isFlipped, setIsFlipped]);
@@ -85,17 +86,14 @@ export default function NodeCard() {
             await flipNodeCardAnimation();
         }
     };
+    
     const onCardContentInputChange = (e) => {
         const { name, value } = e.target;
         setEditedNode((prev) => ({ ...prev, [name]: value }));
     };
 
-    const onMouseEnter = async (e) => {
-        setIsHovered(true);
-    };
-    const onMouseLeave = async (e) => {
-        setIsHovered(false);
-    };
+    const onMouseEnter = async (e) => { setIsHovered(true); };
+    const onMouseLeave = async (e) => { setIsHovered(false); };
 
     const onEditCardClicked = () => {
         setIsEditing(true);
@@ -117,6 +115,35 @@ export default function NodeCard() {
         setIsEditing(false);
     };
 
+    const startEditing = useCallback(() => {
+        setIsEditing(true);
+        setEditedNode({ ...state.currentNode });
+    }, [state.currentNode]);
+
+    const startRemoving = useCallback(() => {
+        setIsRemoving(true);
+    }, []);
+
+    const confirmAction = useCallback(() => {
+        if (isEditing && editedNode) {
+            actions.updateNode(editedNode);
+            setIsEditing(false);
+            setEditedNode(null);
+        } else if (isRemoving) {
+            actions.removeNode(state.currentNode);
+            setIsRemoving(false);
+        }
+    }, [isEditing, isRemoving, editedNode, actions, state.currentNode]);
+
+    const cancelAction = useCallback(() => {
+        if (isEditing) {
+            setIsEditing(false);
+            setEditedNode(null);
+        } else if (isRemoving) {
+            setIsRemoving(false);
+        }
+    }, [isEditing, isRemoving]);
+
     return (
         <div
             id="node-card-container"
@@ -127,7 +154,7 @@ export default function NodeCard() {
         >
             <motion.div
                 id="node-card"
-                className={`relative text-[#CCC] rounded-md [box-shadow:0px_0px_6px_white] overflow-hidden transition-all z-10
+                className={`relative text-[#E0E0E0] rounded-md [box-shadow:0px_0px_6px_white] overflow-hidden transition-all z-10
                 ${isFlipped || isHovered 
                     ? "backdrop-blur-sm bg-clear" : "backdrop-blur-lg bg-[#22222240]"
                 }`}
@@ -139,7 +166,7 @@ export default function NodeCard() {
                     isHovered={isHovered}
                     isEditing={isEditing}
                     progress={timerAnimationProgress}
-                    onNextCardCliked={actions.onNextCardCliked}
+                    onNextCardClicked={actions.onNextCardClicked}
                 />
                 <NodeCardContent
                     node={state.currentNode}
@@ -155,10 +182,11 @@ export default function NodeCard() {
                     isFlipped={isFlipped}
                     isHovered={isHovered}
                     isEditing={isEditing}
-                    onEditCardClicked={onEditCardClicked}
-                    onRemoveCardClicked={onRemoveCardClicked}
-                    onCancelEditClicked={onCancelEditClicked}
-                    onConfirmEditClicked={onConfirmEditClicked}
+                    isRemoving={isRemoving}
+                    onEditClicked={startEditing}
+                    onRemoveClicked={startRemoving}
+                    onConfirmClicked={confirmAction}
+                    onCancelClicked={cancelAction}
                 />
             </motion.div>
         </div>
