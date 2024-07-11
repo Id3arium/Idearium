@@ -140,7 +140,7 @@ export default function NodeCard() {
                 id="node-card"
                 className={`relative text-[#E0E0E0] rounded-md [box-shadow:0px_0px_6px_white] overflow-hidden transition-all z-10
                 ${isFlipped || isHovered 
-                    ? "backdrop-blur-sm bg-clear" : "backdrop-blur-lg bg-[#22222240]"
+                    ? "backdrop-blur-sm bg-clear" : "backdrop-blur-xlg bg-[#22222240]"
                 }`}
                 onClick={onClick}
                 animate={rotationAnimation}

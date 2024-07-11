@@ -49,7 +49,7 @@ function IdeaCompositionArea() {
             className={`
                 ml-3 mr-1 transition-all duration-250 ease-in-out 
                 focus:outline-none focus:ring-0 
-                bg-clear rounded-md shadow-[0_0_6px_#CCC] backdrop-blur-[9px]
+                bg-clear rounded-md shadow-[0_0_6px_#CCC] backdrop-blur-md
                 ${isExpanded ? "h-auto" : "h-[44px]"}
             `}
         >
