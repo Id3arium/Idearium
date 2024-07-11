@@ -47,15 +47,15 @@ function IdeaCompositionArea() {
         <form
             onSubmit={handleSubmit}
             className={`
-                relative overflow-visible ml-3 mr-1 transition-all duration-250 ease-in-out 
+                ml-3 mr-1 transition-all duration-250 ease-in-out 
                 focus:outline-none focus:ring-0 
-                bg-clear rounded-lg shadow-[0_0_6px_#CCC] backdrop-blur-[9px]
-                ${isExpanded ? "h-[200px]" : "h-[44px]"}
+                bg-clear rounded-md shadow-[0_0_6px_#CCC] backdrop-blur-[9px]
+                ${isExpanded ? "h-auto" : "h-[44px]"}
             `}
         >
             <div
                 id="note-input-bars"
-                className={`absolute top-0 left-0 w-full transition-all duration-250 ease-in-out 
+                className={`top-0 left-0 w-full transition-all duration-250 ease-in-out 
                     ${isExpanded ? "opacity-100" : "opacity-0"}
                 `}
             >
@@ -71,7 +71,7 @@ function IdeaCompositionArea() {
                 <textarea
                     name="content"
                     className="w-full bg-clear p-2.5 text-white focus:outline-none focus:ring-0 focus:ring-grey-dark/50 rounded-md"
-                    rows="3"
+                    rows="4"
                     placeholder="Content"
                     value={note.content}
                     onChange={handleInputChange}
@@ -89,7 +89,7 @@ function IdeaCompositionArea() {
                 type="text"
                 id="default-input-bar"
                 className={` absolute top-0 left-0 w-full bg-clear p-2.5 text-white
-                    rounded-lg transition-all duration-250 ease-in-out
+                    rounded-md transition-all duration-250 ease-in-out
                     ${isExpanded ? "opacity-0 pointer-events-none" : "opacity-100"}
                 `}
                 placeholder="Compose An Idea..."
