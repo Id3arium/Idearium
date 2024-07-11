@@ -1,7 +1,7 @@
 import { motion, useTransform } from "framer-motion";
 import styled from "styled-components";
 
-export default function NodeCardTimerBar({ isFlipped, isHovered, progress, onNextCardCliked }) {
+export default function NodeCardTimerBar({ isFlipped, isHovered, progress, onNextCardClicked }) {
     const width = useTransform(progress, [0, 1], ['525px', '0px']);
     const opacity = useTransform(progress, [0, 1], [0.2, 0.1]);
     return (
@@ -12,7 +12,7 @@ export default function NodeCardTimerBar({ isFlipped, isHovered, progress, onNex
             onUpdate={(animationDef) => {
                 if (animationDef.width == "0px") {
                     console.log("animationDef", animationDef);
-                    onNextCardCliked();
+                    onNextCardClicked();
                 }
             }} 
         />
