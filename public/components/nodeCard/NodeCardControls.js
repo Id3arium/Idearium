@@ -19,19 +19,26 @@ export default function NodeCardControls({
     onConfirmClicked,
     onCancelClicked,
 }) {
-    const buttonClass = "relative w-9 h-9 m-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
+    const buttonClass =
+        "relative w-9 h-9 mx-2.5 my-2 rounded-full outline-none hover:outline hover:outline-1 hover:outline-white/50";
 
     return (
         <div
             className={`
-                ${isHovered || isFlipped ? "h-[54px]" : "h-[0px]"} transition-all 
+                ${
+                    isHovered || isFlipped ? "h-[54px]" : "h-[0px]"
+                } transition-all mx-0.5
             `}
         >
             <div
                 id="card-controls"
                 className={`
-                    ${isHovered || isFlipped ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}
-                    mx-0 rounded-[4px] transition-all
+                    ${
+                        isHovered || isFlipped
+                            ? "translate-y-0 opacity-100"
+                            : "-translate-y-full opacity-0"
+                    }
+                    mx-0 rounded-md transition-all
                 `}
             >
                 <button
@@ -58,27 +65,44 @@ export default function NodeCardControls({
                 >
                     <KeyboardArrowRightIcon className="text-white" />
                 </button>
+                <div
+                    id="right-side-controls"
+                    className="absolute right-0 top-0 h-full w-[112px] overflow-hidden"
+                >
                     <div
-                        id="right-side-controls"
-                        className="absolute right-0 top-0 h-full w-[104px] overflow-hidden"
+                        className={`absolute right-0 transition-all ${
+                            isEditing || isRemoving ? "-top-full" : "top-0"
+                        }`}
                     >
-                        <div className={`absolute right-0 transition-all ${isEditing || isRemoving ? '-top-full' : 'top-0'}`}>
-                            <button className={buttonClass} onClick={onRemoveClicked}>
-                                <DeleteIcon className="text-white" />
-                            </button>
-                            <button className={buttonClass} onClick={onEditClicked}>
-                                <EditIcon className="text-white" />
-                            </button>
-                        </div>
-                        <div className={`absolute right-0 transition-all ${isEditing || isRemoving ? 'top-0' : 'top-full'}`}>
-                            <button className={buttonClass} onClick={onCancelClicked}>
-                                <Close className="text-white" />
-                            </button>
-                            <button className={buttonClass} onClick={onConfirmClicked}>
-                                <Check className="text-white" />
-                            </button>
-                        </div>
+                        <button
+                            className={buttonClass}
+                            onClick={onRemoveClicked}
+                        >
+                            <DeleteIcon className="text-white" />
+                        </button>
+                        <button className={buttonClass} onClick={onEditClicked}>
+                            <EditIcon className="text-white" />
+                        </button>
                     </div>
+                    <div
+                        className={`absolute right-0 transition-all ${
+                            isEditing || isRemoving ? "top-0" : "top-full"
+                        }`}
+                    >
+                        <button
+                            className={buttonClass}
+                            onClick={onCancelClicked}
+                        >
+                            <Close className="text-white" />
+                        </button>
+                        <button
+                            className={buttonClass}
+                            onClick={onConfirmClicked}
+                        >
+                            <Check className="text-white" />
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
