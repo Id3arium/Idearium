@@ -87,33 +87,13 @@ export default function NodeCard() {
         }
     };
     
-    const onCardContentInputChange = (e) => {
+    const onInputChanged = (e) => {
         const { name, value } = e.target;
         setEditedNode((prev) => ({ ...prev, [name]: value }));
     };
 
     const onMouseEnter = async (e) => { setIsHovered(true); };
     const onMouseLeave = async (e) => { setIsHovered(false); };
-
-    const onEditCardClicked = () => {
-        setIsEditing(true);
-        setEditedNode({ ...state.currentNode });
-    };
-
-    const onRemoveCardClicked = () => {
-        setIsEditing(true);
-        () => actions.removeNode(node);
-    };
-
-    const onConfirmEditClicked = () => {
-        actions.updateNode(editedNode);
-        setIsEditing(false);
-    };
-
-    const onCancelEditClicked = () => {
-        setEditedNode(null);
-        setIsEditing(false);
-    };
 
     const startEditing = useCallback(() => {
         setIsEditing(true);
@@ -125,10 +105,14 @@ export default function NodeCard() {
     }, []);
 
     const confirmAction = useCallback(() => {
-        if (isEditing && editedNode) {
-            actions.updateNode(editedNode);
+        if (isEditing)
+        {
+            if (editedNode)
+            {
+                actions.updateNode(editedNode);
+                setEditedNode(null);
+            }
             setIsEditing(false);
-            setEditedNode(null);
         } else if (isRemoving) {
             actions.removeNode(state.currentNode);
             setIsRemoving(false);
@@ -175,6 +159,7 @@ export default function NodeCard() {
                     isEditing={isEditing}
                     currentTimelineIndex={state.currentTimelineIndex}
                     nodeIDsTimelineLength={state.nodeIDsTimelineLength}
+                    onInputChanged={onInputChanged}
                 />
                 <NodeCardControls
                     node={state.currentNode}
