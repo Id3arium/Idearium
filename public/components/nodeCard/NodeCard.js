@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { animate, useAnimation, useMotionValue } from "framer-motion";
 import { motion } from "framer-motion";
 import NodeCardControls from "./NodeCardControls.js";
@@ -45,7 +45,8 @@ export default function NodeCard() {
 
     useEffect(() => {
         if (state.currentNode == null) return;
-        var shouldPauseTimerBar = isFlipped || isHovered || isEditing || isRemoving;
+        var shouldPauseTimerBar =
+            isFlipped || isHovered || isEditing || isRemoving;
         if (shouldPauseTimerBar && timerAnimationProgress.isAnimating()) {
             pauseTimerAnimation();
         }
@@ -86,29 +87,31 @@ export default function NodeCard() {
             await flipNodeCardAnimation();
         }
     };
-    
-    const onInputChanged = (e) => {
-        const { name, value } = e.target;
-        setEditedNode((prev) => ({ ...prev, [name]: value }));
-    };
 
-    const onMouseEnter = async (e) => { setIsHovered(true); };
-    const onMouseLeave = async (e) => { setIsHovered(false); };
+    const onMouseEnter = async (e) => {
+        setIsHovered(true);
+    };
+    const onMouseLeave = async (e) => {
+        setIsHovered(false);
+    };
 
     const startEditing = useCallback(() => {
         setIsEditing(true);
         setEditedNode({ ...state.currentNode });
     }, [state.currentNode]);
 
+    const onInputChanged = useCallback((e) => {
+        const { name, value } = e.target;
+        setEditedNode((prev) => ({ ...prev, [name]: value }));
+    }, []);
+
     const startRemoving = useCallback(() => {
         setIsRemoving(true);
     }, []);
 
     const confirmAction = useCallback(() => {
-        if (isEditing)
-        {
-            if (editedNode)
-            {
+        if (isEditing) {
+            if (editedNode) {
                 actions.updateNode(editedNode);
                 setEditedNode(null);
             }
@@ -138,9 +141,11 @@ export default function NodeCard() {
         >
             <motion.div
                 id="node-card"
-                className={`relative text-[#E0E0E0] rounded-md [box-shadow:0px_0px_6px_white] overflow-hidden transition-all z-10
-                ${isFlipped || isHovered 
-                    ? "backdrop-blur-sm bg-clear" : "backdrop-blur-xlg bg-[#22222240]"
+                className={`relative text-[#E0E0E0] rounded-md [box-shadow:0px_0px_6px_white] overflow-hidden transition-all
+                ${
+                    isFlipped || isHovered
+                        ? "backdrop-blur-sm bg-clear"
+                        : "backdrop-blur-xlg bg-[#22222240]"
                 }`}
                 onClick={onClick}
                 animate={rotationAnimation}
@@ -153,7 +158,7 @@ export default function NodeCard() {
                     onNextCardClicked={actions.onNextCardClicked}
                 />
                 <NodeCardContent
-                    node={state.currentNode}
+                    node={isEditing ? editedNode : state.currentNode}
                     isFlipped={isFlipped}
                     isHovered={isHovered}
                     isEditing={isEditing}
@@ -174,6 +179,10 @@ export default function NodeCard() {
                     onCancelClicked={cancelAction}
                 />
             </motion.div>
+            <div
+                className={`bg-clear overflow-hidden transition-all 
+                ${!isHovered ? "h-[54px]" : "h-5"}`}
+            ></div>
         </div>
     );
 }
