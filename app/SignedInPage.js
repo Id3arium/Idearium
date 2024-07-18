@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 import NodeCardsArea from "@/components/NodeCardsArea.js";
 import IdeaCompositionArea from "@/components/IdeaCompositionArea.js";
@@ -20,6 +20,8 @@ export function SignedInPage() {
     useEffect(() => {
         setUser(user);
     }, [user, setUser]);
+
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
     const { actions, state } = useNodeCardLogic();
     const nodeCardKeyMap = {
@@ -49,20 +51,29 @@ export function SignedInPage() {
         },
     };
     return (
-        <main className="">
+        <main className="relative w-screen h-screen overflow-hidden">
             <GlobalHotKeys
                 keyMap={nodeCardKeyMap}
                 handlers={nodeCardHandlers}
                 focused="true"
             >
-                <div id="Home">
+                <div id="Home" className="relative w-full h-full">
                     <ForceGraph3D id="ForceGraph3D" />
-                    <div id="left-content" className="absolute top-0 left-0 w-[375px] h-full overflow-y-auto">
+                    <div 
+                        id="left-content" 
+                        className={`absolute top-0 left-0 w-[375px] h-full transition-transform ease-in-out ${isFullscreen ? '-translate-x-full' : 'translate-x-0'}`}
+                    >
                         <UserDashboard />
                         <IdeaCompositionArea />
                     </div>
-                    <div id="right-content" className="absolute top-0 right-0 w-[375px] h-full overflow-y-auto">
-                        <NodeCardsLibrary />
+                    <div 
+                        id="right-content" 
+                        className={`absolute top-0 right-0 w-[375px] h-full transition-transform ease-in-out ${isFullscreen ? 'translate-x-full' : 'translate-x-0'}`}
+                    >
+                        <NodeCardsLibrary
+                            isFullscreen={isFullscreen}
+                            setIsFullscreen={setIsFullscreen}
+                        />
                     </div>
                     <NodeCardsArea />
                     <div className="relative"></div>
@@ -72,3 +83,4 @@ export function SignedInPage() {
         </main>
     );
 }
+
