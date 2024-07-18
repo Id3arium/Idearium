@@ -74,6 +74,7 @@ function IdeaCompositionArea() {
                     rows="4"
                     placeholder="Content"
                     value={note.content}
+
                     onChange={handleInputChange}
                 />
                 <input

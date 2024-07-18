@@ -13,8 +13,6 @@ export default function NodeCardsArea() {
 
     const [clientNodes, setClientNodes] = useAtom(Atoms.clientNodesAtom);
     const onNextNode = useSetAtom(Atoms.onNextNodeAtom);
-    const resetNodeFrequencies = useSetAtom(Atoms.resetNodeFrequenciesAtom);
-    // const nodesCount = useAtomValue(nodesCountAtom)
     const getRandomNode = useRandomNode();
     const user = useAtomValue(Atoms.userAtom);
 
@@ -35,8 +33,6 @@ export default function NodeCardsArea() {
     }, [user, setClientNodes]);
 
     useEffect(() => {
-        // console.log("NodeCardsArea nodes changed and has", nodesCount)
-
         if (!hasAddedFirstTimelineNode.current) {
             const randNode = getRandomNode();
             if (randNode != null) {
@@ -52,7 +48,7 @@ export default function NodeCardsArea() {
             id="node-cards-area"
             className="absolute top-[50%] left-[50%] origin-top"
         >
-            <div className="relative">
+            <div className="relative ">
                 <div className="absolute w-[530px] h-[200px] transform -translate-x-[50%] -translate-y-[50%]">
                     <NodeCard />
                 </div>
