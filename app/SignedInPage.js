@@ -61,14 +61,14 @@ export function SignedInPage() {
                     <ForceGraph3D id="ForceGraph3D" />
                     <div 
                         id="left-content" 
-                        className={`absolute top-0 left-0 w-[375px] h-full transition-transform ease-in-out ${isFullscreen ? '-translate-x-full' : 'translate-x-0'}`}
+                        className={`absolute top-0 left-0 w-[375px] h-full duration-500 transition-transform ease-in-out ${isFullscreen ? '-translate-x-full' : 'translate-x-0'}`}
                     >
                         <UserDashboard />
                         <IdeaCompositionArea />
                     </div>
                     <div 
                         id="right-content" 
-                        className={`absolute top-0 right-0 w-[375px] h-full transition-transform ease-in-out ${isFullscreen ? 'translate-x-full' : 'translate-x-0'}`}
+                        className={`absolute top-0 right-0 w-[375px] h-full duration-500 transition-transform ease-in-out ${isFullscreen ? 'translate-x-full' : 'translate-x-0'}`}
                     >
                         <NodeCardsLibrary
                             isFullscreen={isFullscreen}
