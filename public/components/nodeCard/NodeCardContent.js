@@ -5,6 +5,7 @@ export default function NodeCardContent({
     isEditing,
     currentTimelineIndex,
     nodeIDsTimelineLength,
+    onInputChanged
 }) {
     function getConditionalStyles(isVisible) {
         const opacityClass = isVisible ? "opacity-100" : "opacity-50";
@@ -23,17 +24,20 @@ export default function NodeCardContent({
                 className={`col-start-1 row-start-1 flex flex-col items-center justify-center transition-all ${getConditionalStyles(!isFlipped)}`}
             >
                 {isEditing ? (
-                    <div className="">
-                        <input
+                    <div className="pointer-events-auto">
+                        {node?.title && <input
+                            name="title"
                             type="text"
                             className="w-full bg-clear p-1 text-white focus:outline-none focus:ring-0 focus:ring-grey-dark/50 rounded-md"
                             placeholder={node?.title || "Title"}
                             value={node?.title || ""}
-                            onChange={(e) => {
+                            onChange={(e) =>
+                            {
                                 onInputChanged(e);
                             }}
-                        />
+                        />}
                         <textarea
+                            name="content"
                             className="w-full bg-clear p-1 text-white focus:outline-none focus:ring-0 focus:ring-grey-dark/50 rounded-md"
                             // rows="4"
                             placeholder={node?.content || "Content"}
