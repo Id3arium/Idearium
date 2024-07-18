@@ -15,7 +15,7 @@ export default function UserDashboard() {
         if (localPart.length <= 2) {
             maskedLocal = '*'.repeat(localPart.length);
         } else {
-            maskedLocal = localPart[0] + '*'.repeat(localPart.length - 2) + localPart[localPart.length - 1];
+            maskedLocal = localPart[0] + '*'.repeat(localPart.length - 1);
         }
         return `${maskedLocal}@${domain}`;
     }
@@ -33,7 +33,7 @@ export default function UserDashboard() {
             </div>
             <p className="" >Name: {user?.fullName}</p>
             <p className="" >Email: {maskEmail(user?.primaryEmailAddress?.emailAddress)}</p>
-            <p className="" >ID: {user?.id}</p>
+            {/* <p className="" >ID: {user?.id}</p> */}
             <div>
                 <h2 className=" mt-4">Your Constellations:</h2>
                 {/* <ul>
