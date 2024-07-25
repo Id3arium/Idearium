@@ -180,7 +180,7 @@ export default function NodeCard() {
                 />
             </motion.div>
             <div
-                className={`bg-clear overflow-hidden transition-all 
+                className={`bg-clear overflow-hidden transition-all
                 ${!isHovered ? "h-[54px]" : "h-5"}`}
             ></div>
         </div>

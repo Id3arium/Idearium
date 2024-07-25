@@ -1,3 +1,5 @@
+import React from "react"
+
 export default function NodeCardContent({
     node,
     isFlipped,
@@ -13,6 +15,15 @@ export default function NodeCardContent({
         const blurClass = isVisible ? "" : isHovered ? "blur-sm" : "blur-lg";
         return `${opacityClass} ${scaleClass} ${blurClass}`;
     }
+
+    const formatContentWithNewlines = (content) => {
+        return content.split('\n').map((line, index) => (
+            <React.Fragment key={index}>
+                {line}
+                <br />
+            </React.Fragment>
+        ));
+    };
 
     return (
         <div
@@ -50,7 +61,7 @@ export default function NodeCardContent({
                 ) : (
                     <>
                         {node?.title && <h1>{node?.title}</h1>}
-                        <p>{node?.content}</p>
+                        <p>{node?.content && formatContentWithNewlines(node.content)}</p>
                     </>
                 )}
             </div>
